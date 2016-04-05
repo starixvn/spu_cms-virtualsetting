@@ -1,0 +1,11 @@
+*.suo
+.idea
+*.dll
+*.log
+*.cache
+/SPU.WinService.VirtualSetting.Core/bin
+/SPU.WinService.VirtualSetting.Core/obj
+/SPU.WinService.VirtualSetting/bin
+/SPU.WinService.VirtualSetting/obj
+/SPU.WinService.VirtualSetting.Console/bin
+/SPU.WinService.VirtualSetting.Console/obj
