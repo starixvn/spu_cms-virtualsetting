@@ -10,11 +10,11 @@
 namespace SPU.WinService.VirtualSetting.Core.MailMasterRenders
 {
     using Fanex.Data.Repository;
+    using FD.Lib.Criteria.MailMaster;
+    using FD.Lib.DTO;
     using FD.Lib.ReportTemplateRenders;
     using FD.Lib.Service.Implement;
     using FD.Lib.Service.Interface;
-    using FD.Lib.DTO;
-    using FD.Lib.Criteria.MailMaster;
 
     public class MailMasterRender : IMailMasterRender
     {

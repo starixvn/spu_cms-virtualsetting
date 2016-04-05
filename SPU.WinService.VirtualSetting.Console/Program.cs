@@ -1,8 +1,6 @@
 ﻿namespace SPU.WinService.VirtualSetting.Console
 {
-    using System;
-    using Core.QueueManagement;
-
+    using System;    
     internal class Program
     {
         private static void Main()

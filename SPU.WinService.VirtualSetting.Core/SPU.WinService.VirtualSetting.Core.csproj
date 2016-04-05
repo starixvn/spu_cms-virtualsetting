@@ -143,14 +143,26 @@
     <Compile Include="MailSenders\IMailClient.cs" />
     <Compile Include="MailSenders\IMailSender.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="QueueManagement\IMessageQueueReceiver.cs" />
-    <Compile Include="QueueManagement\IReceivingMessageHandler.cs" />
-    <Compile Include="QueueManagement\ReceivedMessageHandler.cs" />
-    <Compile Include="ReportTemplateRenders\IReportRenderAbstractFactory.cs" />
-    <Compile Include="ReportTemplateRenders\IReportTemplateRender.cs" />
-    <Compile Include="ReportTemplateRenders\TableRenders\ITableRender.cs" />
-    <Compile Include="ReportTemplateRenders\TableRenders\ReportTemplateType.cs" />
-    <Compile Include="ReportTemplateRenders\TemplateFileManager.cs" />
+    <Compile Include="ReportTemplateRenders\IReportRenderAbstractFactory.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ReportTemplateRenders\IReportTemplateRender.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ReportTemplateRenders\TableRenders\ITableRender.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ReportTemplateRenders\TableRenders\ReportTemplateType.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ReportTemplateRenders\TemplateFileManager.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="VirtualSetting\Criteria\UpdateVirtualSettingCriteria.cs" />
+    <Compile Include="VirtualSetting\Criteria\GetProPrunterCriteria.cs" />
+    <Compile Include="VirtualSetting\Handler\VirtualSettingHandler.cs" />
+    <Compile Include="VirtualSetting\Model\ProPunter.cs" />
+    <Compile Include="VirtualSetting\Service\VirtualSettingPunterService.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
