@@ -1,17 +1,18 @@
 ﻿namespace SPU.WinService.VirtualSetting
 {
-    using System.ServiceProcess;    
+    using System.ServiceProcess;
     using Fanex.Data.Configuration;
     using Fanex.Logging;
     using Fanex.MailDelivery.Client.Handlers;
     using SPU.WinService.VitualSetting.Core.VirtualSetting;
     using System.Linq;
+    using System;
 
     public partial class VirtualSettingService : ServiceBase
-    {                
+    {
         public VirtualSettingService()
         {
-            InitDependencies();     
+            InitDependencies();
             DbSettingProviderManager.Current.Start();
         }
 
@@ -19,30 +20,56 @@
         {
             InitializeComponent();
         }
-        
+
         protected override void OnStart(string[] args)
         {
-            Logger.Log.Error("Starting SPU.VirtualSetting service", "SPU VirtualSetting LOCAL");
+            Logger.Log.Error("Starting SPU.VirtualSetting service", "SPU.Local");
 
             MailClientHandler.Start();
 
             UpdateVirtualSetting();
 
-            Logger.Log.Error("Ending updating virtual setting", "SPU VirtualSetting LOCAL");
+            Logger.Log.Error("Ending updating virtual setting", "SPU.Local");
         }
 
         protected override void OnStop()
-        {         
+        {
             MailClientHandler.Stop();
         }
 
         public void UpdateVirtualSetting()
         {                     
-            VirtualSettingHandler virtualSettingHandler = new VirtualSettingHandler();
-            
-            var proPunters = virtualSettingHandler.GetProPunterList();
+            try
+            {
+                VirtualSettingBusiness virtualSettingBusiness = new VirtualSettingBusiness();
 
-            if (proPunters != null && proPunters.Count() > 0)
+                var proPunters = virtualSettingBusiness.GetProPunterList();
+
+                if (proPunters != null && proPunters.Count() > 0)
+                {
+                    bool update = virtualSettingBusiness.UpdateProPunterVirtualSetting(proPunters);
+                    if (!update)
+                    {
+                        Logger.Log.Error("Error for updating virtual setting", "SPU.Local");
+                    }
+                    else
+                    {
+                        bool log = virtualSettingBusiness.LogProPunterVirtualSetting(proPunters);
+
+                        if (!log)
+                        {
+                            Logger.Log.Error("Error for logging virtual setting", "SPU.Local");
+                        }
+                    }
+                }
+
+            }
+            catch (Exception ex)
+            {
+                Logger.Log.Error(ex.Message, "SPU.Local");
+            }
+            
+
             {
                 bool update = virtualSettingHandler.UpdateProPunterVirtualSetting(proPunters.ToList());
 

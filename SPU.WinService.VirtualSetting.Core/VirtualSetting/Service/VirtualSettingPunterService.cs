@@ -24,5 +24,10 @@ namespace SPU.WinService.VitualSetting.Core.VirtualSetting
         {
             return ExecuteOutput(criteria);
         }
+
+        public ICommandResult LogVirtualSetting(LogVirtualSettingCriteria criteria)
+        {
+            return ExecuteOutput(criteria);
+        }
     }
 }
