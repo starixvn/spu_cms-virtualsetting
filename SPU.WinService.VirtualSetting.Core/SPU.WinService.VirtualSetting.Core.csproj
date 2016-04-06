@@ -51,27 +51,6 @@
     <Reference Include="Fanex.NAP.Framework">
       <HintPath>..\packages\Fanex.NAP.Framework.1.0.0.3\lib\net40\Fanex.NAP.Framework.dll</HintPath>
     </Reference>
-    <Reference Include="FD.Lib.BusinessManager">
-      <HintPath>..\SPU.WinService.FraudDetection\Dependencies\FD.Lib.BusinessManager.dll</HintPath>
-    </Reference>
-    <Reference Include="FD.Lib.Core">
-      <HintPath>..\SPU.WinService.FraudDetection\Dependencies\FD.Lib.Core.dll</HintPath>
-    </Reference>
-    <Reference Include="FD.Lib.Criteria">
-      <HintPath>..\SPU.WinService.FraudDetection\Dependencies\FD.Lib.Criteria.dll</HintPath>
-    </Reference>
-    <Reference Include="FD.Lib.DataAccess">
-      <HintPath>..\SPU.WinService.FraudDetection\Dependencies\FD.Lib.DataAccess.dll</HintPath>
-    </Reference>
-    <Reference Include="FD.Lib.DTO">
-      <HintPath>..\SPU.WinService.FraudDetection\Dependencies\FD.Lib.DTO.dll</HintPath>
-    </Reference>
-    <Reference Include="FD.Lib.Model">
-      <HintPath>..\SPU.WinService.FraudDetection\Dependencies\FD.Lib.Model.dll</HintPath>
-    </Reference>
-    <Reference Include="FD.Lib.Service">
-      <HintPath>..\SPU.WinService.FraudDetection\Dependencies\FD.Lib.Service.dll</HintPath>
-    </Reference>
     <Reference Include="IBCFile">
       <HintPath>..\packages\Fanex.File.1.0.0\lib\net40\IBCFile.dll</HintPath>
     </Reference>
@@ -121,54 +100,22 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="UMControllerLibrary">
-      <HintPath>..\SPU.WinService.FraudDetection\Dependencies\UMControler\UMControllerLibrary.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="MailMasterRenders\IMailMasterRender.cs" />
-    <Compile Include="MailMasterRenders\IMailMasterRenderAbstractFactory.cs" />
-    <Compile Include="MailMasterRenders\IPlaceHolderFinder.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="MailMasterRenders\ITagFinder.cs" />
-    <Compile Include="MailMasterRenders\Location.cs" />
-    <Compile Include="MailMasterRenders\MailMasterRender.cs" />
-    <Compile Include="MailMasterRenders\PlaceHolderFinder.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="MailMasterRenders\TagFinder.cs" />
-    <Compile Include="MailSenders\FDMailSender.cs" />
-    <Compile Include="MailSenders\FileWriter.cs" />
-    <Compile Include="MailSenders\IMailClient.cs" />
-    <Compile Include="MailSenders\IMailSender.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ReportTemplateRenders\IReportRenderAbstractFactory.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="ReportTemplateRenders\IReportTemplateRender.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="ReportTemplateRenders\TableRenders\ITableRender.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="ReportTemplateRenders\TableRenders\ReportTemplateType.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="ReportTemplateRenders\TemplateFileManager.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="VirtualSetting\Criteria\UpdateVirtualSettingCriteria.cs" />
     <Compile Include="VirtualSetting\Criteria\GetProPrunterCriteria.cs" />
     <Compile Include="VirtualSetting\Handler\VirtualSettingHandler.cs" />
     <Compile Include="VirtualSetting\Model\ProPunter.cs" />
+    <Compile Include="VirtualSetting\Service\QueryService.cs" />
     <Compile Include="VirtualSetting\Service\VirtualSettingPunterService.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
     <None Include="packages.config" />
-    <None Include="ReportTemplateRenders\TableTemplates\MarginReport.cshtml" />
-    <None Include="ReportTemplateRenders\TableTemplates\ProPunterStatisticsReport.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="VirtualSetting\DataAccess\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -6,10 +6,6 @@
 
 namespace SPU.WinService.VitualSetting.Core.VirtualSetting
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
     using Fanex.Data.Repository;
 
     /// <summary>
@@ -22,6 +18,10 @@ namespace SPU.WinService.VitualSetting.Core.VirtualSetting
         public int UserId { get; set; }
 
         public string VirtualMultiplier { get; set; }
+
+        public int ErrCode { get; set; }
+
+        public string ErrMsg { get; set; }
 
         /*
         @virtualmultiplier = '<ROOT>

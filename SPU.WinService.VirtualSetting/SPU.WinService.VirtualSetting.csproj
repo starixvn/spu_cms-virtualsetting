@@ -70,34 +70,6 @@
     <Reference Include="Fanex.NAP.Framework">
       <HintPath>..\packages\Fanex.NAP.Framework.1.0.0.3\lib\net40\Fanex.NAP.Framework.dll</HintPath>
     </Reference>
-    <Reference Include="FD.Lib.BusinessManager, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>Dependencies\FD.Lib.BusinessManager.dll</HintPath>
-    </Reference>
-    <Reference Include="FD.Lib.Core, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>Dependencies\FD.Lib.Core.dll</HintPath>
-    </Reference>
-    <Reference Include="FD.Lib.Criteria, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>Dependencies\FD.Lib.Criteria.dll</HintPath>
-    </Reference>
-    <Reference Include="FD.Lib.DataAccess, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>Dependencies\FD.Lib.DataAccess.dll</HintPath>
-    </Reference>
-    <Reference Include="FD.Lib.DTO, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>Dependencies\FD.Lib.DTO.dll</HintPath>
-    </Reference>
-    <Reference Include="FD.Lib.Model, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>Dependencies\FD.Lib.Model.dll</HintPath>
-    </Reference>
-    <Reference Include="FD.Lib.Service, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>Dependencies\FD.Lib.Service.dll</HintPath>
-    </Reference>
     <Reference Include="IBCFile">
       <HintPath>..\packages\Fanex.File.1.0.0\lib\net40\IBCFile.dll</HintPath>
     </Reference>
@@ -154,10 +126,6 @@
     <Reference Include="System.Data" />
     <Reference Include="System.ServiceProcess" />
     <Reference Include="System.Xml" />
-    <Reference Include="UMControllerLibrary, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>Dependencies\UMControler\UMControllerLibrary.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="VirutalSettingService.cs">
@@ -194,14 +162,6 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>app.UAT.config.tt</DependentUpon>
     </Content>
-    <Content Include="Dependencies\FD.Lib.BusinessManager.dll" />
-    <Content Include="Dependencies\FD.Lib.Core.dll" />
-    <Content Include="Dependencies\FD.Lib.Criteria.dll" />
-    <Content Include="Dependencies\FD.Lib.DataAccess.dll" />
-    <Content Include="Dependencies\FD.Lib.DTO.dll" />
-    <Content Include="Dependencies\FD.Lib.Model.dll" />
-    <Content Include="Dependencies\FD.Lib.Service.dll" />
-    <Content Include="Dependencies\UMControler\UMControllerLibrary.dll" />
     <Content Include="Install Service.bat">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -280,6 +240,7 @@
   <ItemGroup>
     <Folder Include="bin\Debug\" />
     <Folder Include="bin\Release\" />
+    <Folder Include="Dependencies\UMControler\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SPU.WinService.VirtualSetting.Core\SPU.WinService.VirtualSetting.Core.csproj">

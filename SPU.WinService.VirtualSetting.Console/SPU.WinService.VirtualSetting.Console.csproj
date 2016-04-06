@@ -64,28 +64,6 @@
     <Reference Include="Fanex.NAP.Framework">
       <HintPath>..\packages\Fanex.NAP.Framework.1.0.0.3\lib\net40\Fanex.NAP.Framework.dll</HintPath>
     </Reference>
-    <Reference Include="FD.Lib.BusinessManager, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\SPU.WinService.FraudDetection\Dependencies\FD.Lib.BusinessManager.dll</HintPath>
-    </Reference>
-    <Reference Include="FD.Lib.Core">
-      <HintPath>..\SPU.WinService.FraudDetection\Dependencies\FD.Lib.Core.dll</HintPath>
-    </Reference>
-    <Reference Include="FD.Lib.Criteria">
-      <HintPath>..\SPU.WinService.FraudDetection\Dependencies\FD.Lib.Criteria.dll</HintPath>
-    </Reference>
-    <Reference Include="FD.Lib.DataAccess">
-      <HintPath>..\SPU.WinService.FraudDetection\Dependencies\FD.Lib.DataAccess.dll</HintPath>
-    </Reference>
-    <Reference Include="FD.Lib.DTO">
-      <HintPath>..\SPU.WinService.FraudDetection\Dependencies\FD.Lib.DTO.dll</HintPath>
-    </Reference>
-    <Reference Include="FD.Lib.Model">
-      <HintPath>..\SPU.WinService.FraudDetection\Dependencies\FD.Lib.Model.dll</HintPath>
-    </Reference>
-    <Reference Include="FD.Lib.Service">
-      <HintPath>..\SPU.WinService.FraudDetection\Dependencies\FD.Lib.Service.dll</HintPath>
-    </Reference>
     <Reference Include="IBCFile">
       <HintPath>..\packages\Fanex.File.1.0.0\lib\net40\IBCFile.dll</HintPath>
     </Reference>

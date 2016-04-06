@@ -6,38 +6,46 @@
 
 namespace SPU.WinService.VitualSetting.Core.VirtualSetting
 {
-    using System;
+    using Fanex.NAP.Framework.Command;
     using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
 
     /// <summary>
     /// TODO: Update summary.
     /// </summary>
-    public static class VirtualSettingHandler
+    public class VirtualSettingHandler
     {
-        public static IEnumerable<ProPunter> GetProPunterList(GetProPrunterCriteria criteria)
+        private VirtualSettingPunterService _virtualSettingsService;
+
+        public VirtualSettingHandler(VirtualSettingPunterService virtualSettingsService = null)
         {
-            return VirtualSettingPunterService.GetProPunterList(criteria);
+            _virtualSettingsService = virtualSettingsService ?? new VirtualSettingPunterService();
         }
 
-        public static bool UpdateProPunterVirtualSetting(List<ProPunter> proPunters)
+        public IEnumerable<ProPunter> GetProPunterList(GetProPrunterCriteria criteria)
         {
-            var result = true;
+            return _virtualSettingsService.GetProPunterList(criteria);
+        }
 
-            foreach (var punter in proPunters)
+        public bool UpdateProPunterVirtualSetting(List<ProPunter> proPunters)
+        {
+            var criteria = new UpdateVirtualSettingCriteria
             {
-                UpdateVirtualSettingCriteria criteria = new UpdateVirtualSettingCriteria()
-                {
-                    CustId = punter.CustId,
-                    UserId = 0, //todo
-                    VirtualMultiplier = "<ROOT> </ROOT>"
-                };
+                VirtualMultiplier = GenerateVirtualSettingXml(proPunters)
+                //// and more params should be here
+            };
 
-                result = VirtualSettingPunterService.UpdateVirtualSetting(criteria) && result;
-            }
+            var updateResult = _virtualSettingsService.UpdateVirtualSetting(criteria);
 
-            return result;
+            return updateResult.IsSuccessful;
         }
+
+        #region Utilities
+
+        private string GenerateVirtualSettingXml(List<ProPunter> proPunters)
+        {
+            return string.Empty;
+        }
+
+        #endregion
     }
 }

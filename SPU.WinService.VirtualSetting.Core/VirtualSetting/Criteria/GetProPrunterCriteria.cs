@@ -6,10 +6,6 @@
 
 namespace SPU.WinService.VitualSetting.Core.VirtualSetting
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
     using Fanex.Data.Repository;
 
     /// <summary>
@@ -17,6 +13,7 @@ namespace SPU.WinService.VitualSetting.Core.VirtualSetting
     /// </summary>
     public class GetProPrunterCriteria : CriteriaBase
     {
+        /// <summary>
         /// Gets Setting Key.
         /// </summary>
         /// <returns>Setting key of the criteria.</returns>
