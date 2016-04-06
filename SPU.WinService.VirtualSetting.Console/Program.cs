@@ -10,7 +10,7 @@
 
             Console.WriteLine("Start to run window service manually.");
 
-            virtualSettingService.RunOnStart();
+            virtualSettingService.UpdateVirtualSetting();
 
             Console.WriteLine("Window service is running now.");
         }
