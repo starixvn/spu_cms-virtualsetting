@@ -16,7 +16,7 @@ namespace SPU.WinService.VitualSetting.Core.VirtualSetting
     /// </summary>
     public static class VirtualSettingHandler
     {
-        public static List<ProPunter> GetProPunterList(GetProPrunterCriteria criteria)
+        public static IEnumerable<ProPunter> GetProPunterList(GetProPrunterCriteria criteria)
         {
             return VirtualSettingPunterService.GetProPunterList(criteria);
         }

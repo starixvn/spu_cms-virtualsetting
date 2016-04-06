@@ -17,20 +17,12 @@ namespace SPU.WinService.VitualSetting.Core.VirtualSetting
     /// </summary>
     public static class VirtualSettingPunterService
     {        
-        public static List<ProPunter> GetProPunterList(GetProPrunterCriteria criteria)
-        {
-            var proPunters = new List<ProPunter>();
-
+        public static IEnumerable<ProPunter> GetProPunterList(GetProPrunterCriteria criteria)
+        {            
             using (ObjectDb obj = new ObjectDb(criteria.GetSettingKey()))
             {
-                var ds = obj.ExecuteDataSet();
-                foreach (var row in ds.Tables[0].Rows)
-                {
-                    proPunters.Add(new ProPunter { });
-                }
-            }
-
-            return proPunters;
+                return obj.Query<ProPunter>();             
+            }            
         }
 
         public static bool UpdateVirtualSetting(UpdateVirtualSettingCriteria criteria)
