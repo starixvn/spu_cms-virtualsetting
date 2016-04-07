@@ -13,20 +13,20 @@ namespace SPU.WinService.VitualSetting.Core.VirtualSetting
     /// </summary>
     public class ProPunter
     {
-        public DateTime rptDate { get; set; }
+        public DateTime ReportDate { get; set; }
         
         public short SiteID { get; set; }
         
         public int CustID { get; set; }
 
-        public int srecommend { get; set; }
+        public int SRecommend { get; set; }
 
-        public int mrecommend { get; set; }
+        public int MRecommend { get; set; }
 
-        public int recommend { get; set; }
+        public int Recommend { get; set; }
+
+        public double OldVirtualRate { get; set; }
         
-        public double VirtualRate { get; set; }
-
-        public short SportType { get; set; }
+        public double NewVirtualRate { get; set; }
     }
 }
