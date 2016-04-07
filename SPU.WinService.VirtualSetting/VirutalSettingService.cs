@@ -69,15 +69,6 @@
                 Logger.Log.Error(ex.Message, "SPU.Local");
             }
             
-
-            {
-                bool update = virtualSettingHandler.UpdateProPunterVirtualSetting(proPunters.ToList());
-
-                if(!update)
-                {
-                    //write log for exception.
-                }
-            }
         }
     }
 }
