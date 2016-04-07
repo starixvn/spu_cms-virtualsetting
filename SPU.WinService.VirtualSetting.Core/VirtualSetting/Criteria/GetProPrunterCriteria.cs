@@ -13,7 +13,7 @@ namespace SPU.WinService.VitualSetting.Core.VirtualSetting
     /// </summary>
     public class GetProPrunterCriteria : CriteriaBase
     {
-        public int ServiceExecutionInterval { get; set; }
+        public int ServiceExeInterval { get; set; }
 
         public string SiteName { get; set; }
 

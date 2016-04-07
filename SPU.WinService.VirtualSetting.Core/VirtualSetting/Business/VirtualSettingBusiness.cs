@@ -26,7 +26,7 @@ namespace SPU.WinService.VitualSetting.Core.VirtualSetting
         {
             var criteria = new GetProPrunterCriteria
             {
-                ServiceExecutionInterval = AppSettings.ServiceExecutionInterval,
+                ServiceExeInterval = AppSettings.ServiceExecutionInterval,
                 SiteName = AppSettings.SiteName
             };
 
@@ -37,7 +37,7 @@ namespace SPU.WinService.VitualSetting.Core.VirtualSetting
         {
             var criteria = new UpdateVirtualSettingCriteria
             {
-                VirtualMultiplier = GenerateVirtualSettingXml(proPunters, virtualMultiplier),
+                VirtualMultiplier = GenerateVirtualSettingXmlForUpdating(proPunters, virtualMultiplier),
   
                 UserId = AppSettings.DummyUser,
                 IP = AppSettings.IP
@@ -48,11 +48,11 @@ namespace SPU.WinService.VitualSetting.Core.VirtualSetting
             return updateResult.IsSuccessful;
         }
 
-        public bool LogProPunterVirtualSetting(IEnumerable<ProPunter> proPunters)
+        public bool LogProPunterVirtualSetting(IEnumerable<ProPunter> proPunters, double newVirtualMultiplier = 0)
         {
             var criteria = new LogVirtualSettingCriteria
             {
-                VirtualMultiplier = GenerateVirtualSettingXml(proPunters),
+                ProPunterVRSettingsDoc = GenerateVirtualSettingXmlForLogging(proPunters, newVirtualMultiplier),
 
                 CreatorId = AppSettings.DummyUser,                
             };
@@ -64,7 +64,7 @@ namespace SPU.WinService.VitualSetting.Core.VirtualSetting
 
         #region Utilities
 
-        private string GenerateVirtualSettingXml(IEnumerable<ProPunter> proPunters, double virtualMultiplier = 0)
+        private string GenerateVirtualSettingXmlForUpdating(IEnumerable<ProPunter> proPunters, double virtualMultiplier = 0)
         {
             string format = "<Rate CustIds=\"@CustIds\" VirtualMultiplier =\"" + virtualMultiplier + "\" />";
             
@@ -73,6 +73,28 @@ namespace SPU.WinService.VitualSetting.Core.VirtualSetting
 
             return "<ROOT>" + format.Replace("@CustIds", cusIds) + "</ROOT>";            
         }
+
+        private string GenerateVirtualSettingXmlForLogging(IEnumerable<ProPunter> proPunters, double newVirtualMultiplier = 0)
+        {
+            //string format = "<Rate CustID=\"@CustId\" ReportDate=\"@ReportDate\" SiteID=\"@SiteID\" SRecommend=\"@SRecommend\" MRecommend=\"@MRecommend\" Recommend=\"@Recommend\" OldVirtualRate=\"OldVirtualRate\" NewVirtualRate =\"" + NewVirtualMultiplier + "\" />";
+
+            string xml = string.Empty;
+
+            foreach(var punter in proPunters)
+            {
+                xml += "<Rate CustID=\"" + punter.CustID + "\"" +
+                       " ReportDate=\"" + punter.ReportDate.ToShortDateString() + "\"" +
+                       " SiteID=\"" + punter.SiteID + "\""+
+                       " SRecommend=\"" + punter.SRecommend + "\"" +
+                       " MRecommend=\"" + punter.MRecommend + "\"" +
+                       " Recommend=\"" + punter.Recommend + "\"" +
+                       " OldVirtualRate=\"" + punter.OldVirtualRate + "\"" +
+                       " NewVirtualRate=\"" + newVirtualMultiplier + "\"" + "/>";                       
+            }
+
+            return "<ROOT>" + xml + "</ROOT>";
+        }
+
 
         #endregion
     }
