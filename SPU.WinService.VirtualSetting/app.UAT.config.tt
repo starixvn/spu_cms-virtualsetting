@@ -21,11 +21,17 @@
     <add key="RemoteCacheUrl" value="tcp://10.40.40.29:8098/CallGetOddsFunction" />    
     <add key="queuePath" value="FormatName:DIRECT=TCP:10.40.40.73\private$\fdmessagequeue"/>
     <add key="FDUrl" value="" />
+    <add key="ProPunterChunkSize" value="1000"/>
+    <add key="NewVirtualMultiplier" value="1.2"/>
+    <add key="SiteName" value="W88SuperUS$"/>
+    <add key="ServiceExecutionInterval" value="7"/>
+    <add key="DummyUser" value="0"/>
+    <add key="IP" value=""/>
   </appSettings>
-  <connectionStrings>
-    <add name="DBFD.bodb02.bodbSPUNet" connectionString="Data Source=10.40.40.95;Initial Catalog=bodb02;User Id=bodbSPUNet;Password=l4exNQ2KUgCjzhehUWfktg===" providerName="System.Data.SqlClient" />
-    <add name="DBFD.bodb_Archive.bodbSPUNet" connectionString="Data Source=10.40.40.100;Initial Catalog=bodb_Archive;User Id=bodbSPUNet;Password=l4exNQ2KUgCjzhehUWfktg===" providerName="System.Data.SqlClient" />
-    <add name="DBFD.FraudDetection.bodbSPUNet" connectionString="Data Source=10.40.40.95;Initial Catalog=SPU_FraudDetection;User Id=bodbSPUNet;Password=l4exNQ2KUgCjzhehUWfktg===" providerName="System.Data.SqlClient" />    
+  <connectionStrings>    
+    <add name="DBDW.bodb_dwrs.bodbAdminNet" providerName="System.Data.SqlClient" connectionString="packet size=4096; Data Source=10.40.40.61;Asynchronous Processing=true;Initial Catalog=bodb_dwrs;integrated security=false; user id=bodbAdminNet; password=i9hNnaZltx04XF6oTNOKTnvvtLC/zfxr="/>
+    <add name="DBVR.CustDB.bodbAdminNet" connectionString="Data Source=10.18.200.233;Initial Catalog=CustDB;User Id=bodbAdminNet;Password=i9hNnaZltx04XF6oTNOKTnvvtLC/zfxr=" providerName="System.Data.SqlClient" />    
+    <add name="DBLOG.bodb_CustomerLog.bodbAdminNet" connectionString="Data Source=10.40.40.92;Initial Catalog=bodb_CustomerLog;integrated security=false; User ID=bodbAdminNet;Password=i9hNnaZltx04XF6oTNOKTnvvtLC/zfxr=" providerName="System.Data.SqlClient" />
   </connectionStrings>
   <system.web>
     <membership defaultProvider="ClientAuthenticationMembershipProvider">

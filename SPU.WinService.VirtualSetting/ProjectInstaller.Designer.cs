@@ -39,8 +39,8 @@
             // 
             // VirtualSettingService
             // 
-            this.VirtualSettingService.Description = "Fraud Detection Service To Run Tasks Periodically";
-            this.VirtualSettingService.DisplayName = "Fraud Detection Service";
+            this.VirtualSettingService.Description = "Virtual Setting Service To Run Tasks Periodically";
+            this.VirtualSettingService.DisplayName = "Virtual Setting Service";
             this.VirtualSettingService.ServiceName = "VirtualSettingService";
             // 
             // ProjectInstaller

@@ -7,9 +7,9 @@
 //-> SPU.WinService.VirtualSetting.exe.UAT.config
 // Generated helper templates
 // Generated items
-// SPU.WinService.VirtualSetting.exe.PRO.config
-// SPU.WinService.VirtualSetting.exe.UAT.config
-// SPU.WinService.VirtualSetting.exe.LOCAL.config
-// SPU.WinService.VirtualSetting.exe.PRO.config
-// SPU.WinService.VirtualSetting.exe.UAT.config
-// SPU.WinService.VirtualSetting.exe.LOCAL.config
+// SPU.WinService.VirtualSetting\SPU.WinService.VirtualSetting.exe.PRO.config
+// SPU.WinService.VirtualSetting\SPU.WinService.VirtualSetting.exe.UAT.config
+// SPU.WinService.VirtualSetting\SPU.WinService.VirtualSetting.exe.LOCAL.config
+// SPU.WinService.VirtualSetting\SPU.WinService.VirtualSetting.exe.PRO.config
+// SPU.WinService.VirtualSetting\SPU.WinService.VirtualSetting.exe.UAT.config
+// SPU.WinService.VirtualSetting\SPU.WinService.VirtualSetting.exe.LOCAL.config
