@@ -4,7 +4,7 @@ using System.Configuration;
 using System.Linq;
 using System.Text;
 
-namespace SPU.WinService.VitualSetting.Core
+namespace SPU.WinService.VitualSetting
 {
     public static class AppSettings
     {
@@ -65,5 +65,19 @@ namespace SPU.WinService.VitualSetting.Core
                 return 1000;
             }
         }
+
+        public static double NewVirtualMultiplier
+        {
+            get
+            {
+                string count = ConfigurationManager.AppSettings["NewVirtualMultiplier"];
+                if (!string.IsNullOrEmpty(count))
+                {
+                    return Convert.ToDouble(count);
+                }
+
+                return 1;
+            }
+        }        
     }
 }

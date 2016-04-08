@@ -110,7 +110,6 @@
     <Compile Include="VirtualSetting\Model\ProPunter.cs" />
     <Compile Include="VirtualSetting\Service\QueryService.cs" />
     <Compile Include="VirtualSetting\Service\VirtualSettingPunterService.cs" />
-    <Compile Include="AppSettings.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

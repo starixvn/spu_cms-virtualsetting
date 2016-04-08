@@ -1,4 +1,4 @@
-﻿namespace SPU.WinService.FraudDetection
+﻿namespace SPU.WinService.VirtualSetting
 {
     using System.ServiceProcess;
     using SPU.WinService.VirtualSetting;

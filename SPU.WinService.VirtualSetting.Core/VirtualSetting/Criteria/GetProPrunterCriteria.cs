@@ -9,7 +9,7 @@ namespace SPU.WinService.VitualSetting.Core.VirtualSetting
     using Fanex.Data.Repository;
 
     /// <summary>
-    /// TODO: Update summary.
+    /// GetProPrunterCriteria Class.
     /// </summary>
     public class GetProPrunterCriteria : CriteriaBase
     {

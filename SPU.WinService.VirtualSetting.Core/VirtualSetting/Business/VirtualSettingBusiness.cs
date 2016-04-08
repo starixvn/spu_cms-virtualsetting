@@ -11,7 +11,7 @@ namespace SPU.WinService.VitualSetting.Core.VirtualSetting
     using System.Linq;
 
     /// <summary>
-    /// TODO: Update summary.
+    /// VirtualSettingBusiness Class.
     /// </summary>
     public class VirtualSettingBusiness
     {
@@ -22,25 +22,25 @@ namespace SPU.WinService.VitualSetting.Core.VirtualSetting
             _virtualSettingsService = virtualSettingsService ?? new VirtualSettingPunterService();
         }
 
-        public IEnumerable<ProPunter> GetProPunterList()
+        public IEnumerable<ProPunter> GetProPunterList(string siteName, int ServiceExecutionInterval)
         {
             var criteria = new GetProPrunterCriteria
             {
-                ServiceExeInterval = AppSettings.ServiceExecutionInterval,
-                SiteName = AppSettings.SiteName
+                ServiceExeInterval = ServiceExecutionInterval,
+                SiteName = siteName
             };
 
             return _virtualSettingsService.GetProPunterList(criteria);
         }
 
-        public bool UpdateProPunterVirtualSetting(IEnumerable<ProPunter> proPunters, double virtualMultiplier = 0)
+        public bool UpdateProPunterVirtualSetting(IEnumerable<ProPunter> proPunters, double virtualMultiplier, int userId, string IP)
         {
             var criteria = new UpdateVirtualSettingCriteria
             {
                 VirtualMultiplier = GenerateVirtualSettingXmlForUpdating(proPunters, virtualMultiplier),
   
-                UserId = AppSettings.DummyUser,
-                IP = AppSettings.IP
+                UserId = userId,
+                IP = IP
             };
 
             var updateResult = _virtualSettingsService.UpdateVirtualSetting(criteria);
@@ -48,23 +48,23 @@ namespace SPU.WinService.VitualSetting.Core.VirtualSetting
             return updateResult.IsSuccessful;
         }
 
-        public bool LogProPunterVirtualSetting(IEnumerable<ProPunter> proPunters, double newVirtualMultiplier = 0)
+        public bool LogProPunterVirtualSetting(IEnumerable<ProPunter> proPunters, double newVirtualMultiplier, int userId)
         {
             var criteria = new LogVirtualSettingCriteria
             {
                 ProPunterVRSettingsDoc = GenerateVirtualSettingXmlForLogging(proPunters, newVirtualMultiplier),
 
-                CreatorId = AppSettings.DummyUser,                
+                CreatorId = userId
             };
 
-            var updateResult = _virtualSettingsService.LogVirtualSetting(criteria);
+            var logResult = _virtualSettingsService.LogVirtualSetting(criteria);
 
-            return updateResult.IsSuccessful;
+            return logResult.IsSuccessful;
         }
 
         #region Utilities
 
-        private string GenerateVirtualSettingXmlForUpdating(IEnumerable<ProPunter> proPunters, double virtualMultiplier = 0)
+        private string GenerateVirtualSettingXmlForUpdating(IEnumerable<ProPunter> proPunters, double virtualMultiplier)
         {
             string format = "<Rate CustIds=\"@CustIds\" VirtualMultiplier =\"" + virtualMultiplier + "\" />";
             
@@ -74,22 +74,14 @@ namespace SPU.WinService.VitualSetting.Core.VirtualSetting
             return "<ROOT>" + format.Replace("@CustIds", cusIds) + "</ROOT>";            
         }
 
-        private string GenerateVirtualSettingXmlForLogging(IEnumerable<ProPunter> proPunters, double newVirtualMultiplier = 0)
-        {
-            //string format = "<Rate CustID=\"@CustId\" ReportDate=\"@ReportDate\" SiteID=\"@SiteID\" SRecommend=\"@SRecommend\" MRecommend=\"@MRecommend\" Recommend=\"@Recommend\" OldVirtualRate=\"OldVirtualRate\" NewVirtualRate =\"" + NewVirtualMultiplier + "\" />";
-
+        private string GenerateVirtualSettingXmlForLogging(IEnumerable<ProPunter> proPunters, double newVirtualMultiplier)
+        {            
             string xml = string.Empty;
 
             foreach(var punter in proPunters)
-            {
-                xml += "<Rate CustID=\"" + punter.CustID + "\"" +
-                       " ReportDate=\"" + punter.ReportDate.ToShortDateString() + "\"" +
-                       " SiteID=\"" + punter.SiteID + "\""+
-                       " SRecommend=\"" + punter.SRecommend + "\"" +
-                       " MRecommend=\"" + punter.MRecommend + "\"" +
-                       " Recommend=\"" + punter.Recommend + "\"" +
-                       " OldVirtualRate=\"" + punter.OldVirtualRate + "\"" +
-                       " NewVirtualRate=\"" + newVirtualMultiplier + "\"" + "/>";                       
+            {              
+                xml += string.Format("<Rate CustID=\"{0}\" ReportDate=\"{1}\" SiteID=\"{2}\" SRecommend=\"{3}\" MRecommend=\"{4}\" Recommend=\"{5}\" OldVirtualRate=\"{6}\" NewVirtualRate =\"{7}\" />",
+                                     punter.CustID, punter.ReportDate.ToShortDateString(), punter.SiteID, punter.SRecommend, punter.MRecommend, punter.Recommend, punter.OldVirtualRate, newVirtualMultiplier);
             }
 
             return "<ROOT>" + xml + "</ROOT>";

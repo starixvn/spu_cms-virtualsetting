@@ -7,6 +7,7 @@
     using SPU.WinService.VitualSetting.Core.VirtualSetting;
     using System.Linq;
     using System;
+    using SPU.WinService.VitualSetting;
 
     public partial class VirtualSettingService : ServiceBase
     {
@@ -23,7 +24,7 @@
 
         protected override void OnStart(string[] args)
         {
-            Logger.Log.Error("Starting SPU.VirtualSetting service", "SPU.Local");
+            Logger.Log.Error("Starting updating virtual service", "SPU.Local");
 
             MailClientHandler.Start();
 
@@ -41,21 +42,27 @@
         {                     
             try
             {
+                int batchMembersNumber = AppSettings.BatchMembersNumber;
+                double newVirtualMultiplier = AppSettings.NewVirtualMultiplier;
+                string siteName = AppSettings.SiteName;
+                int serviceExecutionInterval = AppSettings.ServiceExecutionInterval;
+                int userId = AppSettings.DummyUser;
+                string IP = AppSettings.IP;
+
                 VirtualSettingBusiness virtualSettingBusiness = new VirtualSettingBusiness();
 
-                var proPunters = virtualSettingBusiness.GetProPunterList();
+                var proPunters = virtualSettingBusiness.GetProPunterList(siteName, serviceExecutionInterval);
 
                 if (proPunters != null && proPunters.Count() > 0)
                 {
-                    bool update = virtualSettingBusiness.UpdateProPunterVirtualSetting(proPunters);
+                    bool update = virtualSettingBusiness.UpdateProPunterVirtualSetting(proPunters, newVirtualMultiplier, userId, IP);
                     if (!update)
                     {
                         Logger.Log.Error("Error for updating virtual setting", "SPU.Local");
                     }
                     else
                     {
-                        bool log = virtualSettingBusiness.LogProPunterVirtualSetting(proPunters);
-
+                        bool log = virtualSettingBusiness.LogProPunterVirtualSetting(proPunters, newVirtualMultiplier, userId);
                         if (!log)
                         {
                             Logger.Log.Error("Error for logging virtual setting", "SPU.Local");
