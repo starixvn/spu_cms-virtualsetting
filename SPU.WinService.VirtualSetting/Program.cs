@@ -1,7 +1,6 @@
 ﻿namespace SPU.WinService.VirtualSetting
 {
     using System.ServiceProcess;
-    using SPU.WinService.VirtualSetting;
 
     internal static class Program
     {

@@ -21,7 +21,7 @@ namespace SPU.WinService.VitualSetting
             get
             {
                 string interval = ConfigurationManager.AppSettings["ServiceExecutionInterval"];
-                if(!string.IsNullOrEmpty(interval))
+                if (!string.IsNullOrEmpty(interval))
                 {
                     return Convert.ToInt32(interval);
                 }
@@ -35,7 +35,7 @@ namespace SPU.WinService.VitualSetting
             get
             {
                 string dummyUser = ConfigurationManager.AppSettings["DummyUser"];
-                if(!string.IsNullOrEmpty(dummyUser))
+                if (!string.IsNullOrEmpty(dummyUser))
                 {
                     return Convert.ToInt32(dummyUser);
                 }
@@ -52,11 +52,11 @@ namespace SPU.WinService.VitualSetting
             }
         }
 
-        public static int BatchMembersNumber
+        public static int ProPunterChunkSize
         {
             get
             {
-                string count = ConfigurationManager.AppSettings["BatchMembersNumber"];
+                string count = ConfigurationManager.AppSettings["ProPunterChunkSize"];
                 if (!string.IsNullOrEmpty(count))
                 {
                     return Convert.ToInt32(count);

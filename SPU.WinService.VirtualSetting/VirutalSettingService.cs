@@ -1,13 +1,15 @@
 ﻿namespace SPU.WinService.VirtualSetting
 {
-    using System.ServiceProcess;
     using Fanex.Data.Configuration;
     using Fanex.Logging;
     using Fanex.MailDelivery.Client.Handlers;
-    using SPU.WinService.VitualSetting.Core.VirtualSetting;
-    using System.Linq;
-    using System;
     using SPU.WinService.VitualSetting;
+    using SPU.WinService.VitualSetting.Core;
+    using SPU.WinService.VitualSetting.Core.VirtualSetting;
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.ServiceProcess;
 
     public partial class VirtualSettingService : ServiceBase
     {
@@ -28,7 +30,7 @@
 
             MailClientHandler.Start();
 
-            UpdateVirtualSetting();
+            DoVirtualSetting();
 
             Logger.Log.Error("Ending updating virtual setting", "SPU.Local");
         }
@@ -38,44 +40,50 @@
             MailClientHandler.Stop();
         }
 
-        public void UpdateVirtualSetting()
+        public void DoVirtualSetting()
         {                     
             try
-            {
-                int batchMembersNumber = AppSettings.BatchMembersNumber;
-                double newVirtualMultiplier = AppSettings.NewVirtualMultiplier;
-                string siteName = AppSettings.SiteName;
-                int serviceExecutionInterval = AppSettings.ServiceExecutionInterval;
-                int userId = AppSettings.DummyUser;
-                string IP = AppSettings.IP;
-
+            {                               
                 VirtualSettingBusiness virtualSettingBusiness = new VirtualSettingBusiness();
 
-                var proPunters = virtualSettingBusiness.GetProPunterList(siteName, serviceExecutionInterval);
+                var proPunters = virtualSettingBusiness.GetProPunterList(AppSettings.SiteName, AppSettings.ServiceExecutionInterval);                               
 
                 if (proPunters != null && proPunters.Count() > 0)
                 {
-                    bool update = virtualSettingBusiness.UpdateProPunterVirtualSetting(proPunters, newVirtualMultiplier, userId, IP);
-                    if (!update)
-                    {
-                        Logger.Log.Error("Error for updating virtual setting", "SPU.Local");
-                    }
-                    else
-                    {
-                        bool log = virtualSettingBusiness.LogProPunterVirtualSetting(proPunters, newVirtualMultiplier, userId);
-                        if (!log)
-                        {
-                            Logger.Log.Error("Error for logging virtual setting", "SPU.Local");
-                        }
-                    }
+                    UpdateVirtualSetting(virtualSettingBusiness, proPunters);
                 }
-
             }
             catch (Exception ex)
             {
                 Logger.Log.Error(ex.Message, "SPU.Local");
+            }            
+        }
+
+        private void UpdateVirtualSetting(VirtualSettingBusiness virtualSettingBusiness, IEnumerable<ProPunter> proPunters)
+        {
+            double newVirtualMultiplier = AppSettings.NewVirtualMultiplier;
+            int userId = AppSettings.DummyUser;
+            string ip = AppSettings.IP;
+            int chunkSize = AppSettings.ProPunterChunkSize;
+
+            var chunkProPunters = Extensions.Partition(proPunters, chunkSize);
+
+            foreach (var punters in chunkProPunters)
+            {
+                bool update = virtualSettingBusiness.UpdateProPunterVirtualSetting(punters, newVirtualMultiplier, userId, ip);
+                if (!update)
+                {
+                    Logger.Log.Error("Error for updating virtual setting", "SPU.Local");
+                }
+                else
+                {
+                    bool log = virtualSettingBusiness.LogProPunterVirtualSetting(punters, newVirtualMultiplier, userId);
+                    if (!log)
+                    {
+                        Logger.Log.Error("Error for logging virtual setting", "SPU.Local");
+                    }
+                }
             }
-            
         }
     }
 }
