@@ -1,16 +1,18 @@
 ﻿namespace SPU.WinService.VirtualSetting.Console
 {
+    using Fanex.Data.Configuration;
     using System;    
 
     internal class Program
     {
         private static void Main()
-        {
-            var virtualSettingService = new VirtualSettingService();
-
+        {            
             Console.WriteLine("Start to run window service manually.");
 
-            virtualSettingService.DoVirtualSetting();
+            DbSettingProviderManager.Current.Start();
+
+            VirtualSettingJob job = new VirtualSettingJob();
+            job.DoVirtualSetting();            
 
             Console.WriteLine("Window service is running now.");
         }

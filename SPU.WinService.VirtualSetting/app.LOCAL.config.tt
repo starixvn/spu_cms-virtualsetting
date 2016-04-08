@@ -24,7 +24,7 @@
     <add key="ProPunterChunkSize" value="1000"/>
     <add key="NewVirtualMultiplier" value="1.2"/>
     <add key="SiteName" value="W88SuperUS$"/>
-    <add key="ServiceExecutionInterval" value="7"/>
+    <add key="ServiceExecutionInterval" value="1"/> <!-- in hour-->
     <add key="DummyUser" value="0"/>
     <add key="IP" value=""/>
   </appSettings>

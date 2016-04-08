@@ -22,11 +22,10 @@ namespace SPU.WinService.VitualSetting.Core.VirtualSetting
             _virtualSettingsService = virtualSettingsService ?? new VirtualSettingPunterService();
         }
 
-        public IEnumerable<ProPunter> GetProPunterList(string siteName, int ServiceExecutionInterval)
+        public IEnumerable<ProPunter> GetProPunterList(string siteName)
         {
             var criteria = new GetProPrunterCriteria
-            {
-                ServiceExeInterval = ServiceExecutionInterval,
+            {                
                 SiteName = siteName
             };
 

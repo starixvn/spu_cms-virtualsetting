@@ -129,6 +129,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AppSettings.cs" />
+    <Compile Include="VirtualSettingJob.cs" />
     <Compile Include="VirutalSettingService.cs">
       <SubType>Component</SubType>
     </Compile>
