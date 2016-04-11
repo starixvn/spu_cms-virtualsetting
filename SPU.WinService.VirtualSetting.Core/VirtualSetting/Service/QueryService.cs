@@ -6,7 +6,6 @@
 
 namespace SPU.WinService.VitualSetting.Core.VirtualSetting
 {
-    using Fanex.Common.Helper;
     using Fanex.Data;
     using Fanex.Data.Repository;
     using Fanex.NAP.Framework.Command;
@@ -66,10 +65,6 @@ namespace SPU.WinService.VitualSetting.Core.VirtualSetting
 
         #region UPDATE-DATA
 
-        /// <summary>
-        /// Get output values.
-        /// </summary>
-        /// <param name="criteria">Input criteria.</param>
         public ICommandResult ExecuteOutput(ICriteria criteria)
         {
             using (var objectDb = new ObjectDb(criteria.GetSettingKey()))

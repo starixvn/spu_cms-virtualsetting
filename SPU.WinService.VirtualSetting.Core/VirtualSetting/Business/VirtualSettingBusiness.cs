@@ -25,7 +25,7 @@ namespace SPU.WinService.VitualSetting.Core.VirtualSetting
         public IEnumerable<ProPunter> GetProPunterList(string siteName)
         {
             var criteria = new GetProPrunterCriteria
-            {                
+            {
                 SiteName = siteName
             };
 
@@ -37,7 +37,6 @@ namespace SPU.WinService.VitualSetting.Core.VirtualSetting
             var criteria = new UpdateVirtualSettingCriteria
             {
                 VirtualMultiplier = GenerateVirtualSettingXmlForUpdating(proPunters, virtualMultiplier),
-  
                 UserId = userId,
                 IP = IP
             };
@@ -52,7 +51,6 @@ namespace SPU.WinService.VitualSetting.Core.VirtualSetting
             var criteria = new LogVirtualSettingCriteria
             {
                 ProPunterVRSettingsDoc = GenerateVirtualSettingXmlForLogging(proPunters, newVirtualMultiplier),
-
                 CreatorId = userId
             };
 
@@ -65,27 +63,34 @@ namespace SPU.WinService.VitualSetting.Core.VirtualSetting
 
         private string GenerateVirtualSettingXmlForUpdating(IEnumerable<ProPunter> proPunters, double virtualMultiplier)
         {
-            string format = "<Rate CustIds=\"@CustIds\" VirtualMultiplier =\"" + virtualMultiplier + "\" />";
-            
+            var format = "<Rate CustIds=\"@CustIds\" VirtualMultiplier =\"" + virtualMultiplier + "\" />";
+
             var collection = proPunters.Select(x => x.CustID);
             var cusIds = string.Join(",", collection);
 
-            return "<ROOT>" + format.Replace("@CustIds", cusIds) + "</ROOT>";            
+            return "<ROOT>" + format.Replace("@CustIds", cusIds) + "</ROOT>";
         }
 
         private string GenerateVirtualSettingXmlForLogging(IEnumerable<ProPunter> proPunters, double newVirtualMultiplier)
-        {            
-            string xml = string.Empty;
+        {
+            var xml = string.Empty;
 
-            foreach(var punter in proPunters)
-            {              
-                xml += string.Format("<Rate CustID=\"{0}\" ReportDate=\"{1}\" SiteID=\"{2}\" SRecommend=\"{3}\" MRecommend=\"{4}\" Recommend=\"{5}\" OldVirtualRate=\"{6}\" NewVirtualRate =\"{7}\" />",
-                                     punter.CustID, punter.ReportDate.ToShortDateString(), punter.SiteID, punter.SRecommend, punter.MRecommend, punter.Recommend, punter.OldVirtualRate, newVirtualMultiplier);
+            foreach (var punter in proPunters)
+            {
+                xml += string.Format(
+                                    "<Rate CustID=\"{0}\" ReportDate=\"{1}\" SiteID=\"{2}\" SRecommend=\"{3}\" MRecommend=\"{4}\" Recommend=\"{5}\" OldVirtualRate=\"{6}\" NewVirtualRate =\"{7}\" />",
+                                    punter.CustID,
+                                    punter.ReportDate.ToShortDateString(),
+                                    punter.SiteID,
+                                    punter.SRecommend,
+                                    punter.MRecommend,
+                                    punter.Recommend,
+                                    punter.OldVirtualRate,
+                                    newVirtualMultiplier);
             }
 
             return "<ROOT>" + xml + "</ROOT>";
         }
-
 
         #endregion
     }

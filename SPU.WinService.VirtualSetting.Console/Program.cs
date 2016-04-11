@@ -12,7 +12,7 @@
             DbSettingProviderManager.Current.Start();
 
             VirtualSettingJob job = new VirtualSettingJob();
-            job.DoVirtualSetting();            
+            job.AutoAdjustVirtualSettings();            
 
             Console.WriteLine("Window service is running now.");
         }

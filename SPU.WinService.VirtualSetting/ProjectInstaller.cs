@@ -1,8 +1,8 @@
-﻿using System.ComponentModel;
-using System.Configuration.Install;
-
-namespace SPU.WinService.FraudDetection
+﻿namespace SPU.WinService.FraudDetection
 {
+    using System.ComponentModel;
+    using System.Configuration.Install;
+
     [RunInstaller(true)]
     public partial class ProjectInstaller : Installer
     {

@@ -30,7 +30,6 @@
             {
                 Logger.Log.Error("Error for scheduling virtual setting", "SPU.Local");
             }
-
         }
         
         protected override void OnStop()

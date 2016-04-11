@@ -1,11 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Linq;
-using System.Text;
-
-namespace SPU.WinService.VitualSetting
+﻿namespace SPU.WinService.VitualSetting
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Configuration;
+    using System.Linq;
+    using System.Text;
+
     public static class AppSettings
     {
         public static string SiteName

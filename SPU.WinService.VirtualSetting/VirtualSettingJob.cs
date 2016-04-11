@@ -1,36 +1,35 @@
-﻿using Fanex.Logging;
-using Quartz;
-using SPU.WinService.VitualSetting;
-using SPU.WinService.VitualSetting.Core;
-using SPU.WinService.VitualSetting.Core.VirtualSetting;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-
-namespace SPU.WinService.VirtualSetting
+﻿namespace SPU.WinService.VirtualSetting
 {
-    public class VirtualSettingJob: IJob
+    using Fanex.Logging;
+    using Quartz;
+    using SPU.WinService.VitualSetting;
+    using SPU.WinService.VitualSetting.Core;
+    using SPU.WinService.VitualSetting.Core.VirtualSetting;
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+
+    public class VirtualSettingJob : IJob
     {
         public void Execute(IJobExecutionContext context)
         {
-            Logger.Log.Info("Starting updating virtual service", "SPU.Local");
+            Logger.Log.Info("Starting Auto Updating Virtual Settings", "SPU.Local");
 
             try
             {
-                DoVirtualSetting();
+                AutoAdjustVirtualSettings();
             }
             catch (Exception ex)
             {
                 Logger.Log.Error(ex.Message, "SPU.Local");
             }
 
-            Logger.Log.Info("Ending updating virtual setting", "SPU.Local");
+            Logger.Log.Info("Ending Auto Updating Virtual Settings", "SPU.Local");
         }
 
-        public void DoVirtualSetting()
+        public void AutoAdjustVirtualSettings()
         {
-            VirtualSettingBusiness virtualSettingBusiness = new VirtualSettingBusiness();
-
+            var virtualSettingBusiness = new VirtualSettingBusiness();
             var proPunters = virtualSettingBusiness.GetProPunterList(AppSettings.SiteName);
 
             if (proPunters != null && proPunters.Count() > 0)
@@ -41,30 +40,28 @@ namespace SPU.WinService.VirtualSetting
 
         private void UpdateVirtualSetting(VirtualSettingBusiness virtualSettingBusiness, IEnumerable<ProPunter> proPunters)
         {
-            double newVirtualMultiplier = AppSettings.NewVirtualMultiplier;
-            int userId = AppSettings.DummyUser;
-            string ip = AppSettings.IP;
-            int chunkSize = AppSettings.ProPunterChunkSize;
-
+            var newVirtualMultiplier = AppSettings.NewVirtualMultiplier;
+            var userId = AppSettings.DummyUser;
+            var ip = AppSettings.IP;
+            var chunkSize = AppSettings.ProPunterChunkSize;
             var chunkProPunters = Extensions.Partition(proPunters, chunkSize);
 
             foreach (var punters in chunkProPunters)
             {
-                bool update = virtualSettingBusiness.UpdateProPunterVirtualSetting(punters, newVirtualMultiplier, userId, ip);
-                if (!update)
+                var updateResult = virtualSettingBusiness.UpdateProPunterVirtualSetting(punters, newVirtualMultiplier, userId, ip);
+                if (!updateResult)
                 {
-                    Logger.Log.Error("Error for updating virtual setting", "SPU.Local");
+                    Logger.Log.Error("Error for updating virtual settings", "SPU.Local");
                 }
                 else
                 {
-                    bool log = virtualSettingBusiness.LogProPunterVirtualSetting(punters, newVirtualMultiplier, userId);
-                    if (!log)
+                    var logResult = virtualSettingBusiness.LogProPunterVirtualSetting(punters, newVirtualMultiplier, userId);
+                    if (!logResult)
                     {
-                        Logger.Log.Error("Error for logging virtual setting", "SPU.Local");
+                        Logger.Log.Error("Error for logging virtual settings", "SPU.Local");
                     }
                 }
             }
         }
-    }
-    
+    }    
 }
