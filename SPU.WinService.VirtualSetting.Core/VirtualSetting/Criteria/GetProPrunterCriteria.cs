@@ -13,7 +13,9 @@ namespace SPU.WinService.VitualSetting.Core.VirtualSetting
     /// </summary>
     public class GetProPrunterCriteria : CriteriaBase
     {        
-        public string SiteName { get; set; }
+        public string SiteIds { get; set; }
+
+        public string SuperIds { get; set; }
 
         /// <summary>
         /// Gets Setting Key.

@@ -8,11 +8,19 @@
 
     public static class AppSettings
     {
-        public static string SiteName
+        public static string SiteIds
         {
             get
             {
-                return ConfigurationManager.AppSettings["SiteName"] ?? string.Empty;
+                return ConfigurationManager.AppSettings["SiteIds"] ?? string.Empty;
+            }
+        }
+
+        public static string SuperIds
+        {
+            get
+            {
+                return ConfigurationManager.AppSettings["SuperIds"] ?? string.Empty;
             }
         }
 

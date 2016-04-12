@@ -22,11 +22,12 @@ namespace SPU.WinService.VitualSetting.Core.VirtualSetting
             _virtualSettingsService = virtualSettingsService ?? new VirtualSettingPunterService();
         }
 
-        public IEnumerable<ProPunter> GetProPunterList(string siteName)
+        public IEnumerable<ProPunter> GetProPunterList(string siteNames, string superIds)
         {
             var criteria = new GetProPrunterCriteria
             {
-                SiteName = siteName
+                SiteIds = siteNames,
+                SuperIds = superIds
             };
 
             return _virtualSettingsService.GetProPunterList(criteria);

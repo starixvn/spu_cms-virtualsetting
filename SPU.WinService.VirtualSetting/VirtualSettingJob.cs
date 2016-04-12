@@ -24,13 +24,13 @@
                 Logger.Log.Error(ex.Message, "SPU.Local");
             }
 
-            Logger.Log.Info("Ending Auto Updating Virtual Settings", "SPU.Local");
+            Logger.Log.Info("Finished Auto Updating Virtual Settings", "SPU.Local");
         }
 
         public void AutoAdjustVirtualSettings()
         {
             var virtualSettingBusiness = new VirtualSettingBusiness();
-            var proPunters = virtualSettingBusiness.GetProPunterList(AppSettings.SiteName);
+            var proPunters = virtualSettingBusiness.GetProPunterList(AppSettings.SiteIds, AppSettings.SuperIds);
 
             if (proPunters != null && proPunters.Count() > 0)
             {

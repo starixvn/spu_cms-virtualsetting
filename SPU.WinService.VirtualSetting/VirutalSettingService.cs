@@ -15,6 +15,7 @@
         public VirtualSettingService()
         {
             InitializeComponent();
+            this.CanShutdown = true;
             DbSettingProviderManager.Current.Start();
         }
 
@@ -33,11 +34,22 @@
         }
         
         protected override void OnStop()
-        {
+        {            
+            Logger.Log.Info("Stop for updating Virtual Settings", "SPU.Local");
+
             MailClientHandler.Stop();
 
             _scheduler.Shutdown(true);
-        }      
+        }
+
+        protected override void OnShutdown()
+        {         
+            Logger.Log.Info("Shutdown for updating Virtual Settings", "SPU.Local");
+
+            MailClientHandler.Stop();
+
+            _scheduler.Shutdown(true);
+        }
    
         private void ScheduleVirtualSettingJob()
         {
