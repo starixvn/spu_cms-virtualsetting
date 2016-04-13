@@ -8,7 +8,7 @@
     using SPU.WinService.VitualSetting;
     using System.ServiceProcess;
 
-    public partial class VirtualSettingService : ServiceBase
+    public partial class VirtualSettingService: ServiceBase
     {
         private static IScheduler _scheduler;
 
@@ -32,9 +32,9 @@
                 Logger.Log.Error("Error for scheduling virtual setting", "SPU.Local");
             }
         }
-        
+
         protected override void OnStop()
-        {            
+        {
             Logger.Log.Info("Stop for updating Virtual Settings", "SPU.Local");
 
             MailClientHandler.Stop();
@@ -43,14 +43,14 @@
         }
 
         protected override void OnShutdown()
-        {         
+        {
             Logger.Log.Info("Shutdown for updating Virtual Settings", "SPU.Local");
 
             MailClientHandler.Stop();
 
             _scheduler.Shutdown(true);
         }
-   
+
         private void ScheduleVirtualSettingJob()
         {
             _scheduler = StdSchedulerFactory.GetDefaultScheduler();
@@ -64,7 +64,7 @@
                 .WithIdentity("TriggerUpdateVirtualSetting", "VirtualSetting")
                 .StartNow()
                 .WithSimpleSchedule(x => x
-                    .WithIntervalInHours(AppSettings.ServiceExecutionInterval)                    
+                    .WithIntervalInHours(AppSettings.ServiceExecutionInterval)
                     .RepeatForever())
                 .Build();
 

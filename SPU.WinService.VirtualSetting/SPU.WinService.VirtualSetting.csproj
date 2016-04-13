@@ -171,15 +171,15 @@
     <Content Include="Uninstall Service.bat">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <None Include="app.LOCAL.config.tt">
-      <SubType>Designer</SubType>
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>app.LOCAL.config1.config</LastGenOutput>
-    </None>
-    <None Include="app.LOCAL.config1.config">
+    <None Include="app.LOCAL.config.config">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>app.LOCAL.config.tt</DependentUpon>
+    </None>
+    <None Include="app.LOCAL.config.tt">
+      <SubType>Designer</SubType>
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>app.LOCAL.config.config</LastGenOutput>
     </None>
     <None Include="app.PRO.config.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
@@ -191,17 +191,12 @@
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>app.UAT.config1.txt</LastGenOutput>
     </None>
+    <None Include="MailTemplate\MailInformTemplate.cshtml" />
     <None Include="packages.config" />
     <None Include="MasterTemplate.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>MasterTemplate.txt</LastGenOutput>
     </None>
-    <Content Include="ReportTemplateRenders\TableTemplates\MarginReport.cshtml">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="ReportTemplateRenders\TableTemplates\SuspiciousStatisticsReport.cshtml">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
     <None Include="SPU.WinService.VirtualSetting.exe.LOCAL.config">
       <DependentUpon>MasterTemplate.tt</DependentUpon>
     </None>

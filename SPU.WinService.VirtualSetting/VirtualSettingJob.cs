@@ -1,15 +1,16 @@
 ﻿namespace SPU.WinService.VirtualSetting
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
     using Fanex.Logging;
+    using Fanex.MailDelivery.Client.Handlers;
     using Quartz;
     using SPU.WinService.VitualSetting;
     using SPU.WinService.VitualSetting.Core;
     using SPU.WinService.VitualSetting.Core.VirtualSetting;
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
 
-    public class VirtualSettingJob : IJob
+    public class VirtualSettingJob: IJob
     {
         public void Execute(IJobExecutionContext context)
         {
@@ -29,12 +30,19 @@
 
         public void AutoAdjustVirtualSettings()
         {
+            var startTime = DateTime.Now;
             var virtualSettingBusiness = new VirtualSettingBusiness();
             var proPunters = virtualSettingBusiness.GetProPunterList(AppSettings.SiteIds, AppSettings.SuperIds);
 
             if (proPunters != null && proPunters.Count() > 0)
             {
                 UpdateVirtualSetting(virtualSettingBusiness, proPunters);
+
+                var numberOfCustomers = proPunters.Count();
+                var stopTime = DateTime.Now;
+                var mailContent = GetMailContent(startTime, stopTime, numberOfCustomers);
+
+                SendMail(mailContent);
             }
         }
 
@@ -63,5 +71,31 @@
                 }
             }
         }
-    }    
+
+        private void SendMail(string mailContent)
+        {
+            var newMail = new Fanex.MailDelivery.Client.Models.Mail
+            {
+                Subject = "VR Auto Adjustment finished",
+                Title = "SPU VR Auto Mail",
+                Body = mailContent,
+                MailingListId = AppSettings.MailingListId
+            };
+
+            MailClientHandler.SendMail(newMail);
+        }
+
+        private string GetMailContent(DateTime startTime, DateTime stopTime, int numberOfCustomers)
+        {
+            var mailTemplatePath = Environment.CurrentDirectory + @"\MailTemplate\MailInformTemplate.cshtml";
+            var body = Utilities.ReadTextFile(mailTemplatePath);
+            body = string.Format(body, startTime.ToString("dd/MM/yyyy"),
+                                (stopTime - startTime).TotalSeconds,
+                                startTime.ToString(),
+                                stopTime.ToString(),
+                                numberOfCustomers.ToString());
+
+            return body;
+        }
+    }
 }

@@ -132,13 +132,10 @@
     <None Include="app.config">
       <SubType>Designer</SubType>
     </None>
+    <Content Include="MailTemplate\MailInformTemplate.cshtml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <None Include="packages.config" />
-    <Content Include="ReportTemplateRenders\TableTemplates\MarginReport.cshtml">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="ReportTemplateRenders\TableTemplates\SuspiciousStatisticsReport.cshtml">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
   </ItemGroup>
   <ItemGroup>
     <Content Include="App_Data\SpName.xml">

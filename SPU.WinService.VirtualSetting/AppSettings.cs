@@ -37,7 +37,7 @@
                 return 7;
             }
         }
-        
+
         public static int DummyUser
         {
             get
@@ -86,6 +86,21 @@
 
                 return 1;
             }
-        }        
+        }
+
+        public static int MailingListId
+        {
+            get
+            {
+                string mailingListId = ConfigurationManager.AppSettings["MailingListId"];
+
+                if (!string.IsNullOrEmpty(mailingListId))
+                {
+                    return Convert.ToInt32(mailingListId);
+                }
+
+                return 80;
+            }
+        }
     }
 }
