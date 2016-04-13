@@ -83,6 +83,8 @@
             };
 
             MailClientHandler.SendMail(newMail);
+
+            Logger.Log.Info("Finised sending mail inform with MailId = " + newMail.MailingListId + ", content = " + mailContent, "SPU.Local");
         }
 
         private string GetMailContent(DateTime startTime, DateTime stopTime, int numberOfCustomers)

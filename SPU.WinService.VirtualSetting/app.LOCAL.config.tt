@@ -24,7 +24,7 @@
     <add key="ProPunterChunkSize" value="1000"/>
     <add key="NewVirtualMultiplier" value="1"/>
     <add key="SiteIds" value=""/>
-    <add key="SuperIds" value="410722"/>
+    <add key="SuperIds" value="410722,1127269,14301612"/>
     <add key="ServiceExecutionInterval" value="1"/> <!-- in hour-->
     <add key="DummyUser" value="862400"/>
     <add key="IP" value=""/>

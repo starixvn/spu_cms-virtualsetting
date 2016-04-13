@@ -191,7 +191,9 @@
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>app.UAT.config1.txt</LastGenOutput>
     </None>
-    <None Include="MailTemplate\MailInformTemplate.cshtml" />
+    <Content Include="MailTemplate\MailInformTemplate.cshtml">
+      <SubType>Code</SubType>
+    </Content>
     <None Include="packages.config" />
     <None Include="MasterTemplate.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
