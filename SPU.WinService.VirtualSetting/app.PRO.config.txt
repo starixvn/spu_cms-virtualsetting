@@ -25,7 +25,7 @@
     <add key="SuperIds" value=""/>
     <add key="ServiceExecutionInterval" value="1"/>
     <!-- in hour-->
-    <add key="DummyUser" value="148"/>
+    <add key="DummyUser" value="862400"/>
     <add key="IP" value=""/>
   </appSettings>
   <connectionStrings>
