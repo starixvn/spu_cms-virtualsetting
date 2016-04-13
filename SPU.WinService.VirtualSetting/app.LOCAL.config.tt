@@ -1,5 +1,5 @@
 ﻿<#@ template debug="true" hostSpecific="true" #>
-<#@ output extension=".config" #>
+<#@ output extension=".txt" #>
 <?xml version="1.0" encoding="utf-8"?>
 <configuration>
   <configSections>
@@ -17,10 +17,9 @@
   <Fanex.Logging msmqPath="FormatName:DIRECT=TCP:10.18.200.124\private$\entlib" defaultCategory="SPU.Local" />
   <appSettings>
     <add key="ClientSettingsProvider.ServiceUri" value="" />    
-    <add key="RemoteRefURL" value="tcp://10.18.200.124:8888/CallGetRefFunction" />
+    <add key="RemoteRefURL" value="tcp://10.70.70.242:8888/CallGetRefFunction" />
     <add key="RemoteCacheUrl" value="tcp://10.18.200.124:8888/CallGetOddsFunction" />
     <add key="queuePath" value="FormatName:DIRECT=TCP:10.18.200.209\private$\fdmessagequeue"/>
-    <add key="FDUrl" value="" />
     <add key="ProPunterChunkSize" value="1000"/>
     <add key="NewVirtualMultiplier" value="1"/>
     <add key="SiteIds" value=""/>
