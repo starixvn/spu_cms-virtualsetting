@@ -83,18 +83,15 @@
             };
 
             MailClientHandler.SendMail(newMail);
-
-            Logger.Log.Info("Finised sending mail inform with MailId = " + newMail.MailingListId + ", content = " + mailContent, "SPU.Local");
         }
 
         private string GetMailContent(DateTime startTime, DateTime stopTime, int numberOfCustomers)
         {
             var mailTemplatePath = AppDomain.CurrentDomain.BaseDirectory + @".\MailTemplate\MailInformTemplate.cshtml";
             var body = Utilities.ReadTextFile(mailTemplatePath);
-            body = string.Format(body, startTime.ToString("dd/MM/yyyy"),
-                                (stopTime - startTime).TotalSeconds,
-                                startTime.ToString(),
-                                stopTime.ToString(),
+            body = string.Format(body,
+                                startTime.ToString("MM/dd/yyyy hh:mm:ss"),
+                                stopTime.ToString("MM/dd/yyyy hh:mm:ss"),
                                 numberOfCustomers.ToString());
 
             return body;

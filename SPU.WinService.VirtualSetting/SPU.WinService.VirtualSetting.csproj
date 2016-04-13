@@ -193,6 +193,7 @@
     </None>
     <Content Include="MailTemplate\MailInformTemplate.cshtml">
       <SubType>Code</SubType>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <None Include="packages.config" />
     <None Include="MasterTemplate.tt">
