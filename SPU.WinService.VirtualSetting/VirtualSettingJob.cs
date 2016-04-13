@@ -87,7 +87,7 @@
 
         private string GetMailContent(DateTime startTime, DateTime stopTime, int numberOfCustomers)
         {
-            var mailTemplatePath = Environment.CurrentDirectory + @"\MailTemplate\MailInformTemplate.cshtml";
+            var mailTemplatePath = AppDomain.CurrentDomain.BaseDirectory + @".\MailTemplate\MailInformTemplate.cshtml";
             var body = Utilities.ReadTextFile(mailTemplatePath);
             body = string.Format(body, startTime.ToString("dd/MM/yyyy"),
                                 (stopTime - startTime).TotalSeconds,
