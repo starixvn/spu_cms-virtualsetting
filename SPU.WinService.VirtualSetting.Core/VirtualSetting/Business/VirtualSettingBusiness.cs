@@ -4,6 +4,9 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
+using System.Text;
+using Fanex.Common.Extensions;
+
 namespace SPU.WinService.VitualSetting.Core.VirtualSetting
 {
     using Fanex.NAP.Framework.Command;
@@ -64,22 +67,20 @@ namespace SPU.WinService.VitualSetting.Core.VirtualSetting
 
         private string GenerateVirtualSettingXmlForUpdating(IEnumerable<ProPunter> proPunters, double virtualMultiplier)
         {
-            var format = "<Rate CustIds=\"@CustIds\" VirtualMultiplier =\"" + virtualMultiplier + "\" />";
-
             var collection = proPunters.Select(x => x.CustID);
             var cusIds = string.Join(",", collection);
 
-            return "<ROOT>" + format.Replace("@CustIds", cusIds) + "</ROOT>";
+            return string.Format("<ROOT><Rate CustIds=\"{0}\" VirtualMultiplier =\"{1} \" /></ROOT>", cusIds,
+                virtualMultiplier);
         }
 
         private string GenerateVirtualSettingXmlForLogging(IEnumerable<ProPunter> proPunters, double newVirtualMultiplier)
         {
-            var xml = string.Empty;
+            var xml = new StringBuilder();
 
             foreach (var punter in proPunters)
             {
-                xml += string.Format(
-                                    "<Rate CustID=\"{0}\" ReportDate=\"{1}\" SiteID=\"{2}\" SRecommend=\"{3}\" MRecommend=\"{4}\" Recommend=\"{5}\" OldVirtualRate=\"{6}\" NewVirtualRate =\"{7}\" />",
+                xml.AppendFormat("<Rate CustID=\"{0}\" ReportDate=\"{1}\" SiteID=\"{2}\" SRecommend=\"{3}\" MRecommend=\"{4}\" Recommend=\"{5}\" OldVirtualRate=\"{6}\" NewVirtualRate =\"{7}\" />",
                                     punter.CustID,
                                     punter.ReportDate.ToShortDateString(),
                                     punter.SiteID,

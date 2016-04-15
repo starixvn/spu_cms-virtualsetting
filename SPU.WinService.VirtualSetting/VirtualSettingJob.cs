@@ -34,7 +34,7 @@
             var virtualSettingBusiness = new VirtualSettingBusiness();
             var proPunters = virtualSettingBusiness.GetProPunterList(AppSettings.SiteIds, AppSettings.SuperIds);
 
-            if (proPunters != null && proPunters.Count() > 0)
+            if (proPunters != null && proPunters.Any())
             {
                 UpdateVirtualSetting(virtualSettingBusiness, proPunters);
 
@@ -92,7 +92,7 @@
             body = string.Format(body,
                                 startTime.ToString("MM/dd/yyyy hh:mm:ss"),
                                 stopTime.ToString("MM/dd/yyyy hh:mm:ss"),
-                                numberOfCustomers.ToString());
+                                numberOfCustomers);
 
             return body;
         }
