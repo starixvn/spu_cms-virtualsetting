@@ -149,6 +149,11 @@
     <None Include="app.config">
       <SubType>Designer</SubType>
     </None>
+    <Content Include="app.LOCAL.config.txt">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>app.LOCAL.config.tt</DependentUpon>
+    </Content>
     <Content Include="app.PRO.config.txt">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -171,15 +176,10 @@
     <Content Include="Uninstall Service.bat">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <None Include="app.LOCAL.config.config">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>app.LOCAL.config.tt</DependentUpon>
-    </None>
     <None Include="app.LOCAL.config.tt">
       <SubType>Designer</SubType>
       <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>app.LOCAL.config.config</LastGenOutput>
+      <LastGenOutput>app.LOCAL.config.txt</LastGenOutput>
     </None>
     <None Include="app.PRO.config.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
@@ -200,6 +200,9 @@
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>MasterTemplate.txt</LastGenOutput>
     </None>
+    <Content Include="SPU.WinService.VirtualSetting.exe.config">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <None Include="SPU.WinService.VirtualSetting.exe.LOCAL.config">
       <DependentUpon>MasterTemplate.tt</DependentUpon>
     </None>
