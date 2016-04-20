@@ -200,18 +200,18 @@
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>MasterTemplate.txt</LastGenOutput>
     </None>
-    <Content Include="SPU.WinService.VirtualSetting.exe.config">
+    <Content Include="SPU.WinService.VirtualSetting.exe.LOCAL.config">
+      <DependentUpon>MasterTemplate.tt</DependentUpon>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <None Include="SPU.WinService.VirtualSetting.exe.LOCAL.config">
+    <Content Include="SPU.WinService.VirtualSetting.exe.PRO.config">
       <DependentUpon>MasterTemplate.tt</DependentUpon>
-    </None>
-    <None Include="SPU.WinService.VirtualSetting.exe.PRO.config">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="SPU.WinService.VirtualSetting.exe.UAT.config">
       <DependentUpon>MasterTemplate.tt</DependentUpon>
-    </None>
-    <None Include="SPU.WinService.VirtualSetting.exe.UAT.config">
-      <DependentUpon>MasterTemplate.tt</DependentUpon>
-    </None>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="VirutalSettingService.resx">
