@@ -7,6 +7,8 @@
         /// </summary>
         private System.ComponentModel.IContainer components = null;
 
+        private System.Diagnostics.EventLog eventLog1;
+
         /// <summary>
         /// Clean up any resources being used.
         /// </summary>
@@ -17,6 +19,7 @@
             {
                 components.Dispose();
             }
+
             base.Dispose(disposing);
         }
 
@@ -43,7 +46,5 @@
         }
 
         #endregion
-
-        private System.Diagnostics.EventLog eventLog1;
     }
 }

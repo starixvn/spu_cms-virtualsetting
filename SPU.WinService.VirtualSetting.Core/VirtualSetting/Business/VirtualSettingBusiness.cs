@@ -1,8 +1,7 @@
-﻿// -----------------------------------------------------------------------
-// <copyright file="VirtualSettingBusiness.cs" company="Microsoft">
-namespace SPU.WinService.VitualSetting.Core.VirtualSetting
+﻿namespace SPU.WinService.VitualSetting.Core.VirtualSetting
 {
     using System.Collections.Generic;
+    using System.Diagnostics.CodeAnalysis;
     using System.Linq;
     using System.Text;
 
@@ -26,13 +25,13 @@ namespace SPU.WinService.VitualSetting.Core.VirtualSetting
             return _virtualSettingsService.GetProPunterList(criteria);
         }
 
-        public bool UpdateProPunterVirtualSetting(IEnumerable<ProPunter> proPunters, double virtualMultiplier, int userId, string IP)
+        public bool UpdateProPunterVirtualSetting(IEnumerable<ProPunter> proPunters, double virtualMultiplier, int userId, string ip)
         {
             var criteria = new UpdateVirtualSettingCriteria
             {
                 VirtualMultiplier = GenerateVirtualSettingXmlForUpdating(proPunters, virtualMultiplier),
                 UserId = userId,
-                IP = IP
+                IP = ip
             };
 
             var updateResult = _virtualSettingsService.UpdateVirtualSetting(criteria);
@@ -69,18 +68,21 @@ namespace SPU.WinService.VitualSetting.Core.VirtualSetting
         {
             var collection = proPunters.Select(x => x.CustID);
             var cusIds = string.Join(",", collection);
+            var result = string.Format("<ROOT><Rate CustIds=\"{0}\" VirtualMultiplier =\"{1} \" /></ROOT>", cusIds, virtualMultiplier);
 
-            return string.Format("<ROOT><Rate CustIds=\"{0}\" VirtualMultiplier =\"{1} \" /></ROOT>", cusIds,
-                virtualMultiplier);
+            return result;
         }
 
         private string GenerateVirtualSettingXmlForLogging(IEnumerable<ProPunter> proPunters, double newVirtualMultiplier)
         {
             var xml = new StringBuilder();
+            var pattern = "<Rate CustID=\"{0}\" ReportDate=\"{1}\" SiteID=\"{2}\" SRecommend=\"{3}\"" + 
+                " MRecommend=\"{4}\" Recommend=\"{5}\" OldVirtualRate=\"{6}\" NewVirtualRate =\"{7}\" />";
 
             foreach (var punter in proPunters)
             {
-                xml.AppendFormat("<Rate CustID=\"{0}\" ReportDate=\"{1}\" SiteID=\"{2}\" SRecommend=\"{3}\" MRecommend=\"{4}\" Recommend=\"{5}\" OldVirtualRate=\"{6}\" NewVirtualRate =\"{7}\" />",
+                xml.AppendFormat(
+                                    pattern,
                                     punter.CustID,
                                     punter.ReportDate.ToShortDateString(),
                                     punter.SiteID,

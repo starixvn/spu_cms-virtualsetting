@@ -37,7 +37,7 @@
 
             if (proPunters != null && proPunters.Any())
             {
-                var vrForWinning = AppSettings.VirtualMultiplierForWinning;
+                var virtualRateForWinning = AppSettings.VirtualMultiplierForWinning;
                 var proPuntersDict = proPunters.ToDictionary(p => p.CustID);
                 var custIds = string.Join(",", proPuntersDict.Keys);
 
@@ -45,9 +45,13 @@
 
                 foreach (var currentVR in currentVRs)
                 {
-                    if (currentVR.VirtualRate >= vrForWinning)
+                    if (currentVR.VirtualRate >= virtualRateForWinning)
                     {
                         proPuntersDict.Remove(currentVR.CustID);
+                    }
+                    else
+                    {
+                        proPuntersDict[currentVR.CustID].OldVirtualRate = currentVR.VirtualRate;
                     }
                 }
 
@@ -92,10 +96,7 @@
             var mailTemplatePath = AppDomain.CurrentDomain.BaseDirectory + @".\MailTemplate\MailInformTemplate.cshtml";
             var body = Utilities.ReadTextFile(mailTemplatePath);
 
-            body = string.Format(body,
-                                startTime.ToString("MM/dd/yyyy hh:mm:ss"),
-                                stopTime.ToString("MM/dd/yyyy hh:mm:ss"),
-                                numberOfCustomers);
+            body = string.Format(body, startTime.ToString("MM/dd/yyyy hh:mm:ss"), stopTime.ToString("MM/dd/yyyy hh:mm:ss"), numberOfCustomers);
 
             var newMail = new Fanex.MailDelivery.Client.Models.Mail
             {

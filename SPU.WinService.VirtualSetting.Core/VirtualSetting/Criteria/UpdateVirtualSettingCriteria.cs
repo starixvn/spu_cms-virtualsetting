@@ -12,7 +12,7 @@ namespace SPU.WinService.VitualSetting.Core.VirtualSetting
     /// UpdateVirtualSettingCriteria Class.
     /// </summary>
     public class UpdateVirtualSettingCriteria : CriteriaBase
-    {                
+    {
         public string VirtualMultiplier { get; set; }
 
         public int UserId { get; set; }
@@ -25,10 +25,10 @@ namespace SPU.WinService.VitualSetting.Core.VirtualSetting
 
         /*
         @virtualmultiplier = '<ROOT>
-							<Rate CustIds="1,2,3" VirtualMultiplier="1.5" />	
-							<Rate CustIds="4" VirtualMultiplier="1.5" />	
-							<Rate CustIds="5,6,7" VirtualMultiplier="1.5" />								
-						</ROOT>'
+                                <Rate CustIds="1,2,3" VirtualMultiplier="1.5" />
+                                <Rate CustIds="4" VirtualMultiplier="1.5" />
+                                <Rate CustIds="5,6,7" VirtualMultiplier="1.5" />
+                             </ROOT>'
         */
 
         /// Gets Setting Key.

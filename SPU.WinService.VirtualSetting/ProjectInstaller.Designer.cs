@@ -1,11 +1,15 @@
 ﻿namespace SPU.WinService.FraudDetection
 {
-    partial class ProjectInstaller
+    public partial class ProjectInstaller
     {
         /// <summary>
         /// Required designer variable.
         /// </summary>
         private System.ComponentModel.IContainer components = null;
+
+        private System.ServiceProcess.ServiceProcessInstaller serviceProcessInstaller1;
+
+        private System.ServiceProcess.ServiceInstaller virtualSettingService;
 
         /// <summary> 
         /// Clean up any resources being used.
@@ -17,6 +21,7 @@
             {
                 components.Dispose();
             }
+
             base.Dispose(disposing);
         }
 
@@ -29,7 +34,7 @@
         private void InitializeComponent()
         {
             this.serviceProcessInstaller1 = new System.ServiceProcess.ServiceProcessInstaller();
-            this.VirtualSettingService = new System.ServiceProcess.ServiceInstaller();
+            this.virtualSettingService = new System.ServiceProcess.ServiceInstaller();
             // 
             // serviceProcessInstaller1
             // 
@@ -39,21 +44,18 @@
             // 
             // VirtualSettingService
             // 
-            this.VirtualSettingService.Description = "Virtual Setting Service To Run Tasks Periodically";
-            this.VirtualSettingService.DisplayName = "Virtual Setting Service";
-            this.VirtualSettingService.ServiceName = "VirtualSettingService";
+            this.virtualSettingService.Description = "Virtual Setting Service To Run Tasks Periodically";
+            this.virtualSettingService.DisplayName = "Virtual Setting Service";
+            this.virtualSettingService.ServiceName = "VirtualSettingService";
             // 
             // ProjectInstaller
             // 
             this.Installers.AddRange(new System.Configuration.Install.Installer[] {
             this.serviceProcessInstaller1,
-            this.VirtualSettingService});
+            this.virtualSettingService});
 
         }
 
         #endregion
-
-        private System.ServiceProcess.ServiceProcessInstaller serviceProcessInstaller1;
-        private System.ServiceProcess.ServiceInstaller VirtualSettingService;
     }
 }

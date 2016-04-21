@@ -8,7 +8,7 @@
     using SPU.WinService.VitualSetting;
     using System.ServiceProcess;
 
-    public partial class VirtualSettingService: ServiceBase
+    public partial class VirtualSettingService : ServiceBase
     {
         private static IScheduler _scheduler;
 
