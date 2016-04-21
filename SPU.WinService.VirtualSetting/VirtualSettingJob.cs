@@ -10,7 +10,7 @@
     using SPU.WinService.VitualSetting.Core;
     using SPU.WinService.VitualSetting.Core.VirtualSetting;
 
-    public class VirtualSettingJob: IJob
+    public class VirtualSettingJob : IJob
     {
         public void Execute(IJobExecutionContext context)
         {
@@ -33,17 +33,31 @@
             var startTime = DateTime.Now;
             var virtualSettingBusiness = new VirtualSettingBusiness();
             var proPunters = virtualSettingBusiness.GetProPunterList(AppSettings.SiteIds, AppSettings.SuperIds);
+            var numberOfCustomers = 0;
 
             if (proPunters != null && proPunters.Any())
             {
-                UpdateVirtualSetting(virtualSettingBusiness, proPunters);
+                var custIds = string.Join(",", proPunters.Select(t => t.CustID));
+                var currentVRs = virtualSettingBusiness.GetCurrentCustomerVirtualRate(custIds);
+                var proPunterList = proPunters.ToList();
+                var vrForWinning = AppSettings.VirtualMultiplierForWinning;
 
-                var numberOfCustomers = proPunters.Count();
-                var stopTime = DateTime.Now;
-                var mailContent = GetMailContent(startTime, stopTime, numberOfCustomers);
+                foreach (var currentVR in currentVRs)
+                {
+                    if (currentVR.VirtualRate >= vrForWinning)
+                    {
+                        proPunterList.Remove(proPunterList.Where(t => t.CustID == currentVR.CustID).First());
+                    }
+                }
 
-                SendMail(mailContent);
+                UpdateVirtualSetting(virtualSettingBusiness, proPunterList);
+
+                numberOfCustomers = proPunterList.Count();
             }
+
+            var stopTime = DateTime.Now;
+
+            SendMail(startTime, stopTime, numberOfCustomers);
         }
 
         private void UpdateVirtualSetting(VirtualSettingBusiness virtualSettingBusiness, IEnumerable<ProPunter> proPunters)
@@ -72,29 +86,25 @@
             }
         }
 
-        private void SendMail(string mailContent)
-        {
-            var newMail = new Fanex.MailDelivery.Client.Models.Mail
-            {
-                Subject = "VR Auto Adjustment finished",
-                Title = "SPU VR Auto Mail",
-                Body = mailContent,
-                MailingListId = AppSettings.MailingListId
-            };
-
-            MailClientHandler.SendMail(newMail);
-        }
-
-        private string GetMailContent(DateTime startTime, DateTime stopTime, int numberOfCustomers)
+        private void SendMail(DateTime startTime, DateTime stopTime, int numberOfCustomers)
         {
             var mailTemplatePath = AppDomain.CurrentDomain.BaseDirectory + @".\MailTemplate\MailInformTemplate.cshtml";
             var body = Utilities.ReadTextFile(mailTemplatePath);
+
             body = string.Format(body,
                                 startTime.ToString("MM/dd/yyyy hh:mm:ss"),
                                 stopTime.ToString("MM/dd/yyyy hh:mm:ss"),
                                 numberOfCustomers);
 
-            return body;
+            var newMail = new Fanex.MailDelivery.Client.Models.Mail
+            {
+                Subject = "VR Auto Adjustment finished",
+                Title = "SPU VR Auto Mail",
+                Body = body,
+                MailingListId = AppSettings.MailingListId
+            };
+
+            MailClientHandler.SendMail(newMail);
         }
     }
 }

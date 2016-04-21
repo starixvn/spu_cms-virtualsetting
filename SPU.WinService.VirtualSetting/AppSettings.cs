@@ -102,5 +102,35 @@
                 return 80;
             }
         }
+
+        public static double VirtualMultiplierForWinning
+        {
+            get
+            {
+                string value = ConfigurationManager.AppSettings["VirtualMultiplierForWinning"];
+
+                if (!string.IsNullOrEmpty(value))
+                {
+                    return Convert.ToInt32(value);
+                }
+
+                return 1.0;
+            }
+        }
+
+        public static double VirtualMultiplierForLosing
+        {
+            get
+            {
+                string value = ConfigurationManager.AppSettings["VirtualMultiplierForLosing"];
+
+                if (!string.IsNullOrEmpty(value))
+                {
+                    return Convert.ToInt32(value);
+                }
+
+                return 1.0;
+            }
+        }
     }
 }

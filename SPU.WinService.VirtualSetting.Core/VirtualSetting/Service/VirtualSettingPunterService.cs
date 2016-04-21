@@ -29,5 +29,10 @@ namespace SPU.WinService.VitualSetting.Core.VirtualSetting
         {
             return ExecuteOutput(criteria);
         }
+
+        public IEnumerable<CustomerVirtualRate> GetCurrentCustomerVirtualRate(GetCurrentCustomerVirtualRate criteria)
+        {
+            return GetData<CustomerVirtualRate>(criteria);
+        }
     }
 }

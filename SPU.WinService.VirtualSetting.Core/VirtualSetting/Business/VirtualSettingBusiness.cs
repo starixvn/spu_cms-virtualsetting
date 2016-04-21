@@ -1,21 +1,11 @@
 ﻿// -----------------------------------------------------------------------
 // <copyright file="VirtualSettingBusiness.cs" company="Microsoft">
-// TODO: Update copyright text.
-// </copyright>
-// -----------------------------------------------------------------------
-
-using System.Text;
-using Fanex.Common.Extensions;
-
 namespace SPU.WinService.VitualSetting.Core.VirtualSetting
 {
-    using Fanex.NAP.Framework.Command;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Text;
 
-    /// <summary>
-    /// VirtualSettingBusiness Class.
-    /// </summary>
     public class VirtualSettingBusiness
     {
         private VirtualSettingPunterService _virtualSettingsService;
@@ -61,6 +51,16 @@ namespace SPU.WinService.VitualSetting.Core.VirtualSetting
             var logResult = _virtualSettingsService.LogVirtualSetting(criteria);
 
             return logResult.IsSuccessful;
+        }
+
+        public IEnumerable<CustomerVirtualRate> GetCurrentCustomerVirtualRate(string custIds)
+        {
+            var criteria = new GetCurrentCustomerVirtualRate
+            {
+                CustIds = custIds
+            };
+
+            return _virtualSettingsService.GetCurrentCustomerVirtualRate(criteria);
         }
 
         #region Utilities

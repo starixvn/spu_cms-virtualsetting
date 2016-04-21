@@ -22,6 +22,8 @@
     <add key="queuePath" value="FormatName:DIRECT=TCP:10.18.200.209\private$\fdmessagequeue"/>
     <add key="ProPunterChunkSize" value="1000"/>
     <add key="NewVirtualMultiplier" value="1"/>
+    <add key="VirtualMultiplierForWinning" value="1"/>
+    <add key="VirtualMultiplierForLosing" value="1"/>
     <add key="SiteIds" value=""/>
     <add key="SuperIds" value="410722"/>
     <add key="ServiceExecutionInterval" value="1"/> <!-- in hour-->
@@ -31,8 +33,8 @@
   </appSettings>
   <connectionStrings>
     <add name="DBDW.bodb_dwrs.bodbAdminNet" connectionString="packet size=4096; Data Source=10.18.200.231;Asynchronous Processing=true;Initial Catalog=bodb_dwrs;integrated security=false; user id=bodbAdminNet; password=i9hNnaZltx04XF6oTNOKTnvvtLC/zfxr=" providerName="System.Data.SqlClient"/>
-    <add name="DBVR.CustDB.bodbAdminNet" connectionString="Data Source=10.18.200.233;Initial Catalog=CustDB;User Id=bodbAdminNet;Password=i9hNnaZltx04XF6oTNOKTnvvtLC/zfxr=" providerName="System.Data.SqlClient" />
     <add name="DBLOG.bodb_CustomerLog.bodbAdminNet" connectionString="Data Source=10.18.200.231;Initial Catalog=bodb_CustomerLog;integrated security=false; User ID=bodbAdminNet;Password=i9hNnaZltx04XF6oTNOKTnvvtLC/zfxr=" providerName="System.Data.SqlClient" />
+    <add name="DBCust.CustDB.bodbAdminNet" connectionString="Data Source=10.18.200.233;Initial Catalog=CustDB;integrated security=false; User ID=bodbAdminNet;Password=i9hNnaZltx04XF6oTNOKTnvvtLC/zfxr=" providerName="System.Data.SqlClient" />
   </connectionStrings>
   <system.web>
     <membership defaultProvider="ClientAuthenticationMembershipProvider">
