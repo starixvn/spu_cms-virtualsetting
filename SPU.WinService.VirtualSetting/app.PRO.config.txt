@@ -23,7 +23,7 @@
     <add key="NewVirtualMultiplier" value="1"/>
     <add key="VirtualMultiplierForWinning" value="1"/>
     <add key="VirtualMultiplierForLosing" value="1"/>
-    <add key="SiteIds" value="23"/>
+    <add key="SiteIds" value="114"/>
     <add key="SuperIds" value=""/>
     <add key="ServiceExecutionInterval" value="1"/>
     <!-- in hour-->
