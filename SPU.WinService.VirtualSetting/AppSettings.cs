@@ -1,10 +1,9 @@
-﻿namespace SPU.WinService.VitualSetting
+﻿using System.IO;
+
+namespace SPU.WinService.VitualSetting
 {
     using System;
-    using System.Collections.Generic;
     using System.Configuration;
-    using System.Linq;
-    using System.Text;
 
     public static class AppSettings
     {
@@ -130,6 +129,22 @@
                 }
 
                 return 1.0;
+            }
+        }
+
+        public static string LogFile
+        {
+            get
+            {
+                var logFile = AppDomain.CurrentDomain.BaseDirectory + @"\Runtime Log\Runtime Log.bin";
+                var logFolder = Directory.GetParent(logFile).FullName;
+
+                if (!Directory.Exists(logFolder))
+                {
+                    Directory.CreateDirectory(logFolder);
+                }
+
+                return logFile;
             }
         }
     }

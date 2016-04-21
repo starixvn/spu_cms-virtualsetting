@@ -1,12 +1,12 @@
 ﻿namespace SPU.WinService.VirtualSetting
 {
+    using System.ServiceProcess;
     using Fanex.Data.Configuration;
     using Fanex.Logging;
     using Fanex.MailDelivery.Client.Handlers;
     using Quartz;
     using Quartz.Impl;
     using SPU.WinService.VitualSetting;
-    using System.ServiceProcess;
 
     public partial class VirtualSettingService : ServiceBase
     {

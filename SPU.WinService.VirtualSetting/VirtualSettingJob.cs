@@ -1,31 +1,40 @@
-﻿namespace SPU.WinService.VirtualSetting
+﻿using System.Diagnostics;
+
+namespace SPU.WinService.VirtualSetting
 {
     using System;
     using System.Collections.Generic;
+    using System.IO;
     using System.Linq;
+    using System.Threading.Tasks;
     using Fanex.Logging;
     using Fanex.MailDelivery.Client.Handlers;
     using Quartz;
     using SPU.WinService.VitualSetting;
     using SPU.WinService.VitualSetting.Core;
     using SPU.WinService.VitualSetting.Core.VirtualSetting;
+    using SPU.WinService.VitualSetting.Core.VirtualSetting.Log;
 
     public class VirtualSettingJob : IJob
     {
         public void Execute(IJobExecutionContext context)
         {
-            Logger.Log.Info("Starting Auto Updating Virtual Settings", "SPU.Local");
-
-            try
+            if (!context.PreviousFireTimeUtc.HasValue || CheckTime())
             {
-                AutoAdjustVirtualSettings();
-            }
-            catch (Exception ex)
-            {
-                Logger.Log.Error(ex.Message, "SPU.Local");
-            }
+                Logger.Log.Info("Starting Auto Updating Virtual Settings", "SPU.Local");
 
-            Logger.Log.Info("Finished Auto Updating Virtual Settings", "SPU.Local");
+                try
+                {
+                    LogRuntime();
+                    AutoAdjustVirtualSettings();
+                }
+                catch (Exception ex)
+                {
+                    Logger.Log.Error(ex.Message, "SPU.Local");
+                }
+
+                Logger.Log.Info("Finished Auto Updating Virtual Settings", "SPU.Local");
+            }
         }
 
         public void AutoAdjustVirtualSettings()
@@ -107,6 +116,22 @@
             };
 
             MailClientHandler.SendMail(newMail);
+        }
+
+        private bool CheckTime()
+        {
+            var currentDate = DateTime.Now;
+            var lastMonthDay = DateTime.DaysInMonth(currentDate.Year, currentDate.Month);
+            return lastMonthDay == currentDate.Day || lastMonthDay / 2 == currentDate.Day;
+        }
+
+        private void LogRuntime()
+        {
+            using (var logStream = File.Open(AppSettings.LogFile, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.None))
+            {
+                var logger = new RuntimeLog<DateTime>(logStream);
+                logger.Log(DateTime.Now);
+            }
         }
     }
 }
