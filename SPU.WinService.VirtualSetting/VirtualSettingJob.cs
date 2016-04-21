@@ -37,22 +37,23 @@
 
             if (proPunters != null && proPunters.Any())
             {
-                var custIds = string.Join(",", proPunters.Select(t => t.CustID));
-                var currentVRs = virtualSettingBusiness.GetCurrentCustomerVirtualRate(custIds);
-                var proPunterList = proPunters.ToList();
                 var vrForWinning = AppSettings.VirtualMultiplierForWinning;
+                var proPuntersDict = proPunters.ToDictionary(p => p.CustID);
+                var custIds = string.Join(",", proPuntersDict.Keys);
+
+                var currentVRs = virtualSettingBusiness.GetCurrentCustomerVirtualRate(custIds);
 
                 foreach (var currentVR in currentVRs)
                 {
                     if (currentVR.VirtualRate >= vrForWinning)
                     {
-                        proPunterList.Remove(proPunterList.Where(t => t.CustID == currentVR.CustID).First());
+                        proPuntersDict.Remove(currentVR.CustID);
                     }
                 }
 
-                UpdateVirtualSetting(virtualSettingBusiness, proPunterList);
+                UpdateVirtualSetting(virtualSettingBusiness, proPuntersDict.Values);
 
-                numberOfCustomers = proPunterList.Count();
+                numberOfCustomers = proPuntersDict.Count;
             }
 
             var stopTime = DateTime.Now;
@@ -66,7 +67,7 @@
             var userId = AppSettings.DummyUser;
             var ip = AppSettings.IP;
             var chunkSize = AppSettings.ProPunterChunkSize;
-            var chunkProPunters = Extensions.Partition(proPunters, chunkSize);
+            var chunkProPunters = proPunters.Partition(chunkSize);
 
             foreach (var punters in chunkProPunters)
             {
