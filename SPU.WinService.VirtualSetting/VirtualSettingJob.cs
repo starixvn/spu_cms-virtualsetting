@@ -46,23 +46,7 @@ namespace SPU.WinService.VirtualSetting
 
             if (proPunters != null && proPunters.Any())
             {
-                var virtualRateForWinning = AppSettings.VirtualMultiplierForWinning;
-                var proPuntersDict = proPunters.ToDictionary(p => p.CustID);
-                var custIds = string.Join(",", proPuntersDict.Keys);
-
-                var currentVRs = virtualSettingBusiness.GetCurrentCustomerVirtualRate(custIds);
-
-                foreach (var currentVR in currentVRs)
-                {
-                    if (currentVR.VirtualRate >= virtualRateForWinning)
-                    {
-                        proPuntersDict.Remove(currentVR.CustID);
-                    }
-                    else
-                    {
-                        proPuntersDict[currentVR.CustID].OldVirtualRate = currentVR.VirtualRate;
-                    }
-                }
+                var proPuntersDict = FilterProPunterBaseOnCurrentVirtualRate(virtualSettingBusiness, proPunters);
 
                 UpdateVirtualSetting(virtualSettingBusiness, proPuntersDict.Values);
 
@@ -72,6 +56,29 @@ namespace SPU.WinService.VirtualSetting
             var stopTime = DateTime.Now;
 
             SendMail(startTime, stopTime, numberOfCustomers);
+        }
+
+        private Dictionary<int, ProPunter> FilterProPunterBaseOnCurrentVirtualRate(VirtualSettingBusiness virtualSettingBusiness, IEnumerable<ProPunter> proPunters)
+        {
+            var virtualRateForWinning = AppSettings.VirtualMultiplierForWinning;
+            var proPuntersDict = proPunters.ToDictionary(p => p.CustID);
+            var custIds = string.Join(",", proPuntersDict.Keys);
+
+            var currentVRs = virtualSettingBusiness.GetCurrentCustomerVirtualRate(custIds);            
+
+            foreach (var currentVR in currentVRs)
+            {
+                if (currentVR.VirtualRate < virtualRateForWinning)
+                {
+                    proPuntersDict[currentVR.CustID].OldVirtualRate = currentVR.VirtualRate;
+                }
+                else
+                {
+                    proPuntersDict.Remove(currentVR.CustID);                    
+                }
+            }
+
+            return proPuntersDict;
         }
 
         private void UpdateVirtualSetting(VirtualSettingBusiness virtualSettingBusiness, IEnumerable<ProPunter> proPunters)
