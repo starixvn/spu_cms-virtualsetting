@@ -27,11 +27,12 @@
     <add key="VirtualMultiplierForLosing" value="1"/>
     <add key="SiteIds" value="114"/>
     <add key="SuperIds" value=""/>
-    <add key="ServiceExecutionInterval" value="12"/>
+    <add key="ServiceExecutionInterval" value="24"/>
     <!-- in hour-->
     <add key="DummyUser" value="862400"/>
     <add key="IP" value=""/>
     <add key="MailingListId" value="100"/>
+    <add key="SpecialExecuteDate" value="2016/4/22"/>
   </appSettings>
   <connectionStrings>
     <add name="DBDW.bodb_dwrs.bodbAdminNet" providerName="System.Data.SqlClient" connectionString="packet size=4096; Data Source=10.40.40.61;Asynchronous Processing=true;Initial Catalog=bodb_dwrs;integrated security=false; user id=bodbAdminNet; password=i9hNnaZltx04XF6oTNOKTnvvtLC/zfxr="/>

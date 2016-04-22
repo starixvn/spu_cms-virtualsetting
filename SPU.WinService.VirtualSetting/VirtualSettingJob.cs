@@ -16,14 +16,13 @@
     {
         public void Execute(IJobExecutionContext context)
         {
+            Logger.Log.Info("Starting Auto Updating Virtual Settings", "SPU.Local");
+
             if (CheckTime())
             {
-                Logger.Log.Info("Starting Auto Updating Virtual Settings", "SPU.Local");
-
                 try
                 {
                     AutoAdjustVirtualSettings();
-
                     LogRuntime();
                 }
                 catch (Exception ex)
@@ -61,6 +60,7 @@
             var virtualRateForWinning = AppSettings.VirtualMultiplierForWinning;
             var proPuntersDict = proPunters.ToDictionary(p => p.CustID);
             var custIds = string.Join(",", proPuntersDict.Keys);
+
             var currentVRs = virtualSettingBusiness.GetCurrentCustomerVirtualRate(custIds);
 
             foreach (var currentVR in currentVRs)
@@ -124,10 +124,12 @@
 
         private bool CheckTime()
         {
-            var currentDate = DateTime.Now;
+            var currentDate = DateTime.Today;
             var lastMonthDay = DateTime.DaysInMonth(currentDate.Year, currentDate.Month);
 
-            return lastMonthDay == currentDate.Day || lastMonthDay / 2 == currentDate.Day;
+            return lastMonthDay / 2 == currentDate.Day
+                || lastMonthDay == currentDate.Day
+                || currentDate == AppSettings.SpeciaExecuteDate;
         }
 
         private void LogRuntime()
@@ -135,7 +137,6 @@
             using (var logStream = File.Open(AppSettings.LogFile, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.None))
             {
                 var logger = new RuntimeLog<DateTime>(logStream);
-
                 logger.Log(DateTime.Now);
             }
         }

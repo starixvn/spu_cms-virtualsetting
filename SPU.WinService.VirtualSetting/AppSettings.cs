@@ -147,5 +147,14 @@ namespace SPU.WinService.VitualSetting
                 return logFile;
             }
         }
+
+        public static DateTime SpeciaExecuteDate
+        {
+            get
+            {
+                var time = ConfigurationManager.AppSettings["SpecialExecuteDate"] ?? @"1/1/1";
+                return DateTime.Parse(time);
+            }
+        }
     }
 }

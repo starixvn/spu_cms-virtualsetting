@@ -18,7 +18,7 @@
 
         public void Log(T item)
         {
-            var items = _stream.Length == 0 ? new HashSet<T>() : (HashSet<T>)serializer.Deserialize(_stream);
+            var items = GetLogItems();
 
             items.Add(item);
 
