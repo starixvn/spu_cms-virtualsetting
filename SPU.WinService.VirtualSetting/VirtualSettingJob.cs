@@ -1,12 +1,9 @@
-﻿using System.Diagnostics;
-
-namespace SPU.WinService.VirtualSetting
+﻿namespace SPU.WinService.VirtualSetting
 {
     using System;
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
-    using System.Threading.Tasks;
     using Fanex.Logging;
     using Fanex.MailDelivery.Client.Handlers;
     using Quartz;
@@ -19,14 +16,15 @@ namespace SPU.WinService.VirtualSetting
     {
         public void Execute(IJobExecutionContext context)
         {
-            if (!context.PreviousFireTimeUtc.HasValue || CheckTime())
+            if (CheckTime())
             {
                 Logger.Log.Info("Starting Auto Updating Virtual Settings", "SPU.Local");
 
                 try
                 {
-                    LogRuntime();
                     AutoAdjustVirtualSettings();
+
+                    LogRuntime();
                 }
                 catch (Exception ex)
                 {
@@ -63,8 +61,7 @@ namespace SPU.WinService.VirtualSetting
             var virtualRateForWinning = AppSettings.VirtualMultiplierForWinning;
             var proPuntersDict = proPunters.ToDictionary(p => p.CustID);
             var custIds = string.Join(",", proPuntersDict.Keys);
-
-            var currentVRs = virtualSettingBusiness.GetCurrentCustomerVirtualRate(custIds);            
+            var currentVRs = virtualSettingBusiness.GetCurrentCustomerVirtualRate(custIds);
 
             foreach (var currentVR in currentVRs)
             {
@@ -74,7 +71,7 @@ namespace SPU.WinService.VirtualSetting
                 }
                 else
                 {
-                    proPuntersDict.Remove(currentVR.CustID);                    
+                    proPuntersDict.Remove(currentVR.CustID);
                 }
             }
 
@@ -129,6 +126,7 @@ namespace SPU.WinService.VirtualSetting
         {
             var currentDate = DateTime.Now;
             var lastMonthDay = DateTime.DaysInMonth(currentDate.Year, currentDate.Month);
+
             return lastMonthDay == currentDate.Day || lastMonthDay / 2 == currentDate.Day;
         }
 
@@ -137,6 +135,7 @@ namespace SPU.WinService.VirtualSetting
             using (var logStream = File.Open(AppSettings.LogFile, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.None))
             {
                 var logger = new RuntimeLog<DateTime>(logStream);
+
                 logger.Log(DateTime.Now);
             }
         }
