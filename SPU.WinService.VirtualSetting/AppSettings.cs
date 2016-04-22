@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using SPU.WinService.VitualSetting.Core.VirtualSetting.Log;
 
 namespace SPU.WinService.VitualSetting
 {
@@ -154,6 +155,18 @@ namespace SPU.WinService.VitualSetting
             {
                 var time = ConfigurationManager.AppSettings["SpecialExecuteDate"] ?? @"1/1/1";
                 return DateTime.Parse(time);
+            }
+        }
+
+        public static bool FirstTime
+        {
+            get
+            {
+                using (var file = File.Open(LogFile, FileMode.OpenOrCreate))
+                {
+                    var log = new RuntimeLog<DateTime>(file);
+                    return log.GetLogItems().Count == 0;
+                }
             }
         }
     }
