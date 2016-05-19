@@ -14,22 +14,35 @@
             _virtualSettingsService = virtualSettingsService ?? new VirtualSettingPunterService();
         }
 
-        public IEnumerable<ProPunter> GetProPunterList(string siteNames, string superIds)
+        public IEnumerable<Punter> GetWinningPunterList(string siteNames, string superIds, double virtualRateThreshold)
         {
-            var criteria = new GetProPrunterCriteria
+            var proPuntercriteria = new GetProPrunterCriteria
             {
                 SiteIds = siteNames,
-                SuperIds = superIds
+                SuperIds = superIds,
+                VirtualRateThreshold = virtualRateThreshold
             };
 
-            return _virtualSettingsService.GetProPunterList(criteria);
+            return _virtualSettingsService.GetPunterList(proPuntercriteria);
         }
 
-        public bool UpdateProPunterVirtualSetting(IEnumerable<ProPunter> proPunters, double virtualMultiplier, int userId, string ip)
+        public IEnumerable<Punter> GetLosingPunterList(string siteNames, string superIds, double virtualRateThreshold)
+        {
+            var losingPuntercriteria = new GetLosingPrunterCriteria
+            {
+                SiteIds = siteNames,
+                SuperIds = superIds,
+                VirtualRateThreshold = virtualRateThreshold
+            };
+
+            return _virtualSettingsService.GetPunterList(losingPuntercriteria);
+        }
+
+        public bool UpdatePunterVirtualSetting(IEnumerable<Punter> punters, double virtualMultiplier, int userId, string ip)
         {
             var criteria = new UpdateVirtualSettingCriteria
             {
-                VirtualMultiplier = GenerateVirtualSettingXmlForUpdating(proPunters, virtualMultiplier),
+                VirtualMultiplier = GenerateVirtualSettingXmlForUpdating(punters, virtualMultiplier),
                 UserId = userId,
                 IP = ip
             };
@@ -39,12 +52,12 @@
             return updateResult.IsSuccessful;
         }
 
-        public bool LogProPunterVirtualSetting(IEnumerable<ProPunter> proPunters, double newVirtualMultiplier, int userId)
+        public bool LogPunterVirtualSetting(IEnumerable<Punter> punters, double newVirtualRate, int userId)
         {
             var criteria = new LogVirtualSettingCriteria
             {
-                ProPunterVRSettingsDoc = GenerateVirtualSettingXmlForLogging(proPunters, newVirtualMultiplier),
-                CreatorId = userId
+                PunterVRSettingsDoc = GenerateVirtualSettingXmlForLogging(punters, newVirtualRate),
+                CreatorId = userId                
             };
 
             var logResult = _virtualSettingsService.LogVirtualSetting(criteria);
@@ -64,7 +77,7 @@
 
         #region Utilities
 
-        private string GenerateVirtualSettingXmlForUpdating(IEnumerable<ProPunter> proPunters, double virtualMultiplier)
+        private string GenerateVirtualSettingXmlForUpdating(IEnumerable<Punter> proPunters, double virtualMultiplier)
         {
             var collection = proPunters.Select(x => x.CustID);
             var cusIds = string.Join(",", collection);
@@ -73,7 +86,7 @@
             return result;
         }
 
-        private string GenerateVirtualSettingXmlForLogging(IEnumerable<ProPunter> proPunters, double newVirtualMultiplier)
+        private string GenerateVirtualSettingXmlForLogging(IEnumerable<Punter> proPunters, double newVirtualRate)
         {
             var xml = new StringBuilder();
             var pattern = "<Rate CustID=\"{0}\" ReportDate=\"{1}\" SiteID=\"{2}\" SRecommend=\"{3}\"" + 
@@ -90,7 +103,7 @@
                                     punter.MRecommend,
                                     punter.Recommend,
                                     punter.OldVirtualRate,
-                                    newVirtualMultiplier);
+                                    newVirtualRate);
             }
 
             return "<ROOT>" + xml + "</ROOT>";

@@ -106,13 +106,14 @@
     <Compile Include="Extensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="VirtualSetting\Criteria\GetCurrentCustomerVirtualRate.cs" />
+    <Compile Include="VirtualSetting\Criteria\GetLosingPrunterCriteria.cs" />
     <Compile Include="VirtualSetting\Criteria\LogVirtualSettingCriteria.cs" />
     <Compile Include="VirtualSetting\Criteria\UpdateVirtualSettingCriteria.cs" />
     <Compile Include="VirtualSetting\Criteria\GetProPrunterCriteria.cs" />
     <Compile Include="VirtualSetting\Business\VirtualSettingBusiness.cs" />
     <Compile Include="VirtualSetting\Log\RuntimeLog.cs" />
     <Compile Include="VirtualSetting\Model\CustomerVirtualRate.cs" />
-    <Compile Include="VirtualSetting\Model\ProPunter.cs" />
+    <Compile Include="VirtualSetting\Model\Punter.cs" />
     <Compile Include="VirtualSetting\Service\IRuntimeLog.cs" />
     <Compile Include="VirtualSetting\Service\QueryService.cs" />
     <Compile Include="VirtualSetting\Service\VirtualSettingPunterService.cs" />

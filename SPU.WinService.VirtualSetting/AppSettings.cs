@@ -60,11 +60,11 @@ namespace SPU.WinService.VitualSetting
             }
         }
 
-        public static int ProPunterChunkSize
+        public static int PunterChunkSize
         {
             get
             {
-                string count = ConfigurationManager.AppSettings["ProPunterChunkSize"];
+                string count = ConfigurationManager.AppSettings["PunterChunkSize"];
                 if (!string.IsNullOrEmpty(count))
                 {
                     return Convert.ToInt32(count);
@@ -74,11 +74,25 @@ namespace SPU.WinService.VitualSetting
             }
         }
 
-        public static double NewVirtualMultiplier
+        public static double NewVirtualMultiplierForWinning
         {
             get
             {
-                string count = ConfigurationManager.AppSettings["NewVirtualMultiplier"];
+                string count = ConfigurationManager.AppSettings["NewVirtualMultiplierForWinning"];
+                if (!string.IsNullOrEmpty(count))
+                {
+                    return Convert.ToDouble(count);
+                }
+
+                return 1;
+            }
+        }
+
+        public static double NewVirtualMultiplierForLosing
+        {
+            get
+            {
+                string count = ConfigurationManager.AppSettings["NewVirtualMultiplierForLosing"];
                 if (!string.IsNullOrEmpty(count))
                 {
                     return Convert.ToDouble(count);

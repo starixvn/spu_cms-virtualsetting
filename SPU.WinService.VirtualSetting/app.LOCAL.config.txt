@@ -18,10 +18,11 @@
     <add key="RemoteRefURL" value="tcp://10.70.70.242:8888/CallGetRefFunction" />
     <add key="RemoteCacheUrl" value="tcp://10.18.200.124:8888/CallGetOddsFunction" />
     <add key="queuePath" value="FormatName:DIRECT=TCP:10.18.200.209\private$\fdmessagequeue"/>
-    <add key="ProPunterChunkSize" value="1000"/>
-    <add key="NewVirtualMultiplier" value="1"/>
+    <add key="PunterChunkSize" value="1000"/>
+    <add key="NewVirtualMultiplierForWinning" value="1"/>
+    <add key="NewVirtualMultiplierForLosing" value="0.2"/>
     <add key="VirtualMultiplierForWinning" value="1"/>
-    <add key="VirtualMultiplierForLosing" value="1"/>
+    <add key="VirtualMultiplierForLosing" value="1"/>       
     <add key="SiteIds" value=""/>
     <add key="SuperIds" value="410722"/>
     <add key="ServiceExecutionInterval" value="1"/> <!-- in hour-->

@@ -17,6 +17,8 @@ namespace SPU.WinService.VitualSetting.Core.VirtualSetting
 
         public string SuperIds { get; set; }
 
+        public double VirtualRateThreshold { get; set; }
+
         /// <summary>
         /// Gets Setting Key.
         /// </summary>

@@ -3,6 +3,7 @@
     using Fanex.Data.Configuration;
     using System;
     using Fanex.MailDelivery.Client.Handlers;
+    using SPU.WinService.VitualSetting;
 
     internal class Program
     {
@@ -13,8 +14,12 @@
             DbSettingProviderManager.Current.Start();
             MailClientHandler.Start();
 
+            var siteIds = AppSettings.SiteIds;
+            var superIds = AppSettings.SuperIds;
+
             VirtualSettingJob job = new VirtualSettingJob();
-            job.AutoAdjustVirtualSettings();
+            job.AutoAdjustVirtualSettingsForWinningPunters(siteIds, superIds);
+            job.AutoAdjustVirtualSettingsForLosingPunters(siteIds, superIds);
 
             MailClientHandler.Stop();
 

@@ -14,15 +14,28 @@
 
     public class VirtualSettingJob : IJob
     {
+        private VirtualSettingBusiness _virtualSettingBusiness = new VirtualSettingBusiness();
+        
         public void Execute(IJobExecutionContext context)
         {
             Logger.Log.Info("Starting Auto Updating Virtual Settings", "SPU.Local");
 
-            if (CheckTime())
+            if (IsExecutedDate())
             {
                 try
-                {
-                    AutoAdjustVirtualSettings();
+                {                    
+                    var startTime = DateTime.Now;
+
+                    var siteIds = AppSettings.SiteIds;
+                    var superIds = AppSettings.SuperIds;
+
+                    var numberOfWinningPunters = AutoAdjustVirtualSettingsForWinningPunters(siteIds, superIds);
+                    var numberOfLosingMembers = AutoAdjustVirtualSettingsForLosingPunters(siteIds, superIds);
+
+                    var stopTime = DateTime.Now;
+
+                    SendMail(startTime, stopTime, numberOfWinningPunters + numberOfLosingMembers);
+
                     LogRuntime();
                 }
                 catch (Exception ex)
@@ -34,72 +47,111 @@
             }
         }
 
-        public void AutoAdjustVirtualSettings()
+        public int AutoAdjustVirtualSettingsForWinningPunters(string siteIds, string superIds)
         {
-            var startTime = DateTime.Now;
-            var virtualSettingBusiness = new VirtualSettingBusiness();
-            var proPunters = virtualSettingBusiness.GetProPunterList(AppSettings.SiteIds, AppSettings.SuperIds);
-            var numberOfCustomers = 0;
+            var virtualRateThresholdForWining = AppSettings.VirtualMultiplierForWinning;
+            var newVirtualRate = AppSettings.NewVirtualMultiplierForWinning;
+            var numberOfWinningPunters = 0;
 
-            if (proPunters != null && proPunters.Any())
+            var winningPunters = _virtualSettingBusiness.GetWinningPunterList(siteIds, superIds, virtualRateThresholdForWining);      
+
+            if (winningPunters != null && winningPunters.Any())
             {
-                var proPuntersDict = FilterProPunterBaseOnCurrentVirtualRate(virtualSettingBusiness, proPunters);
+                var winningPuntersDict = FilterWinningPunterBaseOnCurrentVirtualRate(winningPunters, virtualRateThresholdForWining);
 
-                UpdateVirtualSetting(virtualSettingBusiness, proPuntersDict.Values);
+                UpdateVirtualSetting(winningPuntersDict.Values, newVirtualRate);
 
-                numberOfCustomers = proPuntersDict.Count;
+                numberOfWinningPunters = winningPuntersDict.Count;
             }
 
-            var stopTime = DateTime.Now;
-
-            SendMail(startTime, stopTime, numberOfCustomers);
+            return numberOfWinningPunters;
         }
 
-        private Dictionary<int, ProPunter> FilterProPunterBaseOnCurrentVirtualRate(VirtualSettingBusiness virtualSettingBusiness, IEnumerable<ProPunter> proPunters)
-        {
-            var virtualRateForWinning = AppSettings.VirtualMultiplierForWinning;
-            var proPuntersDict = proPunters.ToDictionary(p => p.CustID);
-            var custIds = string.Join(",", proPuntersDict.Keys);
+        public int AutoAdjustVirtualSettingsForLosingPunters(string siteIds, string superIds)
+        {                     
+            var virtualRateThresholdForLosing = AppSettings.VirtualMultiplierForLosing;
+            var newVirtualRate = AppSettings.NewVirtualMultiplierForLosing;
+            var numberOfLosingMembers = 0;
+            
+            var losingPunters = _virtualSettingBusiness.GetLosingPunterList(siteIds, superIds, virtualRateThresholdForLosing);
 
-            var currentVRs = virtualSettingBusiness.GetCurrentCustomerVirtualRate(custIds);
+            if (losingPunters != null && losingPunters.Any())
+            {
+                var losingPuntersDict = FilterLosingPunterBaseOnCurrentVirtualRate(losingPunters, virtualRateThresholdForLosing);
+
+                UpdateVirtualSetting(losingPuntersDict.Values, newVirtualRate);
+
+                numberOfLosingMembers = losingPuntersDict.Count;
+            }
+
+            return numberOfLosingMembers;
+        }
+
+        private Dictionary<int, Punter> FilterWinningPunterBaseOnCurrentVirtualRate(IEnumerable<Punter> winningPunters, double virtualRateThresholdForWinning)
+        {            
+            var winningPuntersDict = winningPunters.ToDictionary(p => p.CustID);
+            var custIds = string.Join(",", winningPuntersDict.Keys);
+
+            var currentVRs = _virtualSettingBusiness.GetCurrentCustomerVirtualRate(custIds);
 
             foreach (var currentVR in currentVRs)
             {
-                if (currentVR.VirtualRate < virtualRateForWinning)
+                if (currentVR.VirtualRate < virtualRateThresholdForWinning)
                 {
-                    proPuntersDict[currentVR.CustID].OldVirtualRate = currentVR.VirtualRate;
+                    winningPuntersDict[currentVR.CustID].OldVirtualRate = currentVR.VirtualRate;
                 }
                 else
                 {
-                    proPuntersDict.Remove(currentVR.CustID);
+                    winningPuntersDict.Remove(currentVR.CustID);
                 }
             }
 
-            return proPuntersDict;
+            return winningPuntersDict;
         }
 
-        private void UpdateVirtualSetting(VirtualSettingBusiness virtualSettingBusiness, IEnumerable<ProPunter> proPunters)
-        {
-            var newVirtualMultiplier = AppSettings.NewVirtualMultiplier;
+        private Dictionary<int, Punter> FilterLosingPunterBaseOnCurrentVirtualRate(IEnumerable<Punter> losingPunters, double virtualRateThresholdForLosing)
+        {            
+            var losingPuntersDict = losingPunters.ToDictionary(p => p.CustID);
+            var custIds = string.Join(",", losingPuntersDict.Keys);
+
+            var currentVRs = _virtualSettingBusiness.GetCurrentCustomerVirtualRate(custIds);
+
+            foreach (var currentVR in currentVRs)
+            {
+                if (currentVR.VirtualRate >= virtualRateThresholdForLosing)
+                {
+                    losingPuntersDict[currentVR.CustID].OldVirtualRate = currentVR.VirtualRate;
+                }
+                else
+                {
+                    losingPuntersDict.Remove(currentVR.CustID);
+                }
+            }
+
+            return losingPuntersDict;
+        }
+
+        private void UpdateVirtualSetting(IEnumerable<Punter> punters, double newVirtualRate)
+        {            
             var userId = AppSettings.DummyUser;
             var ip = AppSettings.IP;
-            var chunkSize = AppSettings.ProPunterChunkSize;
-            var chunkProPunters = proPunters.Partition(chunkSize);
+            var chunkSize = AppSettings.PunterChunkSize;
+            var chunkPunters = punters.Partition(chunkSize);
 
-            foreach (var punters in chunkProPunters)
+            foreach (var selectedPunters in chunkPunters)
             {
-                var updateResult = virtualSettingBusiness.UpdateProPunterVirtualSetting(punters, newVirtualMultiplier, userId, ip);
+                var updateResult = _virtualSettingBusiness.UpdatePunterVirtualSetting(selectedPunters, newVirtualRate, userId, ip);
                 if (!updateResult)
                 {
                     Logger.Log.Error("Error for updating virtual settings", "SPU.Local");
                 }
                 else
                 {
-                    var logResult = virtualSettingBusiness.LogProPunterVirtualSetting(punters, newVirtualMultiplier, userId);
+                    var logResult = _virtualSettingBusiness.LogPunterVirtualSetting(selectedPunters, newVirtualRate, userId);
                     if (!logResult)
                     {
                         Logger.Log.Error("Error for logging virtual settings", "SPU.Local");
-                    }
+                    }                    
                 }
             }
         }
@@ -122,14 +174,10 @@
             MailClientHandler.SendMail(newMail);
         }
 
-        private bool CheckTime()
+        private bool IsExecutedDate()
         {
-            var currentDate = DateTime.Today;
-            var lastMonthDay = DateTime.DaysInMonth(currentDate.Year, currentDate.Month);
-
-            return lastMonthDay / 2 == currentDate.Day
-                || lastMonthDay == currentDate.Day
-                || currentDate == AppSettings.SpeciaExecuteDate;
+            var currentDate = DateTime.Today;            
+            return currentDate.Day == 1 || currentDate.Day == 16 || currentDate == AppSettings.SpeciaExecuteDate;
         }
 
         private void LogRuntime()

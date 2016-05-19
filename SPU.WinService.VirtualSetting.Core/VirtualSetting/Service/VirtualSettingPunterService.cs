@@ -6,6 +6,7 @@
 
 namespace SPU.WinService.VitualSetting.Core.VirtualSetting
 {
+    using Fanex.Data.Repository;
     using Fanex.NAP.Framework.Command;
     using System.Collections.Generic;
     using System.Linq;
@@ -14,10 +15,10 @@ namespace SPU.WinService.VitualSetting.Core.VirtualSetting
     /// VirtualSettingPunterService class.
     /// </summary>
     public class VirtualSettingPunterService : QueryService
-    {        
-        public IEnumerable<ProPunter> GetProPunterList(GetProPrunterCriteria criteria)
+    {
+        public IEnumerable<Punter> GetPunterList(CriteriaBase criteria)
         {
-            return GetData<ProPunter>(criteria);
+            return GetData<Punter>(criteria);
         }
 
         public ICommandResult UpdateVirtualSetting(UpdateVirtualSettingCriteria criteria)

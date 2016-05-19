@@ -13,15 +13,15 @@ namespace SPU.WinService.VitualSetting.Core.VirtualSetting
     /// </summary>
     public class LogVirtualSettingCriteria : CriteriaBase
     {
-        public string ProPunterVRSettingsDoc { get; set; }
-
+        public string PunterVRSettingsDoc { get; set; }
+        
         public int CreatorId { get; set; }
 
         public int ErrCode { get; set; }
 
         public string ErrMsg { get; set; }
 
-        /* @ProPunterVRSettingsDoc ='<ROOT>
+        /* @PunterVRSettingsDoc ='<ROOT>
                                         <Rate CustID="123456" ReportDate="2016-04-04" SiteID="22" SRecommend="123" MRecommend="456" Recommend="789" OldVirtualRate="0.2" NewVirtualRate="0.8" />
                                         <Rate CustID="7891011" ReportDate="2016-04-05" SiteID="122" SRecommend="21123" MRecommend="11456" Recommend="12789" OldVirtualRate="0.5" NewVirtualRate="0.7" />
                                      </ROOT>'

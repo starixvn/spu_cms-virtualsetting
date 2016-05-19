@@ -21,8 +21,9 @@
     <add key="RemoteCacheUrl" value="tcp://10.40.40.29:8098/CallGetOddsFunction" />    
     <add key="queuePath" value="FormatName:DIRECT=TCP:10.40.40.73\private$\fdmessagequeue"/>
     <add key="FDUrl" value="" />
-    <add key="ProPunterChunkSize" value="1000"/>
-    <add key="NewVirtualMultiplier" value="1"/>
+    <add key="PunterChunkSize" value="1000"/>
+    <add key="NewVirtualMultiplierForWinning" value="1"/>
+    <add key="NewVirtualMultiplierForLosing" value="0.2"/>
     <add key="VirtualMultiplierForWinning" value="1"/>
     <add key="VirtualMultiplierForLosing" value="1"/>
     <add key="SiteIds" value="23"/>

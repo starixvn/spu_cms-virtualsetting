@@ -1,5 +1,5 @@
 ﻿// -----------------------------------------------------------------------
-// <copyright file="ProPunter.cs" company="Microsoft">
+// <copyright file="Punter.cs" company="Microsoft">
 // TODO: Update copyright text.
 // </copyright>
 // -----------------------------------------------------------------------
@@ -9,9 +9,9 @@ namespace SPU.WinService.VitualSetting.Core.VirtualSetting
     using System;
 
     /// <summary>
-    /// Pro punter class.
+    /// Punter class.
     /// </summary>
-    public class ProPunter
+    public class Punter
     {
         public DateTime ReportDate { get; set; }
         
