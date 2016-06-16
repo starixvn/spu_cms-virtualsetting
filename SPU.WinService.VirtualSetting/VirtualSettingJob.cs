@@ -51,12 +51,15 @@
         {
             var virtualRateThresholdForWining = AppSettings.VirtualMultiplierForWinning;
             var newVirtualRate = AppSettings.NewVirtualMultiplierForWinning;
+            var expiredDays = AppSettings.AdjustDateExpiredDays;
             var numberOfWinningPunters = 0;
 
             var winningPunters = _virtualSettingBusiness.GetWinningPunterList(siteIds, superIds, virtualRateThresholdForWining);      
 
             if (winningPunters != null && winningPunters.Any())
             {
+                winningPunters = FilterPunterBaseOnAdjustDate(winningPunters, expiredDays);
+
                 var winningPuntersDict = FilterWinningPunterBaseOnCurrentVirtualRate(winningPunters, virtualRateThresholdForWining);
 
                 UpdateVirtualSetting(winningPuntersDict.Values, newVirtualRate);
@@ -71,12 +74,15 @@
         {                     
             var virtualRateThresholdForLosing = AppSettings.VirtualMultiplierForLosing;
             var newVirtualRate = AppSettings.NewVirtualMultiplierForLosing;
+            var expiredDays = AppSettings.AdjustDateExpiredDays;
             var numberOfLosingMembers = 0;
             
             var losingPunters = _virtualSettingBusiness.GetLosingPunterList(siteIds, superIds, virtualRateThresholdForLosing);
 
             if (losingPunters != null && losingPunters.Any())
             {
+                losingPunters = FilterPunterBaseOnAdjustDate(losingPunters, expiredDays);
+
                 var losingPuntersDict = FilterLosingPunterBaseOnCurrentVirtualRate(losingPunters, virtualRateThresholdForLosing);
 
                 UpdateVirtualSetting(losingPuntersDict.Values, newVirtualRate);
@@ -87,9 +93,18 @@
             return numberOfLosingMembers;
         }
 
+        private IEnumerable<Punter> FilterPunterBaseOnAdjustDate(IEnumerable<Punter> punters, short expiredDays)
+        {                    
+            var custIds = string.Join(",", punters.Select(p => p.CustID));
+
+            var filteredPunters = _virtualSettingBusiness.FilterPunterBaseOnAdjustDate(custIds, expiredDays);
+
+            return punters.Where(p => filteredPunters.Contains(p.CustID));          
+        }
+
         private Dictionary<int, Punter> FilterWinningPunterBaseOnCurrentVirtualRate(IEnumerable<Punter> winningPunters, double virtualRateThresholdForWinning)
-        {            
-            var winningPuntersDict = winningPunters.ToDictionary(p => p.CustID);
+        {
+            var winningPuntersDict = winningPunters.Distinct().ToDictionary(p => p.CustID);
             var custIds = string.Join(",", winningPuntersDict.Keys);
 
             var currentVRs = _virtualSettingBusiness.GetCurrentCustomerVirtualRate(custIds);

@@ -21,6 +21,11 @@ namespace SPU.WinService.VitualSetting.Core.VirtualSetting
             return GetData<Punter>(criteria);
         }
 
+        public IEnumerable<int> GetPunterIdList(CriteriaBase criteria)
+        {
+            return GetData<int>(criteria);
+        }
+
         public ICommandResult UpdateVirtualSetting(UpdateVirtualSettingCriteria criteria)
         {
             return ExecuteOutput(criteria);

@@ -102,6 +102,20 @@ namespace SPU.WinService.VitualSetting
             }
         }
 
+        public static short AdjustDateExpiredDays
+        {
+            get
+            {
+                string count = ConfigurationManager.AppSettings["AdjustDateExpiredDays"];
+                if (!string.IsNullOrEmpty(count))
+                {
+                    return Convert.ToInt16(count);
+                }
+
+                return 90;
+            }
+        }
+
         public static int MailingListId
         {
             get
