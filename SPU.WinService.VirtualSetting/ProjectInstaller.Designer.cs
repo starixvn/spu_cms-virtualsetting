@@ -45,8 +45,8 @@
             // VirtualSettingService
             // 
             this.virtualSettingService.Description = "Virtual Setting Service To Run Tasks Periodically";
-            this.virtualSettingService.DisplayName = "Virtual Setting Service";
-            this.virtualSettingService.ServiceName = "VirtualSettingService";
+            this.virtualSettingService.DisplayName = "Fanex.AutoAdjustVR.Service";
+            this.virtualSettingService.ServiceName = "Fanex.AutoAdjustVR.Service";
             // 
             // ProjectInstaller
             // 

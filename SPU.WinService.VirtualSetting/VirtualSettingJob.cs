@@ -29,12 +29,11 @@
                     var siteIds = AppSettings.SiteIds;
                     var superIds = AppSettings.SuperIds;
 
-                    var numberOfWinningPunters = AutoAdjustVirtualSettingsForWinningPunters(siteIds, superIds);
-                    var numberOfLosingMembers = AutoAdjustVirtualSettingsForLosingPunters(siteIds, superIds);
+                    var numberOfWinningPunters = AutoAdjustVirtualSettingsForWinningPunters(siteIds, superIds);                    
 
                     var stopTime = DateTime.Now;
 
-                    SendMail(startTime, stopTime, numberOfWinningPunters + numberOfLosingMembers);
+                    SendMail(startTime, stopTime, numberOfWinningPunters);
 
                     LogRuntime();
                 }
@@ -50,16 +49,13 @@
         public int AutoAdjustVirtualSettingsForWinningPunters(string siteIds, string superIds)
         {
             var virtualRateThresholdForWining = AppSettings.VirtualMultiplierForWinning;
-            var newVirtualRate = AppSettings.NewVirtualMultiplierForWinning;
-            var expiredDays = AppSettings.AdjustDateExpiredDays;
+            var newVirtualRate = AppSettings.NewVirtualMultiplierForWinning;            
             var numberOfWinningPunters = 0;
 
             var winningPunters = _virtualSettingBusiness.GetWinningPunterList(siteIds, superIds, virtualRateThresholdForWining);      
 
             if (winningPunters != null && winningPunters.Any())
-            {
-                winningPunters = FilterPunterBaseOnAdjustDate(winningPunters, expiredDays);
-
+            {                
                 var winningPuntersDict = FilterWinningPunterBaseOnCurrentVirtualRate(winningPunters, virtualRateThresholdForWining);
 
                 UpdateVirtualSetting(winningPuntersDict.Values, newVirtualRate);
