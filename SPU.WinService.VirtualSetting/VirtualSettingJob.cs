@@ -188,7 +188,7 @@
         private bool IsExecutedDate()
         {
             var currentDate = DateTime.Today;            
-            return currentDate.Day == 1 || currentDate.Day == 16 || currentDate == AppSettings.SpeciaExecuteDate;
+            return currentDate.Day == 1 || currentDate.Day == 16 || currentDate.Day == AppSettings.SpeciaExecuteDate.Day;
         }
 
         private void LogRuntime()
