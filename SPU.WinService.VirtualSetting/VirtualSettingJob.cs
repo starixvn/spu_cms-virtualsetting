@@ -22,6 +22,8 @@
 
             if (IsExecutedDate())
             {
+                Logger.Log.Info("Is executed date", "SPU.Local");
+
                 try
                 {                    
                     var startTime = DateTime.Now;
@@ -187,8 +189,12 @@
 
         private bool IsExecutedDate()
         {
-            var currentDate = DateTime.Today;            
-            return currentDate.Day == 1 || currentDate.Day == 16 || currentDate.Day == AppSettings.SpeciaExecuteDate.Day;
+            var currentDate = DateTime.Today;
+            var specialDay = AppSettings.SpeciaExecuteDate;
+
+            var isSpecialDay = currentDate.Year == specialDay.Year && currentDate.Month == specialDay.Month && currentDate.Day == specialDay.Day;
+
+            return currentDate.Day == 1 || currentDate.Day == 16 || isSpecialDay;
         }
 
         private void LogRuntime()
