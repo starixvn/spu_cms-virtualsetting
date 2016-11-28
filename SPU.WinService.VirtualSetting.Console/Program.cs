@@ -1,9 +1,9 @@
 ﻿namespace SPU.WinService.VirtualSetting.Console
 {
     using Fanex.Data.Configuration;
-    using System;
-    using Fanex.MailDelivery.Client.Handlers;
+    using Fanex.MailDelivery.Client;
     using SPU.WinService.VitualSetting;
+    using System;
 
     internal class Program
     {

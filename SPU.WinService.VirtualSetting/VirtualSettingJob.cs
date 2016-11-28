@@ -1,16 +1,16 @@
 ﻿namespace SPU.WinService.VirtualSetting
 {
-    using System;
-    using System.Collections.Generic;
-    using System.IO;
-    using System.Linq;
     using Fanex.Logging;
-    using Fanex.MailDelivery.Client.Handlers;
+    using Fanex.MailDelivery.Client;
     using Quartz;
     using SPU.WinService.VitualSetting;
     using SPU.WinService.VitualSetting.Core;
     using SPU.WinService.VitualSetting.Core.VirtualSetting;
     using SPU.WinService.VitualSetting.Core.VirtualSetting.Log;
+    using System;
+    using System.Collections.Generic;
+    using System.IO;
+    using System.Linq;
 
     public class VirtualSettingJob : IJob
     {
@@ -176,7 +176,7 @@
 
             body = string.Format(body, startTime.ToString("MM/dd/yyyy hh:mm:ss"), stopTime.ToString("MM/dd/yyyy hh:mm:ss"), numberOfCustomers);
 
-            var newMail = new Fanex.MailDelivery.Client.Models.Mail
+            var newMail = new Fanex.MailDelivery.Core.Models.Mail
             {
                 Subject = "VR Auto Adjustment finished",
                 Title = "SPU VR Auto Mail",
@@ -184,7 +184,7 @@
                 MailingListId = AppSettings.MailingListId
             };
 
-            MailClientHandler.SendMail(newMail);
+            MailClientHandler.SendFunctionMail(newMail);
         }
 
         private bool IsExecutedDate()
