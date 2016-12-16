@@ -3,6 +3,7 @@
 *.dll
 *.log
 *.cache
+packages/*
 /SPU.WinService.VirtualSetting.Core/bin
 /SPU.WinService.VirtualSetting.Core/obj
 /SPU.WinService.VirtualSetting/bin
