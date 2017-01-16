@@ -9,7 +9,7 @@
     public class RuntimeLog<T> : IRuntimeLog<T> where T : IEquatable<T>
     {
         private Stream _stream;
-        BinaryFormatter serializer = new BinaryFormatter();
+        private BinaryFormatter serializer = new BinaryFormatter();
 
         public RuntimeLog(Stream stream)
         {

@@ -5,32 +5,40 @@
     using Fanex.MailDelivery.Client;
     using Quartz;
     using Quartz.Impl;
+    using SPU.WinService.VirtualSetting.JobScheduler;
     using SPU.WinService.VitualSetting;
     using System.ServiceProcess;
 
     public partial class VirtualSettingService : ServiceBase
     {
-        private static IScheduler _scheduler;
+        private QuartzJobScheduler _jobScheduler;
 
         public VirtualSettingService()
         {
             InitializeComponent();
+            InitializeScheduler();
             this.CanShutdown = true;
             DbSettingProviderManager.Current.Start();
         }
 
+        private void InitializeScheduler()
+        {
+            var schedulderFacttory = new StdSchedulerFactory();
+            var scheduler = schedulderFacttory.GetScheduler();
+
+            _jobScheduler = new QuartzJobScheduler(scheduler);
+            _jobScheduler.Schedule(typeof(VirtualSettingJob), AppSettings.JobCronEveryDay);
+        }
+
         protected override void OnStart(string[] args)
         {
+            Logger.Log.Info("Start for scheduling to update Virtual Settings", "SPU.Local");
+
             MailClientHandler.Start();
 
-            try
-            {
-                ScheduleVirtualSettingJob();
-            }
-            catch
-            {
-                Logger.Log.Error("Error for scheduling virtual setting", "SPU.Local");
-            }
+            base.OnStart(args);
+
+            _jobScheduler.Start();
         }
 
         protected override void OnStop()
@@ -39,7 +47,9 @@
 
             MailClientHandler.Stop();
 
-            _scheduler.Shutdown(true);
+            base.OnStop();
+
+            _jobScheduler.Shutdown();
         }
 
         protected override void OnShutdown()
@@ -48,27 +58,7 @@
 
             MailClientHandler.Stop();
 
-            _scheduler.Shutdown(true);
-        }
-
-        private void ScheduleVirtualSettingJob()
-        {
-            _scheduler = StdSchedulerFactory.GetDefaultScheduler();
-            _scheduler.Start();
-
-            IJobDetail job = JobBuilder.Create<VirtualSettingJob>()
-                .WithIdentity("UpdateVirtualSetting", "VirtualSetting")
-                .Build();
-
-            ITrigger trigger = TriggerBuilder.Create()
-                .WithIdentity("TriggerUpdateVirtualSetting", "VirtualSetting")
-                .StartNow()
-                .WithSimpleSchedule(x => x
-                    .WithIntervalInHours(AppSettings.ServiceExecutionInterval)
-                    .RepeatForever())
-                .Build();
-
-            _scheduler.ScheduleJob(job, trigger);
-        }
+            _jobScheduler.Shutdown();
+        }       
     }
 }

@@ -17,12 +17,10 @@
         private VirtualSettingBusiness _virtualSettingBusiness = new VirtualSettingBusiness();
         
         public void Execute(IJobExecutionContext context)
-        {
-            Logger.Log.Info("Starting Auto Updating Virtual Settings", "SPU.Local");
-
+        {            
             if (IsExecutedDate())
             {
-                Logger.Log.Info("Is executed date", "SPU.Local");
+                Logger.Log.Info("Starting Auto Updating Virtual Settings", "SPU.Local");
 
                 try
                 {                    

@@ -161,6 +161,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AppSettings.cs" />
+    <Compile Include="JobScheduler\IJobScheduler.cs" />
+    <Compile Include="JobScheduler\IQuartzJobScheduler.cs" />
+    <Compile Include="JobScheduler\QuartzJobScheduler.cs" />
     <Compile Include="VirtualSettingJob.cs" />
     <Compile Include="VirutalSettingService.cs">
       <SubType>Component</SubType>
@@ -181,48 +184,12 @@
     <None Include="app.config">
       <SubType>Designer</SubType>
     </None>
-    <Content Include="app.LOCAL.config.txt">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>app.LOCAL.config.tt</DependentUpon>
-    </Content>
-    <Content Include="app.PRO.config.txt">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>app.PRO.config.tt</DependentUpon>
-    </Content>
-    <Content Include="app.UAT.config1.txt">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>app.UAT.config.tt</DependentUpon>
-    </Content>
     <Content Include="Install Service.bat">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="MasterTemplate.txt">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>MasterTemplate.tt</DependentUpon>
-    </Content>
-    <Content Include="TextFile1.txt" />
     <Content Include="Uninstall Service.bat">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <None Include="app.LOCAL.config.tt">
-      <SubType>Designer</SubType>
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>app.LOCAL.config.txt</LastGenOutput>
-    </None>
-    <None Include="app.PRO.config.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>app.PRO.config.txt</LastGenOutput>
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="app.UAT.config.tt">
-      <SubType>Designer</SubType>
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>app.UAT.config1.txt</LastGenOutput>
-    </None>
     <Content Include="MailTemplate\MailInformTemplate.cshtml">
       <SubType>Code</SubType>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -231,21 +198,8 @@
       <SubType>Designer</SubType>
     </None>
     <None Include="packages.config" />
-    <None Include="MasterTemplate.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>MasterTemplate.txt</LastGenOutput>
-    </None>
-    <Content Include="SPU.WinService.VirtualSetting.exe.LOCAL.config">
-      <DependentUpon>MasterTemplate.tt</DependentUpon>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
     <Content Include="SPU.WinService.VirtualSetting.exe.PRO.config">
-      <DependentUpon>MasterTemplate.tt</DependentUpon>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="SPU.WinService.VirtualSetting.exe.UAT.config">
-      <DependentUpon>MasterTemplate.tt</DependentUpon>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
   <ItemGroup>

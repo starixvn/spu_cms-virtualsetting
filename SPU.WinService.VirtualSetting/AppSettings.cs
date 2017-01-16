@@ -197,5 +197,20 @@ namespace SPU.WinService.VitualSetting
                 }
             }
         }
+
+        public static string JobCronEveryDay
+        {
+            get
+            {
+                try
+                {
+                    return ConfigurationManager.AppSettings["JobCronEveryDay"].ToString();
+                }
+                catch
+                {
+                    return "0 15 0 * * ?";
+                }
+            }
+        }
     }
 }
