@@ -15,21 +15,21 @@
     public class VirtualSettingJob : IJob
     {
         private VirtualSettingBusiness _virtualSettingBusiness = new VirtualSettingBusiness();
-        
+
         public void Execute(IJobExecutionContext context)
-        {            
+        {
             if (IsExecutedDate())
             {
                 Logger.Log.Info("Starting Auto Updating Virtual Settings", "SPU.Local");
 
                 try
-                {                    
+                {
                     var startTime = DateTime.Now;
 
                     var siteIds = AppSettings.SiteIds;
                     var superIds = AppSettings.SuperIds;
 
-                    var numberOfWinningPunters = AutoAdjustVirtualSettingsForWinningPunters(siteIds, superIds);                    
+                    var numberOfWinningPunters = AutoAdjustVirtualSettingsForWinningPunters(siteIds, superIds);
 
                     var stopTime = DateTime.Now;
 
@@ -49,13 +49,13 @@
         public int AutoAdjustVirtualSettingsForWinningPunters(string siteIds, string superIds)
         {
             var virtualRateThresholdForWining = AppSettings.VirtualMultiplierForWinning;
-            var newVirtualRate = AppSettings.NewVirtualMultiplierForWinning;            
+            var newVirtualRate = AppSettings.NewVirtualMultiplierForWinning;
             var numberOfWinningPunters = 0;
 
-            var winningPunters = _virtualSettingBusiness.GetWinningPunterList(siteIds, superIds, virtualRateThresholdForWining);      
+            var winningPunters = _virtualSettingBusiness.GetWinningPunterList(siteIds, superIds, virtualRateThresholdForWining);
 
             if (winningPunters != null && winningPunters.Any())
-            {                
+            {
                 var winningPuntersDict = FilterWinningPunterBaseOnCurrentVirtualRate(winningPunters, virtualRateThresholdForWining);
 
                 UpdateVirtualSetting(winningPuntersDict.Values, newVirtualRate);
@@ -67,12 +67,12 @@
         }
 
         public int AutoAdjustVirtualSettingsForLosingPunters(string siteIds, string superIds)
-        {                     
+        {
             var virtualRateThresholdForLosing = AppSettings.VirtualMultiplierForLosing;
             var newVirtualRate = AppSettings.NewVirtualMultiplierForLosing;
             var expiredDays = AppSettings.AdjustDateExpiredDays;
             var numberOfLosingMembers = 0;
-            
+
             var losingPunters = _virtualSettingBusiness.GetLosingPunterList(siteIds, superIds, virtualRateThresholdForLosing);
 
             if (losingPunters != null && losingPunters.Any())
@@ -90,12 +90,12 @@
         }
 
         private IEnumerable<Punter> FilterPunterBaseOnAdjustDate(IEnumerable<Punter> punters, short expiredDays)
-        {                    
+        {
             var custIds = string.Join(",", punters.Select(p => p.CustID));
 
             var filteredPunters = _virtualSettingBusiness.FilterPunterBaseOnAdjustDate(custIds, expiredDays);
 
-            return punters.Where(p => filteredPunters.Contains(p.CustID));          
+            return punters.Where(p => filteredPunters.Contains(p.CustID));
         }
 
         private Dictionary<int, Punter> FilterWinningPunterBaseOnCurrentVirtualRate(IEnumerable<Punter> winningPunters, double virtualRateThresholdForWinning)
@@ -121,7 +121,7 @@
         }
 
         private Dictionary<int, Punter> FilterLosingPunterBaseOnCurrentVirtualRate(IEnumerable<Punter> losingPunters, double virtualRateThresholdForLosing)
-        {            
+        {
             var losingPuntersDict = losingPunters.ToDictionary(p => p.CustID);
             var custIds = string.Join(",", losingPuntersDict.Keys);
 
@@ -143,10 +143,11 @@
         }
 
         private void UpdateVirtualSetting(IEnumerable<Punter> punters, double newVirtualRate)
-        {            
+        {
             var userId = AppSettings.DummyUser;
             var ip = AppSettings.IP;
             var chunkSize = AppSettings.PunterChunkSize;
+            var numOfMonth = AppSettings.NumOfMonth;
             var chunkPunters = punters.Partition(chunkSize);
 
             foreach (var selectedPunters in chunkPunters)
@@ -162,7 +163,20 @@
                     if (!logResult)
                     {
                         Logger.Log.Error("Error for logging virtual settings", "SPU.Local");
-                    }                    
+                    }
+
+                    try
+                    {
+                        logResult = _virtualSettingBusiness.InsertCustomerMarginHistory(selectedPunters, numOfMonth);
+                        if (!logResult)
+                        {
+                            Logger.Log.Error("Error for logging customer margin history", "SPU.Local");
+                        }
+                    }
+                    catch (Exception exception)
+                    {
+                        Logger.Log.Error("Error (exception) for logging customer margin history: " + exception.Message, "SPU.Local");
+                    }
                 }
             }
         }

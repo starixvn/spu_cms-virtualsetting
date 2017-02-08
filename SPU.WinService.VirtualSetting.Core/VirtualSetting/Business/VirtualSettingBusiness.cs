@@ -57,12 +57,31 @@
             var criteria = new LogVirtualSettingCriteria
             {
                 PunterVRSettingsDoc = GenerateVirtualSettingXmlForLogging(punters, newVirtualRate),
-                CreatorId = userId                
+                CreatorId = userId
             };
 
             var logResult = _virtualSettingsService.LogVirtualSetting(criteria);
 
             return logResult.IsSuccessful;
+        }
+
+        public bool InsertCustomerMarginHistory(IEnumerable<Punter> punters, int numOfMonth)
+        {
+            var criteria = new GetCustomerMarginHistoryCriteria
+            {
+                CustIds = string.Join(",", punters.Select(c => c.CustID).Distinct()),
+                NumOfMonth = numOfMonth
+            };
+
+            var customerMarginList = _virtualSettingsService.GetCustomerMarginHistory(criteria);
+            var insertCriteria = new InsertCustomerMarginHistoryCriteria
+            {
+                CustomerMarginDoc = GenerateVirtualSettingXmlForCustomerMarginHistory(customerMarginList)
+            };
+
+            var result = _virtualSettingsService.InsertCustomerMarginHistory(insertCriteria);
+
+            return result.IsSuccessful;
         }
 
         public IEnumerable<CustomerVirtualRate> GetCurrentCustomerVirtualRate(string custIds)
@@ -100,7 +119,7 @@
         private string GenerateVirtualSettingXmlForLogging(IEnumerable<Punter> proPunters, double newVirtualRate)
         {
             var xml = new StringBuilder();
-            var pattern = "<Rate CustID=\"{0}\" ReportDate=\"{1}\" SiteID=\"{2}\" SRecommend=\"{3}\"" + 
+            var pattern = "<Rate CustID=\"{0}\" ReportDate=\"{1}\" SiteID=\"{2}\" SRecommend=\"{3}\"" +
                 " MRecommend=\"{4}\" Recommend=\"{5}\" OldVirtualRate=\"{6}\" NewVirtualRate =\"{7}\" />";
 
             foreach (var punter in proPunters)
@@ -115,6 +134,27 @@
                                     punter.Recommend,
                                     punter.OldVirtualRate,
                                     newVirtualRate);
+            }
+
+            return "<ROOT>" + xml + "</ROOT>";
+        }
+
+        private string GenerateVirtualSettingXmlForCustomerMarginHistory(IEnumerable<CustomerMargin> data)
+        {
+            var xml = new StringBuilder();
+            var pattern = "<Rate CustID=\"{0}\" ReportMonth=\"{1}\" ReportYear=\"{2}\" Turnover=\"{3}\"" +
+                " Winloss=\"{4}\" BetCount=\"{5}\" />";
+
+            foreach (var item in data)
+            {
+                xml.AppendFormat(
+                                    pattern,
+                                    item.CustId,
+                                    item.ReportMonth,
+                                    item.ReportYear,
+                                    item.Turnover,
+                                    item.Winloss,
+                                    item.BetCount);
             }
 
             return "<ROOT>" + xml + "</ROOT>";

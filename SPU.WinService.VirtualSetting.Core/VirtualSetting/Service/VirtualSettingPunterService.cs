@@ -40,5 +40,15 @@ namespace SPU.WinService.VitualSetting.Core.VirtualSetting
         {
             return GetData<CustomerVirtualRate>(criteria);
         }
+
+        public ICommandResult InsertCustomerMarginHistory(InsertCustomerMarginHistoryCriteria criteria)
+        {
+            return ExecuteOutput(criteria);
+        }
+
+        public IEnumerable<CustomerMargin> GetCustomerMarginHistory(CriteriaBase criteria)
+        {
+            return GetData<CustomerMargin>(criteria);
+        }
     }
 }

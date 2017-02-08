@@ -1,10 +1,9 @@
-﻿using System.IO;
-using SPU.WinService.VitualSetting.Core.VirtualSetting.Log;
-
-namespace SPU.WinService.VitualSetting
+﻿namespace SPU.WinService.VitualSetting
 {
+    using SPU.WinService.VitualSetting.Core.VirtualSetting.Log;
     using System;
     using System.Configuration;
+    using System.IO;
 
     public static class AppSettings
     {
@@ -139,7 +138,7 @@ namespace SPU.WinService.VitualSetting
 
                 if (!string.IsNullOrEmpty(value))
                 {
-                    return Convert.ToInt32(value);
+                    return Convert.ToDouble(value);
                 }
 
                 return 1.0;
@@ -154,7 +153,7 @@ namespace SPU.WinService.VitualSetting
 
                 if (!string.IsNullOrEmpty(value))
                 {
-                    return Convert.ToInt32(value);
+                    return Convert.ToDouble(value);
                 }
 
                 return 1.0;
@@ -209,6 +208,28 @@ namespace SPU.WinService.VitualSetting
                 catch
                 {
                     return "0 15 0 * * ?";
+                }
+            }
+        }
+
+        public static int NumOfMonth
+        {
+            get
+            {
+                try
+                {
+                    var value = ConfigurationManager.AppSettings["NumOfMonth"];
+
+                    if (!string.IsNullOrEmpty(value))
+                    {
+                        return Convert.ToInt32(value);
+                    }
+
+                    return 12;
+                }
+                catch
+                {
+                    return 12;
                 }
             }
         }
