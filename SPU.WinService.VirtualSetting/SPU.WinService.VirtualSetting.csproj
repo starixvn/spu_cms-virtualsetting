@@ -200,6 +200,7 @@
     <None Include="packages.config" />
     <Content Include="SPU.WinService.VirtualSetting.exe.PRO.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <SubType>Designer</SubType>
     </Content>
   </ItemGroup>
   <ItemGroup>

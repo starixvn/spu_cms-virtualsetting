@@ -87,6 +87,34 @@
             }
         }
 
+        public static double NewVirtualMultiplierForWinning2
+        {
+            get
+            {
+                string count = ConfigurationManager.AppSettings["NewVirtualMultiplierForWinning2"];
+                if (!string.IsNullOrEmpty(count))
+                {
+                    return Convert.ToDouble(count);
+                }
+
+                return 3;
+            }
+        }
+
+        public static decimal Margin200
+        {
+            get
+            {
+                string count = ConfigurationManager.AppSettings["Margin200"];
+                if (!string.IsNullOrEmpty(count))
+                {
+                    return Convert.ToDecimal(count);
+                }
+
+                return 4;
+            }
+        }
+
         public static double NewVirtualMultiplierForLosing
         {
             get

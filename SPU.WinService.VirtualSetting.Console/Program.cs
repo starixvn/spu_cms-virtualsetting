@@ -14,12 +14,8 @@
             DbSettingProviderManager.Current.Start();
             MailClientHandler.Start();
 
-            var siteIds = AppSettings.SiteIds;
-            var superIds = AppSettings.SuperIds;
-
             VirtualSettingJob job = new VirtualSettingJob();
-            job.AutoAdjustVirtualSettingsForWinningPunters(siteIds, superIds);
-            job.AutoAdjustVirtualSettingsForLosingPunters(siteIds, superIds);
+            job.Execute(null);
 
             MailClientHandler.Stop();
 

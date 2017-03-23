@@ -84,6 +84,19 @@
             return result.IsSuccessful;
         }
 
+        public IEnumerable<CustomerMargin> GetCustomerMarginHistory(IEnumerable<Punter> punters, int numOfMonth)
+        {
+            var criteria = new GetCustomerMarginHistoryCriteria
+            {
+                CustIds = string.Join(",", punters.Select(c => c.CustID).Distinct()),
+                NumOfMonth = numOfMonth
+            };
+
+            var customerMarginList = _virtualSettingsService.GetCustomerMarginHistory(criteria);
+
+            return customerMarginList;
+        }
+
         public IEnumerable<CustomerVirtualRate> GetCurrentCustomerVirtualRate(string custIds)
         {
             var criteria = new GetCurrentCustomerVirtualRate
