@@ -68,33 +68,7 @@
 
             return numberOfWinningPunters;
         }
-
-        public int AutoAdjustVirtualSettingsForLosingPunters(string siteIds, string superIds)
-        {
-            var virtualRateThresholdForLosing = AppSettings.VirtualMultiplierForLosing;
-            var newVirtualRate = AppSettings.NewVirtualMultiplierForLosing;
-            var expiredDays = AppSettings.AdjustDateExpiredDays;
-            var numberOfLosingMembers = 0;
-
-            var losingPunters = _virtualSettingBusiness.GetLosingPunterList(siteIds, superIds, virtualRateThresholdForLosing);
-
-            if (losingPunters != null && losingPunters.Any())
-            {
-                losingPunters = FilterPunterBaseOnAdjustDate(losingPunters, expiredDays);
-                _failedUpdatePunterList.Clear();
-
-                var losingPuntersDict = FilterLosingPunterBaseOnCurrentVirtualRate(losingPunters, virtualRateThresholdForLosing);
-
-                UpdateVirtualSetting(losingPuntersDict.Values, newVirtualRate);
-
-                UpdateCustomerMarginHistory(losingPuntersDict.Values);
-
-                numberOfLosingMembers = losingPuntersDict.Count - _failedUpdatePunterList.Count;
-            }
-
-            return numberOfLosingMembers;
-        }
-
+        
         #region Private Method
 
         private IEnumerable<Punter> FilterPunterBaseOnAdjustDate(IEnumerable<Punter> punters, short expiredDays)
@@ -126,29 +100,7 @@
             }
 
             return winningPuntersDict;
-        }
-
-        private Dictionary<int, Punter> FilterLosingPunterBaseOnCurrentVirtualRate(IEnumerable<Punter> losingPunters, double virtualRateThresholdForLosing)
-        {
-            var losingPuntersDict = losingPunters.ToDictionary(p => p.CustID);
-            var custIds = string.Join(",", losingPuntersDict.Keys);
-
-            var currentVRs = _virtualSettingBusiness.GetCurrentCustomerVirtualRate(custIds);
-
-            foreach (var currentVR in currentVRs)
-            {
-                if (currentVR.VirtualRate >= virtualRateThresholdForLosing)
-                {
-                    losingPuntersDict[currentVR.CustID].OldVirtualRate = currentVR.VirtualRate;
-                }
-                else
-                {
-                    losingPuntersDict.Remove(currentVR.CustID);
-                }
-            }
-
-            return losingPuntersDict;
-        }
+        }        
 
         private void UpdateVirtualSettingWithTwoLevel(IEnumerable<Punter> punters)
         {

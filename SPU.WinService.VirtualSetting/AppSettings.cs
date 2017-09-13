@@ -114,21 +114,7 @@
                 return 4;
             }
         }
-
-        public static double NewVirtualMultiplierForLosing
-        {
-            get
-            {
-                string count = ConfigurationManager.AppSettings["NewVirtualMultiplierForLosing"];
-                if (!string.IsNullOrEmpty(count))
-                {
-                    return Convert.ToDouble(count);
-                }
-
-                return 1;
-            }
-        }
-
+      
         public static short AdjustDateExpiredDays
         {
             get
@@ -172,22 +158,7 @@
                 return 1.0;
             }
         }
-
-        public static double VirtualMultiplierForLosing
-        {
-            get
-            {
-                string value = ConfigurationManager.AppSettings["VirtualMultiplierForLosing"];
-
-                if (!string.IsNullOrEmpty(value))
-                {
-                    return Convert.ToDouble(value);
-                }
-
-                return 1.0;
-            }
-        }
-
+       
         public static string LogFile
         {
             get

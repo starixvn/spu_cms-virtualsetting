@@ -24,19 +24,7 @@
             };
 
             return _virtualSettingsService.GetPunterList(proPuntercriteria);
-        }
-
-        public IEnumerable<Punter> GetLosingPunterList(string siteNames, string superIds, double virtualRateThreshold)
-        {
-            var losingPuntercriteria = new GetLosingPrunterCriteria
-            {
-                SiteIds = siteNames,
-                SuperIds = superIds,
-                VirtualRateThreshold = virtualRateThreshold
-            };
-
-            return _virtualSettingsService.GetPunterList(losingPuntercriteria);
-        }
+        }       
 
         public bool UpdatePunterVirtualSetting(IEnumerable<Punter> punters, double virtualMultiplier, int userId, string ip)
         {
