@@ -148,6 +148,7 @@
     <Compile Include="VirtualSetting\Criteria\GetCurrentCustomerVirtualRate.cs" />
     <Compile Include="VirtualSetting\Criteria\GetLosingPrunterCriteria.cs" />
     <Compile Include="VirtualSetting\Criteria\GetCustomerMarginHistoryCriteria.cs" />
+    <Compile Include="VirtualSetting\Criteria\GetProPrunterSoccerCriteria.cs" />
     <Compile Include="VirtualSetting\Criteria\InsertCustomerMarginHistoryCriteria.cs" />
     <Compile Include="VirtualSetting\Criteria\LogVirtualSettingCriteria.cs" />
     <Compile Include="VirtualSetting\Criteria\UpdateVirtualSettingCriteria.cs" />

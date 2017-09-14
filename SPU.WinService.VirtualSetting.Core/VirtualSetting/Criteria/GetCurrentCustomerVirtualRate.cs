@@ -6,6 +6,8 @@
     {
         public string CustIds { get; set; }
 
+        public bool IsVRSoccer { get; set; }
+
         public override string GetSettingKey()
         {
             return "NAP_Report_CustMngt_GetCustomersVirtualRate";

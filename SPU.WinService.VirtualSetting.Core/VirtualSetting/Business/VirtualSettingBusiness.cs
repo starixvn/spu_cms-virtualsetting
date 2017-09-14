@@ -14,6 +14,18 @@
             _virtualSettingsService = virtualSettingsService ?? new VirtualSettingPunterService();
         }
 
+        public IEnumerable<Punter> GetWinningPunterSoccerList(string siteNames, string superIds, double virtualRateThreshold)
+        {
+            var proPuntercriteria = new GetProPrunterSoccerCriteria
+            {
+                SiteIds = siteNames,
+                SuperIds = superIds,
+                VirtualRateThreshold = virtualRateThreshold
+            };
+
+            return _virtualSettingsService.GetPunterList(proPuntercriteria);
+        }
+
         public IEnumerable<Punter> GetWinningPunterList(string siteNames, string superIds, double virtualRateThreshold)
         {
             var proPuntercriteria = new GetProPrunterCriteria
@@ -24,15 +36,46 @@
             };
 
             return _virtualSettingsService.GetPunterList(proPuntercriteria);
-        }       
+        }
 
-        public bool UpdatePunterVirtualSetting(IEnumerable<Punter> punters, double virtualMultiplier, int userId, string ip)
+        public bool UpdatePunterVirtualSettingForAllSports(IEnumerable<Punter> punters, double virtualMultiplier, int userId, string ip)
         {
             var criteria = new UpdateVirtualSettingCriteria
             {
                 VirtualMultiplier = GenerateVirtualSettingXmlForUpdating(punters, virtualMultiplier),
                 UserId = userId,
-                IP = ip
+                IP = ip,
+                SportType = 0
+            };
+
+            var updateResult = _virtualSettingsService.UpdateVirtualSetting(criteria);
+
+            return updateResult.IsSuccessful;
+        }
+
+        public bool UpdatePunterVirtualSettingForSoccer(IEnumerable<Punter> punters, double virtualMultiplier, int userId, string ip)
+        {
+            var criteria = new UpdateVirtualSettingCriteria
+            {
+                VirtualMultiplier = GenerateVirtualSettingXmlForUpdating(punters, virtualMultiplier),
+                UserId = userId,
+                IP = ip,
+                SportType = 1
+            };
+
+            var updateResult = _virtualSettingsService.UpdateVirtualSetting(criteria);
+
+            return updateResult.IsSuccessful;
+        }
+
+        public bool UpdatePunterVirtualSettingForOtherSports(IEnumerable<Punter> punters, double virtualMultiplier, int userId, string ip)
+        {
+            var criteria = new UpdateVirtualSettingCriteria
+            {
+                VirtualMultiplier = GenerateVirtualSettingXmlForUpdating(punters, virtualMultiplier),
+                UserId = userId,
+                IP = ip,
+                SportType = 2
             };
 
             var updateResult = _virtualSettingsService.UpdateVirtualSetting(criteria);
@@ -89,11 +132,11 @@
         {
             var criteria = new GetCurrentCustomerVirtualRate
             {
-                CustIds = custIds
+                CustIds = custIds                
             };
 
             return _virtualSettingsService.GetCurrentCustomerVirtualRate(criteria);
-        }
+        }        
 
         public IEnumerable<int> FilterPunterBaseOnAdjustDate(string custIds, short expiredDays)
         {

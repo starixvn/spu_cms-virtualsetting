@@ -19,6 +19,8 @@ namespace SPU.WinService.VitualSetting.Core.VirtualSetting
 
         public string IP { get; set; }
 
+        public short SportType { get; set; }
+
         public int ErrCode { get; set; }
 
         public string ErrMsg { get; set; }

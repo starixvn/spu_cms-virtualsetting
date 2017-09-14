@@ -87,19 +87,19 @@
             }
         }
 
-        public static double NewVirtualMultiplierForWinning2
+        public static double NewVirtualMultiplierForSuperProPunter
         {
             get
             {
-                string count = ConfigurationManager.AppSettings["NewVirtualMultiplierForWinning2"];
+                string count = ConfigurationManager.AppSettings["NewVirtualMultiplierForSuperProPunter"];
                 if (!string.IsNullOrEmpty(count))
                 {
                     return Convert.ToDouble(count);
                 }
 
-                return 3;
+                return 1;
             }
-        }
+        }       
 
         public static decimal Margin200
         {

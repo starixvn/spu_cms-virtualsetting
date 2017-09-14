@@ -26,7 +26,9 @@ namespace SPU.WinService.VitualSetting.Core.VirtualSetting
         public int Recommend { get; set; }
 
         public double OldVirtualRate { get; set; }
-        
-        public double NewVirtualRate { get; set; }
+
+        public short SportType { get; set; }
+
+        public bool IsSuperProPunters { get; set; }       
     }
 }

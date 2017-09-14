@@ -164,6 +164,9 @@
     <Compile Include="JobScheduler\IJobScheduler.cs" />
     <Compile Include="JobScheduler\IQuartzJobScheduler.cs" />
     <Compile Include="JobScheduler\QuartzJobScheduler.cs" />
+    <Compile Include="VirtualSettingBase.cs" />
+    <Compile Include="VirtualSettingForAllSports.cs" />
+    <Compile Include="VirtualSettingForSoccer.cs" />
     <Compile Include="VirtualSettingJob.cs" />
     <Compile Include="VirutalSettingService.cs">
       <SubType>Component</SubType>
