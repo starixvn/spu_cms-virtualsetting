@@ -16,6 +16,8 @@
     {
         public VirtualSettingForSoccer(string siteIds, string superIds)
         {
+            ServiceName = "Soccer";
+
             SiteIds = siteIds;
             SuperIds = superIds;
 

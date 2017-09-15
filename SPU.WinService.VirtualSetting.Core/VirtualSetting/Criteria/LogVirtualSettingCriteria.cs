@@ -17,6 +17,8 @@ namespace SPU.WinService.VitualSetting.Core.VirtualSetting
         
         public int CreatorId { get; set; }
 
+        public string ServiceName { get; set; }
+
         public int ErrCode { get; set; }
 
         public string ErrMsg { get; set; }

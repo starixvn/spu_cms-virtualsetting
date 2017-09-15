@@ -16,6 +16,8 @@
     {
         public VirtualSettingForAllSports(string siteIds, string superIds)
         {
+            ServiceName = "Sportbooks";
+
             SiteIds = siteIds;
             SuperIds = superIds;
 

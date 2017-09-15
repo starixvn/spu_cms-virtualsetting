@@ -83,12 +83,13 @@
             return updateResult.IsSuccessful;
         }
 
-        public bool LogPunterVirtualSetting(IEnumerable<Punter> punters, double newVirtualRate, int userId)
+        public bool LogPunterVirtualSetting(string serviceName, IEnumerable<Punter> punters, double newVirtualRate, int userId)
         {
             var criteria = new LogVirtualSettingCriteria
             {
                 PunterVRSettingsDoc = GenerateVirtualSettingXmlForLogging(punters, newVirtualRate),
-                CreatorId = userId
+                CreatorId = userId,
+                ServiceName = serviceName
             };
 
             var logResult = _virtualSettingsService.LogVirtualSetting(criteria);

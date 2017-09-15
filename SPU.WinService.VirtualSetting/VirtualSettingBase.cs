@@ -14,6 +14,8 @@
 
     public abstract class VirtualSettingBase
     {
+        public string ServiceName { get; set; }
+
         public string SiteIds { get; set; }
         
         public string SuperIds { get; set; }
@@ -64,7 +66,7 @@
                     }
                     else
                     {
-                        var logResult = VirtualSettingBusiness.LogPunterVirtualSetting(selectedPunters, newVirtualRate, userId);
+                        var logResult = VirtualSettingBusiness.LogPunterVirtualSetting(ServiceName, selectedPunters, newVirtualRate, userId);
                         if (!logResult)
                         {
                             Logger.Log.Error("Error for logging virtual settings", "SPU.Local");
