@@ -14,6 +14,12 @@
 
     public abstract class VirtualSettingBase
     {
+        public VirtualSettingBase()
+        {
+            FailedUpdatePunterList = new List<Punter>();
+            VirtualSettingBusiness = new VirtualSettingBusiness();
+        }
+
         public string ServiceName { get; set; }
 
         public string SiteIds { get; set; }
@@ -42,7 +48,16 @@
 
         public IEnumerable<CustomerVirtualRate> GetCurrentCustomerVirtualRate(string custIds)
         {
-            return VirtualSettingBusiness.GetCurrentCustomerVirtualRate(custIds);
+            try 
+            { 
+                return VirtualSettingBusiness.GetCurrentCustomerVirtualRate(custIds);
+            }
+            catch (Exception exception)
+            {
+                Logger.Log.Error("Error (exception) for GetCurrentCustomerVirtualRate on " + this.ServiceName + " ; " + exception.Message);
+            }
+
+            return null;
         }
 
         public void UpdateVirtualSetting(IEnumerable<Punter> punters, double newVirtualRate)
@@ -62,21 +77,21 @@
                     {
                         FailedUpdatePunterList.AddRange(selectedPunters);
 
-                        Logger.Log.Error("Error for updating virtual settings", "SPU.Local");
+                        Logger.Log.Error("Error for updating virtual settings on " + this.ServiceName);
                     }
                     else
                     {
                         var logResult = VirtualSettingBusiness.LogPunterVirtualSetting(ServiceName, selectedPunters, newVirtualRate, userId);
                         if (!logResult)
                         {
-                            Logger.Log.Error("Error for logging virtual settings", "SPU.Local");
+                            Logger.Log.Error("Error for logging virtual settings on " + this.ServiceName);
                         }
                     }
                 }
             }
             catch (Exception exception)
             {
-                Logger.Log.Error("Error (exception) for UpdateVirtualSetting : " + exception.Message, "SPU.Local");
+                Logger.Log.Error("Error (exception) for UpdateVirtualSetting on " + this.ServiceName + " ; " + exception.Message);
             }
         }
 
@@ -89,12 +104,12 @@
                 var result = VirtualSettingBusiness.InsertCustomerMarginHistory(punters, numOfMonth);
                 if (!result)
                 {
-                    Logger.Log.Error("Error for logging customer margin history", "SPU.Local");
+                    Logger.Log.Error("Error for logging customer margin history on "  + this.ServiceName);
                 }
             }
             catch (Exception exception)
             {
-                Logger.Log.Error("Error (exception) for UpdateCustomerMarginHistory : " + exception.Message, "SPU.Local");
+                Logger.Log.Error("Error (exception) for UpdateCustomerMarginHistory on " + this.ServiceName + " ; " + exception.Message);
             }
         }
 

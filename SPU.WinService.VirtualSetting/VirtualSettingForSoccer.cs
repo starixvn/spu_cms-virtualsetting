@@ -17,19 +17,15 @@
         public VirtualSettingForSoccer(string siteIds, string superIds)
         {
             ServiceName = "Soccer";
-
             SiteIds = siteIds;
             SuperIds = superIds;
-
-            VirtualRateThreshold = AppSettings.VirtualMultiplierForWinning;
-            FailedUpdatePunterList = new List<Punter>();
-            VirtualSettingBusiness = new VirtualSettingBusiness();
+            VirtualRateThreshold = AppSettings.VirtualRateThresholdForWinning;            
         }
 
         public override IEnumerable<Punter> AutoAdjustVirtualSettingsForPunters()
         {
             try
-            {
+            {                
                 var punters = GetPunterList();
 
                 if (punters != null && punters.Any())
@@ -37,31 +33,31 @@
                     var puntersDict = FilterPunterBaseOnCurrentVirtualRate(punters);
 
                     if (puntersDict != null && puntersDict.Any())
-                    {
-                        var updatedSuperProPunters = AutoAdjustVirtualSettingsForSuperProPunters(puntersDict);
-                        var updatedNormalPunters = AutoAdjustVirtualSettingsForNormalPunters(puntersDict);
+                    {                        
+                        var proPunters = puntersDict.Values.Where(p => p.IsSuperProPunters);
+                        var updatedProPunters = AdjustVirtualSettings(proPunters, AppSettings.NewVirtualMultiplierForSuperProPunter);
+                        
+                        var normalPunters = puntersDict.Values.Where(p => !p.IsSuperProPunters);
+                        var updatedNormalPunters = AdjustVirtualSettings(normalPunters, AppSettings.NewVirtualMultiplierForWinning);
 
-                        if (updatedSuperProPunters != null && updatedNormalPunters != null)
+                        if (updatedProPunters != null && updatedNormalPunters != null)
                         {
-                            return updatedSuperProPunters.Union(updatedNormalPunters);
+                            return updatedProPunters.Union(updatedNormalPunters);
                         }
-                        else
+                        else if (updatedProPunters != null)
                         {
-                            if (updatedSuperProPunters != null)
-                            {
-                                return updatedSuperProPunters;
-                            }
-                            else
-                            {
-                                return updatedNormalPunters;
-                            }
+                            return updatedProPunters;
                         }
+                        else if (updatedNormalPunters != null)
+                        {
+                            return updatedNormalPunters;
+                        }                        
                     }
-                }
+                }                
             }
             catch (Exception exception)
             {
-                Logger.Log.Error("Error (exception) for AutoAdjustVirtualSettingsForPunters of VirtualSettingForSoccer : " + exception.Message, "SPU.Local");
+                Logger.Log.Error("Error (exception) for AutoAdjustVirtualSettingsForPunters of VirtualSettingForSoccer : " + exception.Message);
             }
 
             return null;
@@ -70,12 +66,12 @@
         public override IEnumerable<Punter> GetPunterList()
         {
             try
-            {
+            {                
                 return VirtualSettingBusiness.GetWinningPunterSoccerList(SiteIds, SuperIds, VirtualRateThreshold);
             }
             catch (Exception exception)
             {
-                Logger.Log.Error("Error (exception) for GetPunterList of VirtualSettingForSoccer : " + exception.Message, "SPU.Local");
+                Logger.Log.Error("Error (exception) for GetPunterList of VirtualSettingForSoccer : " + exception.Message);
             }
 
             return null;
@@ -89,25 +85,27 @@
                 var custIds = string.Join(",", puntersDict.Keys);
 
                 var currentVRs = GetCurrentCustomerVirtualRate(custIds);
-
-                foreach (var currentVR in currentVRs)
+                if (currentVRs != null && currentVRs.Any())
                 {
-                    if (currentVR.VirtualRateForSoccer < VirtualRateThreshold)
+                    foreach (var currentVR in currentVRs)
                     {
-                        puntersDict[currentVR.CustID].OldVirtualRate = currentVR.VirtualRateForSoccer;
-                        puntersDict[currentVR.CustID].SportType = 1;                      
+                        if (currentVR.VRSoccer < VirtualRateThreshold)
+                        {
+                            puntersDict[currentVR.CustID].OldVirtualRate = currentVR.VRSoccer;
+                            puntersDict[currentVR.CustID].SportType = 1;
+                        }
+                        else
+                        {
+                            puntersDict.Remove(currentVR.CustID);
+                        }
                     }
-                    else
-                    {
-                        puntersDict.Remove(currentVR.CustID);
-                    }
-                }
 
-                return puntersDict;
+                    return puntersDict;
+                }
             }
             catch (Exception exception)
             {
-                Logger.Log.Error("Error (exception) for FilterPunterBaseOnCurrentVirtualRate of VirtualSettingBase : " + exception.Message, "SPU.Local");
+                Logger.Log.Error("Error (exception) for FilterPunterBaseOnCurrentVirtualRate of VirtualSettingForSoccer : " + exception.Message);
             }
 
             return null;
@@ -115,23 +113,26 @@
 
         public override bool UpdatePunterVirtualSetting(IEnumerable<Punter> punters, double virtualMultiplier, int userId, string ip)
         {
-            return VirtualSettingBusiness.UpdatePunterVirtualSettingForSoccer(punters, virtualMultiplier, userId, ip);
+            try
+            {
+                return VirtualSettingBusiness.UpdatePunterVirtualSettingForSoccer(punters, virtualMultiplier, userId, ip);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
 
         #region Private Methods
 
-        private IEnumerable<Punter> AutoAdjustVirtualSettingsForSuperProPunters(Dictionary<int, Punter> punters)
-        {            
+        private IEnumerable<Punter> AdjustVirtualSettings(IEnumerable<Punter> filtedPunters, double newVirtualRate)
+        {
             try
-            {
-                FailedUpdatePunterList.Clear();
-
-                var newVirtualRate = AppSettings.NewVirtualMultiplierForSuperProPunter;
-
-                var filtedPunters = FilterSuperProPunter(punters);
-
+            {                                
                 if (filtedPunters != null && filtedPunters.Any())
                 {
+                    FailedUpdatePunterList.Clear();
+
                     UpdateVirtualSetting(filtedPunters, newVirtualRate);
 
                     var succesfulUpdatedPunters = filtedPunters.Except(FailedUpdatePunterList);
@@ -144,52 +145,12 @@
             }
             catch (Exception exception)
             {
-                Logger.Log.Error("Error (exception) for AutoAdjustVirtualSettingsForSuperProPunters of VirtualSettingForSoccer : " + exception.Message, "SPU.Local");
+                Logger.Log.Error("Error (exception) for AdjustVirtualSettings of VirtualSettingForSoccer : " + exception.Message);
             }
 
             return null;
         }
-
-        private IEnumerable<Punter> AutoAdjustVirtualSettingsForNormalPunters(Dictionary<int, Punter> punters)
-        {            
-            try
-            {
-                FailedUpdatePunterList.Clear();
-
-                var newVirtualRate = AppSettings.NewVirtualMultiplierForWinning;
-
-                var filtedPunters = FilterNormalPunter(punters);
-
-                if (filtedPunters != null && filtedPunters.Any())
-                {
-                    UpdateVirtualSetting(filtedPunters, newVirtualRate);
-
-                    var succesfulUpdatedPunters = filtedPunters.Except(FailedUpdatePunterList);
-                    if (succesfulUpdatedPunters != null && succesfulUpdatedPunters.Any())
-                    {
-                        UpdateCustomerMarginHistory(succesfulUpdatedPunters);
-                        return succesfulUpdatedPunters;
-                    }
-                }
-            }
-            catch (Exception exception)
-            {
-                Logger.Log.Error("Error (exception) for AutoAdjustVirtualSettingsForNormalPunters of VirtualSettingForSoccer : " + exception.Message, "SPU.Local");
-            }
-
-            return null;
-        }
-
-        private IEnumerable<Punter> FilterSuperProPunter(Dictionary<int, Punter> punters)
-        {
-            return punters.Values.Where(p => p.IsSuperProPunters = true);
-        }
-
-        private IEnumerable<Punter> FilterNormalPunter(Dictionary<int, Punter> punters)
-        {
-            return punters.Values.Where(p => p.IsSuperProPunters = false);
-        }
-
+      
         #endregion       
     }
 }

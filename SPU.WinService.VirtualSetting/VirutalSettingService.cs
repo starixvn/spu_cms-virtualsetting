@@ -32,7 +32,7 @@
 
         protected override void OnStart(string[] args)
         {
-            Logger.Log.Info("Start for scheduling to update Virtual Settings", "SPU.Local");
+            Logger.Log.Info("Start for scheduling to update Virtual Settings");
 
             MailClientHandler.Start();
 
@@ -43,7 +43,7 @@
 
         protected override void OnStop()
         {
-            Logger.Log.Info("Stop for updating Virtual Settings", "SPU.Local");
+            Logger.Log.Info("Stop for updating Virtual Settings");
 
             MailClientHandler.Stop();
 
@@ -54,7 +54,7 @@
 
         protected override void OnShutdown()
         {
-            Logger.Log.Info("Shutdown for updating Virtual Settings", "SPU.Local");
+            Logger.Log.Info("Shutdown for updating Virtual Settings");
 
             MailClientHandler.Stop();
 

@@ -12,28 +12,20 @@
     using System.IO;
     using System.Linq;
 
-    public class VirtualSettingForAllSports : VirtualSettingBase
+    public class VirtualSettingForSportbooks : VirtualSettingBase
     {
-        public VirtualSettingForAllSports(string siteIds, string superIds)
+        public VirtualSettingForSportbooks(string siteIds, string superIds)
         {
             ServiceName = "Sportbooks";
-
             SiteIds = siteIds;
             SuperIds = superIds;
-
-            VirtualRateThreshold = AppSettings.VirtualMultiplierForWinning;
-            FailedUpdatePunterList = new List<Punter>();
-            VirtualSettingBusiness = new VirtualSettingBusiness();
+            VirtualRateThreshold = AppSettings.VirtualRateThresholdForWinning;                        
         }
 
         public override IEnumerable<Punter> AutoAdjustVirtualSettingsForPunters()
         {            
             try
-            {
-                FailedUpdatePunterList.Clear();
-
-                var newVirtualRate = AppSettings.NewVirtualMultiplierForWinning;
-
+            {                                
                 var punters = GetPunterList();
 
                 if (punters != null && punters.Any())
@@ -42,7 +34,9 @@
 
                     if (puntersDict != null && puntersDict.Any())
                     {
-                        UpdateVirtualSetting(puntersDict.Values, newVirtualRate);
+                        FailedUpdatePunterList.Clear();
+
+                        UpdateVirtualSetting(puntersDict.Values, AppSettings.NewVirtualMultiplierForWinning);
 
                         var succesfulUpdatedPunters = puntersDict.Values.Except(FailedUpdatePunterList);
                         if (succesfulUpdatedPunters != null && succesfulUpdatedPunters.Any())
@@ -51,11 +45,11 @@
                             return succesfulUpdatedPunters;
                         }
                     }
-                }
+                }                
             }
             catch (Exception exception)
             {
-                Logger.Log.Error("Error (exception) for AutoAdjustVirtualSettingsForPunters of VirtualSettingForAllSports : " + exception.Message, "SPU.Local");
+                Logger.Log.Error("Error (exception) for AutoAdjustVirtualSettingsForPunters of VirtualSettingForSportbooks : " + exception.Message);
             }
 
             return null;
@@ -69,7 +63,7 @@
             }
             catch (Exception exception)
             {
-                Logger.Log.Error("Error (exception) for GetPunterList of VirtualSettingForAllSports : " + exception.Message, "SPU.Local");
+                Logger.Log.Error("Error (exception) for GetPunterList of VirtualSettingForSportbooks : " + exception.Message);
             }
 
             return null;
@@ -84,29 +78,32 @@
 
                 var currentVRs = GetCurrentCustomerVirtualRate(custIds);
 
-                foreach (var currentVR in currentVRs)
+                if (currentVRs != null && currentVRs.Any())
                 {
-                    if (currentVR.VirtualRateForSoccer < VirtualRateThreshold)
+                    foreach (var currentVR in currentVRs)
                     {
-                        puntersDict[currentVR.CustID].OldVirtualRate = currentVR.VirtualRateForSoccer;
-                        puntersDict[currentVR.CustID].SportType = 0;
+                        if (currentVR.VRSoccer < VirtualRateThreshold)
+                        {
+                            puntersDict[currentVR.CustID].OldVirtualRate = currentVR.VRSoccer;
+                            puntersDict[currentVR.CustID].SportType = 0;
+                        }
+                        else if (currentVR.VROtherSports < VirtualRateThreshold)
+                        {
+                            puntersDict[currentVR.CustID].OldVirtualRate = currentVR.VROtherSports;
+                            puntersDict[currentVR.CustID].SportType = 2;
+                        }
+                        else
+                        {
+                            puntersDict.Remove(currentVR.CustID);
+                        }
                     }
-                    else if (currentVR.VirtualRateForOtherSports < VirtualRateThreshold)
-                    {
-                        puntersDict[currentVR.CustID].OldVirtualRate = currentVR.VirtualRateForOtherSports;
-                        puntersDict[currentVR.CustID].SportType = 2;
-                    }
-                    else
-                    {
-                        puntersDict.Remove(currentVR.CustID);
-                    }
-                }
 
-                return puntersDict;
+                    return puntersDict;
+                }
             }
             catch (Exception exception)
             {
-                Logger.Log.Error("Error (exception) for FilterPunterBaseOnCurrentVirtualRate of VirtualSettingBase : " + exception.Message, "SPU.Local");
+                Logger.Log.Error("Error (exception) for FilterPunterBaseOnCurrentVirtualRate of VirtualSettingForSportbooks : " + exception.Message);
             }
 
             return null;
@@ -114,8 +111,15 @@
 
         public override bool UpdatePunterVirtualSetting(IEnumerable<Punter> punters, double virtualMultiplier, int userId, string ip)
         {
-            return UpdatePunterVirtualSettingForAllSports(punters, virtualMultiplier, userId, ip) &&
-                UpdatePunterVirtualSettingForOtherSports(punters, virtualMultiplier, userId, ip);
+            try
+            {
+                return UpdatePunterVirtualSettingForAllSports(punters, virtualMultiplier, userId, ip) &&
+                    UpdatePunterVirtualSettingForOtherSports(punters, virtualMultiplier, userId, ip);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
 
         #region Private Methods
@@ -123,13 +127,23 @@
         private bool UpdatePunterVirtualSettingForAllSports(IEnumerable<Punter> punters, double virtualMultiplier, int userId, string ip)
         {
             var puntersForAllSports = punters.Where(p => p.SportType == 0);
-            return VirtualSettingBusiness.UpdatePunterVirtualSettingForAllSports(puntersForAllSports, virtualMultiplier, userId, ip);
+            if (puntersForAllSports != null && puntersForAllSports.Any())
+            {
+                return VirtualSettingBusiness.UpdatePunterVirtualSettingForAllSports(puntersForAllSports, virtualMultiplier, userId, ip);
+            }
+
+            return true;
         }
 
         private bool UpdatePunterVirtualSettingForOtherSports(IEnumerable<Punter> punters, double virtualMultiplier, int userId, string ip)
         {
             var puntersForOtherSports = punters.Where(p => p.SportType == 2);
-            return VirtualSettingBusiness.UpdatePunterVirtualSettingForOtherSports(puntersForOtherSports, virtualMultiplier, userId, ip);
+            if (puntersForOtherSports != null & puntersForOtherSports.Any())
+            {
+                return VirtualSettingBusiness.UpdatePunterVirtualSettingForOtherSports(puntersForOtherSports, virtualMultiplier, userId, ip);
+            }
+
+            return true;
         }
 
         #endregion

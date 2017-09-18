@@ -23,20 +23,6 @@
             }
         }
 
-        public static int ServiceExecutionInterval
-        {
-            get
-            {
-                string interval = ConfigurationManager.AppSettings["ServiceExecutionInterval"];
-                if (!string.IsNullOrEmpty(interval))
-                {
-                    return Convert.ToInt32(interval);
-                }
-
-                return 7;
-            }
-        }
-
         public static int DummyUser
         {
             get
@@ -113,21 +99,7 @@
 
                 return 4;
             }
-        }
-      
-        public static short AdjustDateExpiredDays
-        {
-            get
-            {
-                string count = ConfigurationManager.AppSettings["AdjustDateExpiredDays"];
-                if (!string.IsNullOrEmpty(count))
-                {
-                    return Convert.ToInt16(count);
-                }
-
-                return 90;
-            }
-        }
+        }           
 
         public static int MailingListId
         {
@@ -144,11 +116,11 @@
             }
         }
 
-        public static double VirtualMultiplierForWinning
+        public static double VirtualRateThresholdForWinning
         {
             get
             {
-                string value = ConfigurationManager.AppSettings["VirtualMultiplierForWinning"];
+                string value = ConfigurationManager.AppSettings["VirtualRateThresholdForWinning"];
 
                 if (!string.IsNullOrEmpty(value))
                 {

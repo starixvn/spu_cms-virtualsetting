@@ -13,59 +13,86 @@
     using System.Linq;
 
     public class VirtualSettingJob : IJob
-    {        
+    {
         public void Execute(IJobExecutionContext context)
         {
             if (IsExecutedDate())
             {
-                Logger.Log.Info("Starting Auto Updating Virtual Settings", "SPU.Local");
+                Logger.Log.Info("Starting Auto Updating Virtual Settings");
 
                 try
                 {
                     var startTime = DateTime.Now;
 
-                    var siteIds = AppSettings.SiteIds;
-                    var superIds = AppSettings.SuperIds;
+                    var puntersForSoccer = ExecuteForSoccer(AppSettings.SiteIds, AppSettings.SuperIds);
 
-                    var virtualSettingForSoccer = new VirtualSettingForSoccer(siteIds, superIds);
-                    var puntersForSoccer = virtualSettingForSoccer.AutoAdjustVirtualSettingsForPunters();
-
-                    var virtualSettingForAllSports = new VirtualSettingForAllSports(siteIds, superIds);
-                    var puntersForAllSports = virtualSettingForAllSports.AutoAdjustVirtualSettingsForPunters();
-
-                    var countUpdatedPunters = 0;
-                    if (puntersForSoccer != null && puntersForAllSports != null)
-                    {
-                        countUpdatedPunters = puntersForSoccer.Union(puntersForAllSports).GroupBy(p => p.CustID).Count();
-                    }
-                    else
-                    {
-                        if (puntersForSoccer != null)
-                        {
-                            countUpdatedPunters = puntersForSoccer.Count();
-                        }
-                        else
-                        {
-                            countUpdatedPunters = puntersForAllSports.Count();
-                        }
-                    }
+                    var puntersForSportbooks = ExecuteForSportbooks(AppSettings.SiteIds, AppSettings.SuperIds);
 
                     var stopTime = DateTime.Now;
 
-                    SendMail(startTime, stopTime, countUpdatedPunters);
+                    var countAffectedPunters = CountAffectedMembers(puntersForSoccer, puntersForSportbooks);
+                    Logger.Log.Info("Done Virtual Setting For All Sports -> Affected members = " + countAffectedPunters);
+
+                    SendMail(startTime, stopTime, countAffectedPunters);
 
                     LogRuntime();
                 }
                 catch (Exception ex)
                 {
-                    Logger.Log.Error(ex.Message, "SPU.Local");
+                    Logger.Log.Error(ex.Message);
                 }
 
-                Logger.Log.Info("Finished Auto Updating Virtual Settings", "SPU.Local");
+                Logger.Log.Info("Finished Auto Updating Virtual Settings");
             }
         }
-               
+      
         #region Private Method
+
+        private IEnumerable<Punter> ExecuteForSoccer(string siteIds, string superIds)
+        {
+            Logger.Log.Info("Starting Virtual Setting For Soccer");
+
+            var virtualSettingForSoccer = new VirtualSettingForSoccer(siteIds, superIds);
+            var puntersForSoccer = virtualSettingForSoccer.AutoAdjustVirtualSettingsForPunters();
+
+            var count = (puntersForSoccer != null && puntersForSoccer.Any()) ? puntersForSoccer.Count() : 0;
+            Logger.Log.Info("Done Virtual Setting For Soccer -> Affected members (Soccer) = " + count);
+
+            return puntersForSoccer;
+        }
+
+        private IEnumerable<Punter> ExecuteForSportbooks(string siteIds, string superIds)
+        {
+            Logger.Log.Info("Starting Virtual Setting For Sportbooks");
+
+            var virtualSettingForSportbooks = new VirtualSettingForSportbooks(siteIds, superIds);
+            var puntersForSportbooks = virtualSettingForSportbooks.AutoAdjustVirtualSettingsForPunters();
+            
+            var count = (puntersForSportbooks != null && puntersForSportbooks.Any()) ? puntersForSportbooks.Count() : 0;
+            Logger.Log.Info("Done Virtual Setting For Sportbooks -> Affected members (Sportbooks) = " + count);
+
+            return puntersForSportbooks;
+        }
+
+        private int CountAffectedMembers(IEnumerable<Punter> puntersForSoccer, IEnumerable<Punter> puntersForSportbooks)
+        {
+            if (puntersForSoccer != null && puntersForSportbooks != null)
+            {
+                return puntersForSoccer.Union(puntersForSportbooks).GroupBy(p => p.CustID).Count();
+            }
+            else if (puntersForSoccer != null)
+            {
+                return puntersForSoccer.Count();
+            }
+            else if (puntersForSportbooks != null)
+            {
+                return puntersForSportbooks.Count();
+            }
+            else
+            {
+                return 0;
+            }
+        }
 
         private void SendMail(DateTime startTime, DateTime stopTime, int numberOfCustomers)
         {
@@ -89,7 +116,6 @@
         {
             var currentDate = DateTime.Today;
             var specialDay = AppSettings.SpeciaExecuteDate;
-
             var isSpecialDay = currentDate.Year == specialDay.Year && currentDate.Month == specialDay.Month && currentDate.Day == specialDay.Day;
 
             return currentDate.Day == 1 || currentDate.Day == 16 || isSpecialDay;

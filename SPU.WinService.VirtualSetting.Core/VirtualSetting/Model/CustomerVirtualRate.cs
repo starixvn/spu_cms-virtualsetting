@@ -6,8 +6,8 @@
     {
         public int CustID { get; set; }
 
-        public double VirtualRateForSoccer { get; set; }
+        public double VRSoccer { get; set; }
 
-        public double VirtualRateForOtherSports { get; set; }
+        public double VROtherSports { get; set; }
     }
 }
