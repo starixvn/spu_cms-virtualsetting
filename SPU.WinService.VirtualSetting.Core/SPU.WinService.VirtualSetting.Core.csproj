@@ -157,6 +157,7 @@
     <Compile Include="VirtualSetting\Log\RuntimeLog.cs" />
     <Compile Include="VirtualSetting\Model\CustomerVirtualRate.cs" />
     <Compile Include="VirtualSetting\Model\CustomerMargin.cs" />
+    <Compile Include="VirtualSetting\Model\PunterEqualityComparer.cs" />
     <Compile Include="VirtualSetting\Model\Punter.cs" />
     <Compile Include="VirtualSetting\Service\IRuntimeLog.cs" />
     <Compile Include="VirtualSetting\Service\QueryService.cs" />

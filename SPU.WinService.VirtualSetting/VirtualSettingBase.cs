@@ -18,25 +18,28 @@
         {
             FailedUpdatePunterList = new List<Punter>();
             VirtualSettingBusiness = new VirtualSettingBusiness();
+            PunterEqualityComparer = new PunterEqualityComparer();
         }
 
         public string ServiceName { get; set; }
 
         public string SiteIds { get; set; }
-        
+
         public string SuperIds { get; set; }
 
         public double VirtualRateThreshold { get; set; }
 
-        public List<Punter> FailedUpdatePunterList { get; set; }        
-        
+        public List<Punter> FailedUpdatePunterList { get; set; }
+
         public VirtualSettingBusiness VirtualSettingBusiness { get; set; }
+
+        public PunterEqualityComparer PunterEqualityComparer { get; set; }
 
         #region Abstract Methods
 
-        public abstract IEnumerable<Punter> AutoAdjustVirtualSettingsForPunters();        
+        public abstract IEnumerable<Punter> AutoAdjustVirtualSettingsForPunters();
 
-        public abstract IEnumerable<Punter> GetPunterList();        
+        public abstract IEnumerable<Punter> GetPunterList();
 
         public abstract Dictionary<int, Punter> FilterPunterBaseOnCurrentVirtualRate(IEnumerable<Punter> punters);
 
@@ -44,17 +47,17 @@
 
         #endregion
 
-        #region Public Methods
+        #region Methods
 
         public IEnumerable<CustomerVirtualRate> GetCurrentCustomerVirtualRate(string custIds)
         {
-            try 
-            { 
+            try
+            {
                 return VirtualSettingBusiness.GetCurrentCustomerVirtualRate(custIds);
             }
             catch (Exception exception)
             {
-                Logger.Log.Error("Error (exception) for GetCurrentCustomerVirtualRate on " + this.ServiceName + " ; " + exception.Message);
+                Logger.Log.Error("Error (exception) for GetCurrentCustomerVirtualRate on " + ServiceName + " ; " + exception.Message);
             }
 
             return null;
@@ -77,39 +80,54 @@
                     {
                         FailedUpdatePunterList.AddRange(selectedPunters);
 
-                        Logger.Log.Error("Error for updating virtual settings on " + this.ServiceName);
+                        Logger.Log.Error("Error for updating virtual settings on " + ServiceName);
                     }
                     else
                     {
-                        var logResult = VirtualSettingBusiness.LogPunterVirtualSetting(ServiceName, selectedPunters, newVirtualRate, userId);
-                        if (!logResult)
-                        {
-                            Logger.Log.Error("Error for logging virtual settings on " + this.ServiceName);
-                        }
+                        var adjustDate = DateTime.Now;
+
+                        LoggingUpdateVirtualSetting(newVirtualRate, userId, selectedPunters, adjustDate);
+                        UpdateCustomerMarginHistory(selectedPunters, adjustDate);
                     }
                 }
             }
             catch (Exception exception)
             {
-                Logger.Log.Error("Error (exception) for UpdateVirtualSetting on " + this.ServiceName + " ; " + exception.Message);
+                Logger.Log.Error("Error (exception) for UpdateVirtualSetting on " + ServiceName + " ; " + exception.Message);
             }
         }
 
-        public void UpdateCustomerMarginHistory(IEnumerable<Punter> punters)
+        private void LoggingUpdateVirtualSetting(double newVirtualRate, int userId, IEnumerable<Punter> selectedPunters, DateTime adjustDate)
+        {
+            try
+            {
+                var logResult = VirtualSettingBusiness.LogPunterVirtualSetting(ServiceName, selectedPunters, newVirtualRate, userId, adjustDate);
+                if (!logResult)
+                {
+                    Logger.Log.Error("Error for logging virtual settings on " + ServiceName);
+                }
+            }
+            catch (Exception exception)
+            {
+                Logger.Log.Error("Error (exception) for LoggingUpdateVirtualSetting on " + ServiceName + " ; " + exception.Message);
+            }
+        }
+
+        private void UpdateCustomerMarginHistory(IEnumerable<Punter> punters, DateTime adjustDate)
         {
             try
             {
                 var numOfMonth = AppSettings.NumOfMonth;
-                
-                var result = VirtualSettingBusiness.InsertCustomerMarginHistory(punters, numOfMonth);
+
+                var result = VirtualSettingBusiness.InsertCustomerMarginHistory(punters, numOfMonth, adjustDate);
                 if (!result)
                 {
-                    Logger.Log.Error("Error for logging customer margin history on "  + this.ServiceName);
+                    Logger.Log.Error("Error for logging customer margin history on " + ServiceName);
                 }
             }
             catch (Exception exception)
             {
-                Logger.Log.Error("Error (exception) for UpdateCustomerMarginHistory on " + this.ServiceName + " ; " + exception.Message);
+                Logger.Log.Error("Error (exception) for UpdateCustomerMarginHistory on " + ServiceName + " ; " + exception.Message);
             }
         }
 

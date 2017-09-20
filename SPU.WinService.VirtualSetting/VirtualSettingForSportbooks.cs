@@ -38,10 +38,9 @@
 
                         UpdateVirtualSetting(puntersDict.Values, AppSettings.NewVirtualMultiplierForWinning);
 
-                        var succesfulUpdatedPunters = puntersDict.Values.Except(FailedUpdatePunterList);
+                        var succesfulUpdatedPunters = puntersDict.Values.Except(FailedUpdatePunterList, PunterEqualityComparer);
                         if (succesfulUpdatedPunters != null && succesfulUpdatedPunters.Any())
-                        {
-                            UpdateCustomerMarginHistory(succesfulUpdatedPunters);
+                        {                            
                             return succesfulUpdatedPunters;
                         }
                     }

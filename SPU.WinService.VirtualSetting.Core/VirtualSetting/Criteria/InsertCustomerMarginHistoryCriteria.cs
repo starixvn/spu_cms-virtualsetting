@@ -1,10 +1,13 @@
 ﻿namespace SPU.WinService.VitualSetting.Core.VirtualSetting
 {
     using Fanex.Data.Repository;
+    using System;
 
     public class InsertCustomerMarginHistoryCriteria : CriteriaBase
     {
         public string CustomerMarginDoc { get; set; }
+
+        public DateTime AdjustDate { get; set; }
 
         public int ErrCode { get; set; }
 

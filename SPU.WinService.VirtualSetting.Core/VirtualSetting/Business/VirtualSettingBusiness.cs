@@ -1,5 +1,6 @@
 ﻿namespace SPU.WinService.VitualSetting.Core.VirtualSetting
 {
+    using System;
     using System.Collections.Generic;
     using System.Diagnostics.CodeAnalysis;
     using System.Linq;
@@ -83,13 +84,14 @@
             return updateResult.IsSuccessful;
         }
 
-        public bool LogPunterVirtualSetting(string serviceName, IEnumerable<Punter> punters, double newVirtualRate, int userId)
+        public bool LogPunterVirtualSetting(string serviceName, IEnumerable<Punter> punters, double newVirtualRate, int userId, DateTime adjustDate)
         {
             var criteria = new LogVirtualSettingCriteria
             {
                 PunterVRSettingsDoc = GenerateVirtualSettingXmlForLogging(punters, newVirtualRate),
                 CreatorId = userId,
-                ServiceName = serviceName
+                ServiceName = serviceName,
+                AdjustDate = adjustDate
             };
 
             var logResult = _virtualSettingsService.LogVirtualSetting(criteria);
@@ -97,18 +99,19 @@
             return logResult.IsSuccessful;
         }
 
-        public bool InsertCustomerMarginHistory(IEnumerable<Punter> punters, int numOfMonth)
+        public bool InsertCustomerMarginHistory(IEnumerable<Punter> punters, int numOfMonth, DateTime adjustDate)
         {
             var criteria = new GetCustomerMarginHistoryCriteria
             {
                 CustIds = string.Join(",", punters.Select(c => c.CustID).Distinct()),
-                NumOfMonth = numOfMonth
+                NumOfMonth = numOfMonth                
             };
 
             var customerMarginList = _virtualSettingsService.GetCustomerMarginHistory(criteria);
             var insertCriteria = new InsertCustomerMarginHistoryCriteria
             {
-                CustomerMarginDoc = GenerateVirtualSettingXmlForCustomerMarginHistory(customerMarginList)
+                CustomerMarginDoc = GenerateVirtualSettingXmlForCustomerMarginHistory(customerMarginList),
+                AdjustDate = adjustDate
             };
 
             var result = _virtualSettingsService.InsertCustomerMarginHistory(insertCriteria);

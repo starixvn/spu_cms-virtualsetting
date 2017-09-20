@@ -42,7 +42,7 @@
 
                         if (updatedProPunters != null && updatedNormalPunters != null)
                         {
-                            return updatedProPunters.Union(updatedNormalPunters);
+                            return updatedProPunters.Union(updatedNormalPunters, PunterEqualityComparer);
                         }
                         else if (updatedProPunters != null)
                         {
@@ -135,10 +135,9 @@
 
                     UpdateVirtualSetting(filtedPunters, newVirtualRate);
 
-                    var succesfulUpdatedPunters = filtedPunters.Except(FailedUpdatePunterList);
+                    var succesfulUpdatedPunters = filtedPunters.Except(FailedUpdatePunterList, PunterEqualityComparer);
                     if (succesfulUpdatedPunters != null && succesfulUpdatedPunters.Any())
-                    {
-                        UpdateCustomerMarginHistory(succesfulUpdatedPunters);
+                    {                        
                         return succesfulUpdatedPunters;
                     }
                 }

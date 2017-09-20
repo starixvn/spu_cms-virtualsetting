@@ -80,7 +80,7 @@
         {
             if (puntersForSoccer != null && puntersForSportbooks != null)
             {
-                return puntersForSoccer.Union(puntersForSportbooks).GroupBy(p => p.CustID).Count();
+                return puntersForSoccer.Union(puntersForSportbooks, new PunterEqualityComparer()).Count();
             }
             else if (puntersForSoccer != null)
             {

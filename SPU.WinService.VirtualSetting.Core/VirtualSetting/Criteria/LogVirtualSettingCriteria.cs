@@ -7,6 +7,7 @@
 namespace SPU.WinService.VitualSetting.Core.VirtualSetting
 {
     using Fanex.Data.Repository;
+    using System;
 
     /// <summary>
     /// Log Virtual Setting Criteria Class.
@@ -18,6 +19,8 @@ namespace SPU.WinService.VitualSetting.Core.VirtualSetting
         public int CreatorId { get; set; }
 
         public string ServiceName { get; set; }
+
+        public DateTime AdjustDate { get; set; } 
 
         public int ErrCode { get; set; }
 
