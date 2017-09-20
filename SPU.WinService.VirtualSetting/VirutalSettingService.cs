@@ -32,7 +32,7 @@
 
         protected override void OnStart(string[] args)
         {
-            Logger.Log.Info("Start for scheduling to update Virtual Settings");
+            Logger.Log.Info("OnStart Fanex.AutoAdjustVR.Service for scheduling to update Virtual Settings");
 
             MailClientHandler.Start();
 
@@ -43,7 +43,7 @@
 
         protected override void OnStop()
         {
-            Logger.Log.Info("Stop for updating Virtual Settings");
+            Logger.Log.Info("OnStop Fanex.AutoAdjustVR.Service for updating Virtual Settings");
 
             MailClientHandler.Stop();
 
@@ -54,7 +54,7 @@
 
         protected override void OnShutdown()
         {
-            Logger.Log.Info("Shutdown for updating Virtual Settings");
+            Logger.Log.Info("OnShutdown Fanex.AutoAdjustVR.Service for updating Virtual Settings");
 
             MailClientHandler.Stop();
 
