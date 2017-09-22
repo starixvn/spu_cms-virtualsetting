@@ -26,7 +26,7 @@
 
                     var puntersForSoccer = ExecuteForSoccer(AppSettings.SiteIds, AppSettings.SuperIds);
 
-                    System.Threading.Thread.Sleep(10000);
+                    System.Threading.Thread.Sleep(AppSettings.IdleTime * 1000);
 
                     var puntersForSportbooks = ExecuteForSportbooks(AppSettings.SiteIds, AppSettings.SuperIds);
 

@@ -204,5 +204,19 @@
                 }
             }
         }
+
+        public static int IdleTime
+        {
+            get
+            {
+                var value = ConfigurationManager.AppSettings["IdleTime"].ToString();
+                if (!string.IsNullOrEmpty(value))
+                {
+                    return Convert.ToInt32(value);
+                }
+
+                return 30;
+            }
+        }
     }
 }
