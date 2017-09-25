@@ -99,15 +99,10 @@
             return logResult.IsSuccessful;
         }
 
-        public bool InsertCustomerMarginHistory(IEnumerable<Punter> punters, int numOfMonth, DateTime adjustDate)
+        public bool InsertCustomerMarginHistory(IEnumerable<Punter> punters, byte sportGroupID, int numOfMonth, DateTime adjustDate)
         {
-            var criteria = new GetCustomerMarginHistoryCriteria
-            {
-                CustIds = string.Join(",", punters.Select(c => c.CustID).Distinct()),
-                NumOfMonth = numOfMonth                
-            };
+            var customerMarginList = GetCustomerMarginHistory(punters, sportGroupID, numOfMonth);
 
-            var customerMarginList = _virtualSettingsService.GetCustomerMarginHistory(criteria);
             var insertCriteria = new InsertCustomerMarginHistoryCriteria
             {
                 CustomerMarginDoc = GenerateVirtualSettingXmlForCustomerMarginHistory(customerMarginList),
@@ -119,11 +114,12 @@
             return result.IsSuccessful;
         }
 
-        public IEnumerable<CustomerMargin> GetCustomerMarginHistory(IEnumerable<Punter> punters, int numOfMonth)
+        public IEnumerable<CustomerMargin> GetCustomerMarginHistory(IEnumerable<Punter> punters, byte sportGroupID, int numOfMonth)
         {
             var criteria = new GetCustomerMarginHistoryCriteria
             {
                 CustIds = string.Join(",", punters.Select(c => c.CustID).Distinct()),
+                SportGroupID = sportGroupID,
                 NumOfMonth = numOfMonth
             };
 

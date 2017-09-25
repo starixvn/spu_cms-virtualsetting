@@ -17,6 +17,7 @@
         public VirtualSettingForSportbooks(string siteIds, string superIds)
         {
             ServiceName = "Sportbooks";
+            SportGroupID = 0;
             SiteIds = siteIds;
             SuperIds = superIds;
             VirtualRateThreshold = AppSettings.VirtualRateThresholdForWinning;                        

@@ -6,6 +6,8 @@
     {
         public string CustIds { get; set; }
 
+        public byte SportGroupID { get; set; }
+
         public int NumOfMonth { get; set; }
 
         public override string GetSettingKey()

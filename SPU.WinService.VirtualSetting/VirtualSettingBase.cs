@@ -23,6 +23,8 @@
 
         public string ServiceName { get; set; }
 
+        public byte SportGroupID { get; set; }
+
         public string SiteIds { get; set; }
 
         public string SuperIds { get; set; }
@@ -72,6 +74,7 @@
                 var chunkSize = AppSettings.PunterChunkSize;
                 var numOfMonth = AppSettings.NumOfMonth;
                 var chunkPunters = punters.Partition(chunkSize);
+                var adjustDate = DateTime.Now;
 
                 foreach (var selectedPunters in chunkPunters)
                 {
@@ -83,9 +86,7 @@
                         Logger.Log.Error("Error for updating virtual settings on " + ServiceName);
                     }
                     else
-                    {
-                        var adjustDate = DateTime.Now;
-
+                    {                        
                         LoggingUpdateVirtualSetting(newVirtualRate, userId, selectedPunters, adjustDate);
                         UpdateCustomerMarginHistory(selectedPunters, adjustDate);
                     }
@@ -119,7 +120,7 @@
             {
                 var numOfMonth = AppSettings.NumOfMonth;
 
-                var result = VirtualSettingBusiness.InsertCustomerMarginHistory(punters, numOfMonth, adjustDate);
+                var result = VirtualSettingBusiness.InsertCustomerMarginHistory(punters, SportGroupID, numOfMonth, adjustDate);
                 if (!result)
                 {
                     Logger.Log.Error("Error for logging customer margin history on " + ServiceName);
