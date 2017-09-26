@@ -23,6 +23,8 @@
 
         public string ServiceName { get; set; }
 
+        public DateTime AdjustDate { get; set; }
+
         public byte SportGroupID { get; set; }
 
         public string SiteIds { get; set; }
@@ -73,8 +75,7 @@
                 var ip = AppSettings.IP;
                 var chunkSize = AppSettings.PunterChunkSize;
                 var numOfMonth = AppSettings.NumOfMonth;
-                var chunkPunters = punters.Partition(chunkSize);
-                var adjustDate = DateTime.Now;
+                var chunkPunters = punters.Partition(chunkSize);                
 
                 foreach (var selectedPunters in chunkPunters)
                 {
@@ -87,8 +88,8 @@
                     }
                     else
                     {                        
-                        LoggingUpdateVirtualSetting(newVirtualRate, userId, selectedPunters, adjustDate);
-                        UpdateCustomerMarginHistory(selectedPunters, adjustDate);
+                        LoggingUpdateVirtualSetting(newVirtualRate, userId, selectedPunters);
+                        UpdateCustomerMarginHistory(selectedPunters);
                     }
                 }
             }
@@ -98,11 +99,11 @@
             }
         }
 
-        private void LoggingUpdateVirtualSetting(double newVirtualRate, int userId, IEnumerable<Punter> selectedPunters, DateTime adjustDate)
+        private void LoggingUpdateVirtualSetting(double newVirtualRate, int userId, IEnumerable<Punter> selectedPunters)
         {
             try
             {
-                var logResult = VirtualSettingBusiness.LogPunterVirtualSetting(ServiceName, selectedPunters, newVirtualRate, userId, adjustDate);
+                var logResult = VirtualSettingBusiness.LogPunterVirtualSetting(ServiceName, selectedPunters, newVirtualRate, userId, AdjustDate);
                 if (!logResult)
                 {
                     Logger.Log.Error("Error for logging virtual settings on " + ServiceName);
@@ -114,13 +115,13 @@
             }
         }
 
-        private void UpdateCustomerMarginHistory(IEnumerable<Punter> punters, DateTime adjustDate)
+        private void UpdateCustomerMarginHistory(IEnumerable<Punter> punters)
         {
             try
             {
                 var numOfMonth = AppSettings.NumOfMonth;
 
-                var result = VirtualSettingBusiness.InsertCustomerMarginHistory(punters, SportGroupID, numOfMonth, adjustDate);
+                var result = VirtualSettingBusiness.InsertCustomerMarginHistory(punters, SportGroupID, numOfMonth, AdjustDate);
                 if (!result)
                 {
                     Logger.Log.Error("Error for logging customer margin history on " + ServiceName);

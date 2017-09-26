@@ -24,11 +24,11 @@
                 {
                     var startTime = DateTime.Now;
 
-                    var puntersForSoccer = ExecuteForSoccer(AppSettings.SiteIds, AppSettings.SuperIds);
+                    var puntersForSoccer = ExecuteForSoccer(AppSettings.SiteIds, AppSettings.SuperIds, startTime);
 
                     System.Threading.Thread.Sleep(AppSettings.IdleTime * 1000);
 
-                    var puntersForSportbooks = ExecuteForSportbooks(AppSettings.SiteIds, AppSettings.SuperIds);
+                    var puntersForSportbooks = ExecuteForSportbooks(AppSettings.SiteIds, AppSettings.SuperIds, startTime);
 
                     var stopTime = DateTime.Now;
 
@@ -50,11 +50,11 @@
       
         #region Private Method
 
-        private IEnumerable<Punter> ExecuteForSoccer(string siteIds, string superIds)
+        private IEnumerable<Punter> ExecuteForSoccer(string siteIds, string superIds, DateTime adjustDate)
         {
             Logger.Log.Info("Starting Virtual Setting For Soccer");
 
-            var virtualSettingForSoccer = new VirtualSettingForSoccer(siteIds, superIds);
+            var virtualSettingForSoccer = new VirtualSettingForSoccer(siteIds, superIds, adjustDate);
             var puntersForSoccer = virtualSettingForSoccer.AutoAdjustVirtualSettingsForPunters();
 
             var count = (puntersForSoccer != null && puntersForSoccer.Any()) ? puntersForSoccer.Count() : 0;
@@ -63,11 +63,11 @@
             return puntersForSoccer;
         }
 
-        private IEnumerable<Punter> ExecuteForSportbooks(string siteIds, string superIds)
+        private IEnumerable<Punter> ExecuteForSportbooks(string siteIds, string superIds, DateTime adjustDate)
         {
             Logger.Log.Info("Starting Virtual Setting For Sportbooks");
 
-            var virtualSettingForSportbooks = new VirtualSettingForSportbooks(siteIds, superIds);
+            var virtualSettingForSportbooks = new VirtualSettingForSportbooks(siteIds, superIds, adjustDate);
             var puntersForSportbooks = virtualSettingForSportbooks.AutoAdjustVirtualSettingsForPunters();
             
             var count = (puntersForSportbooks != null && puntersForSportbooks.Any()) ? puntersForSportbooks.Count() : 0;

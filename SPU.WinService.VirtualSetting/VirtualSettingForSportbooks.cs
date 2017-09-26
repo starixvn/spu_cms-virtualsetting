@@ -14,9 +14,10 @@
 
     public class VirtualSettingForSportbooks : VirtualSettingBase
     {
-        public VirtualSettingForSportbooks(string siteIds, string superIds)
+        public VirtualSettingForSportbooks(string siteIds, string superIds, DateTime adjustDate)
         {
             ServiceName = "Sportbooks";
+            AdjustDate = adjustDate;
             SportGroupID = 0;
             SiteIds = siteIds;
             SuperIds = superIds;
