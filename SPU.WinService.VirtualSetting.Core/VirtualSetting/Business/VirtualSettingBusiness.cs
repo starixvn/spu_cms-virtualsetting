@@ -134,17 +134,6 @@
             };
 
             return _virtualSettingsService.GetCurrentCustomerVirtualRate(criteria);
-        }        
-
-        public IEnumerable<int> FilterPunterBaseOnAdjustDate(string custIds, short expiredDays)
-        {
-            var criteria = new GetCustomerBasedOnAdjustDateCriteria
-            {
-                CustIds = custIds,
-                ExpiredDays = expiredDays
-            };
-
-            return _virtualSettingsService.GetPunterIdList(criteria);
-        }       
+        }               
     }
 }
