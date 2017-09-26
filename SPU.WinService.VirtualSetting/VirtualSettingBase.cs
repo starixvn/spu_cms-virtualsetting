@@ -121,7 +121,7 @@
             {
                 var numOfMonth = AppSettings.NumOfMonth;
 
-                var result = VirtualSettingBusiness.InsertCustomerMarginHistory(punters, SportGroupID, numOfMonth, AdjustDate);
+                var result = VirtualSettingBusiness.InsertCustomerMarginHistory(punters, SportGroupID, numOfMonth, ServiceName, AdjustDate);
                 if (!result)
                 {
                     Logger.Log.Error("Error for logging customer margin history on " + ServiceName);

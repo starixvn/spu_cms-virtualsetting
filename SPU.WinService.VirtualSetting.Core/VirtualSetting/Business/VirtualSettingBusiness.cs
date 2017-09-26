@@ -2,9 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.Diagnostics.CodeAnalysis;
     using System.Linq;
-    using System.Text;
 
     public class VirtualSettingBusiness
     {
@@ -43,7 +41,7 @@
         {
             var criteria = new UpdateVirtualSettingCriteria
             {
-                VirtualMultiplier = GenerateVirtualSettingXmlForUpdating(punters, virtualMultiplier),
+                VirtualMultiplier = Utilities.GenerateVirtualSettingXmlForUpdating(punters, virtualMultiplier),
                 UserId = userId,
                 IP = ip,
                 SportType = 0
@@ -58,7 +56,7 @@
         {
             var criteria = new UpdateVirtualSettingCriteria
             {
-                VirtualMultiplier = GenerateVirtualSettingXmlForUpdating(punters, virtualMultiplier),
+                VirtualMultiplier = Utilities.GenerateVirtualSettingXmlForUpdating(punters, virtualMultiplier),
                 UserId = userId,
                 IP = ip,
                 SportType = 1
@@ -73,7 +71,7 @@
         {
             var criteria = new UpdateVirtualSettingCriteria
             {
-                VirtualMultiplier = GenerateVirtualSettingXmlForUpdating(punters, virtualMultiplier),
+                VirtualMultiplier = Utilities.GenerateVirtualSettingXmlForUpdating(punters, virtualMultiplier),
                 UserId = userId,
                 IP = ip,
                 SportType = 2
@@ -88,7 +86,7 @@
         {
             var criteria = new LogVirtualSettingCriteria
             {
-                PunterVRSettingsDoc = GenerateVirtualSettingXmlForLogging(punters, newVirtualRate),
+                PunterVRSettingsDoc = Utilities.GenerateVirtualSettingXmlForLogging(punters, newVirtualRate),
                 CreatorId = userId,
                 ServiceName = serviceName,
                 AdjustDate = adjustDate
@@ -99,13 +97,13 @@
             return logResult.IsSuccessful;
         }
 
-        public bool InsertCustomerMarginHistory(IEnumerable<Punter> punters, byte sportGroupID, int numOfMonth, DateTime adjustDate)
+        public bool InsertCustomerMarginHistory(IEnumerable<Punter> punters, byte sportGroupID, int numOfMonth, string serviceName, DateTime adjustDate)
         {
             var customerMarginList = GetCustomerMarginHistory(punters, sportGroupID, numOfMonth);
 
             var insertCriteria = new InsertCustomerMarginHistoryCriteria
             {
-                CustomerMarginDoc = GenerateVirtualSettingXmlForCustomerMarginHistory(customerMarginList),
+                CustomerMarginDoc = Utilities.GenerateVirtualSettingXmlForCustomerMarginHistory(customerMarginList, serviceName),
                 AdjustDate = adjustDate
             };
 
@@ -147,63 +145,6 @@
             };
 
             return _virtualSettingsService.GetPunterIdList(criteria);
-        }
-
-        #region Utilities
-
-        private string GenerateVirtualSettingXmlForUpdating(IEnumerable<Punter> proPunters, double virtualMultiplier)
-        {
-            var collection = proPunters.Select(x => x.CustID);
-            var cusIds = string.Join(",", collection);
-            var result = string.Format("<ROOT><Rate CustIds=\"{0}\" VirtualMultiplier =\"{1} \" /></ROOT>", cusIds, virtualMultiplier);
-
-            return result;
-        }
-
-        private string GenerateVirtualSettingXmlForLogging(IEnumerable<Punter> proPunters, double newVirtualRate)
-        {
-            var xml = new StringBuilder();
-            var pattern = "<Rate CustID=\"{0}\" ReportDate=\"{1}\" SiteID=\"{2}\" SRecommend=\"{3}\"" +
-                " MRecommend=\"{4}\" Recommend=\"{5}\" OldVirtualRate=\"{6}\" NewVirtualRate =\"{7}\" />";
-
-            foreach (var punter in proPunters)
-            {
-                xml.AppendFormat(
-                                    pattern,
-                                    punter.CustID,
-                                    punter.ReportDate.ToShortDateString(),
-                                    punter.SiteID,
-                                    punter.SRecommend,
-                                    punter.MRecommend,
-                                    punter.Recommend,
-                                    punter.OldVirtualRate,
-                                    newVirtualRate);
-            }
-
-            return "<ROOT>" + xml + "</ROOT>";
-        }
-
-        private string GenerateVirtualSettingXmlForCustomerMarginHistory(IEnumerable<CustomerMargin> data)
-        {
-            var xml = new StringBuilder();
-            var pattern = "<Rate CustID=\"{0}\" ReportMonth=\"{1}\" ReportYear=\"{2}\" Turnover=\"{3}\"" +
-                " Winloss=\"{4}\" BetCount=\"{5}\" />";
-
-            foreach (var item in data)
-            {
-                xml.AppendFormat(
-                                    pattern,
-                                    item.CustId,
-                                    item.ReportMonth,
-                                    item.ReportYear,
-                                    item.Turnover,
-                                    item.Winloss,
-                                    item.BetCount);
-            }
-
-            return "<ROOT>" + xml + "</ROOT>";
-        }
-
-        #endregion
+        }       
     }
 }
