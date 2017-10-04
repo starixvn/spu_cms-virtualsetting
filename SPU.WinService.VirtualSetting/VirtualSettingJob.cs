@@ -18,7 +18,8 @@
         {
             if (IsExecutedDate())
             {
-                Logger.Log.Info("Starting Auto Updating Virtual Settings");
+                Log4NetService.Info("Starting Auto Updating Virtual Settings");                
+                Logger.Log.Info("Starting Auto Updating Virtual Settings");                
 
                 try
                 {
@@ -33,6 +34,7 @@
                     var stopTime = DateTime.Now;
 
                     var countAffectedPunters = CountAffectedMembers(puntersForSoccer, puntersForSportbooks);
+                    Log4NetService.Info("Done Virtual Setting For All Sports -> Affected members = " + countAffectedPunters);
                     Logger.Log.Info("Done Virtual Setting For All Sports -> Affected members = " + countAffectedPunters);
 
                     SendMail(startTime, stopTime, countAffectedPunters);
@@ -44,6 +46,7 @@
                     Logger.Log.Error(ex.Message);
                 }
 
+                Log4NetService.Info("Finished Auto Updating Virtual Settings");
                 Logger.Log.Info("Finished Auto Updating Virtual Settings");
             }
         }
@@ -52,6 +55,7 @@
 
         private IEnumerable<Punter> ExecuteForSoccer(string siteIds, string superIds, DateTime adjustDate)
         {
+            Log4NetService.Info("Starting Virtual Setting For Soccer");
             Logger.Log.Info("Starting Virtual Setting For Soccer");
 
             var virtualSettingForSoccer = new VirtualSettingForSoccer(siteIds, superIds, adjustDate);
@@ -60,13 +64,15 @@
             var count = (puntersForSoccer != null && puntersForSoccer.Any()) ? puntersForSoccer.Count() : 0;
             var custIds = count > 0 ? string.Join(";", puntersForSoccer.Select(p => string.Join(",", p.CustID, p.OldVirtualRate, p.NewVirtualRate))) : string.Empty;
 
-            Logger.Log.Info("Done Virtual Setting For Soccer -> Affected members (Soccer) = " + count + " => {" + custIds + "}");
+            Log4NetService.Info("Done Virtual Setting For Soccer -> Affected members (Soccer) = " + count + " => {" + custIds + "}");
+            Logger.Log.Info("Done Virtual Setting For Soccer -> Affected members (Soccer) = " + count);
 
             return puntersForSoccer;
         }
 
         private IEnumerable<Punter> ExecuteForSportbooks(string siteIds, string superIds, DateTime adjustDate)
         {
+            Log4NetService.Info("Starting Virtual Setting For Sportsbook");
             Logger.Log.Info("Starting Virtual Setting For Sportsbook");
 
             var virtualSettingForSportbooks = new VirtualSettingForSportsbook(siteIds, superIds, adjustDate);
@@ -75,7 +81,8 @@
             var count = (puntersForSportbooks != null && puntersForSportbooks.Any()) ? puntersForSportbooks.Count() : 0;
             var custIds = count > 0 ? string.Join(";", puntersForSportbooks.Select(p => string.Join(",", p.CustID, p.OldVirtualRate, p.NewVirtualRate))) : string.Empty;
 
-            Logger.Log.Info("Done Virtual Setting For Sportsbook -> Affected members (Sportsbook) = " + count + " => {" + custIds + "}");
+            Log4NetService.Info("Done Virtual Setting For Sportsbook -> Affected members (Sportsbook) = " + count + " => {" + custIds + "}");
+            Logger.Log.Info("Done Virtual Setting For Sportsbook -> Affected members (Sportsbook) = " + count);
 
             return puntersForSportbooks;
         }

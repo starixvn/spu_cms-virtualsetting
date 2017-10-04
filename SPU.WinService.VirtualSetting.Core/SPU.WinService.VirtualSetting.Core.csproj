@@ -66,6 +66,9 @@
     <Reference Include="IBCFile">
       <HintPath>..\packages\Fanex.File.1.0.0\lib\net40\IBCFile.dll</HintPath>
     </Reference>
+    <Reference Include="log4net">
+      <HintPath>..\packages\log4net.2.0.8\lib\net40-full\log4net.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Practices.EnterpriseLibrary.Common, Version=5.0.414.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\EnterpriseLibrary.Common.5.0.414.0\lib\net40\Microsoft.Practices.EnterpriseLibrary.Common.dll</HintPath>
@@ -153,6 +156,7 @@
     <Compile Include="VirtualSetting\Criteria\UpdateVirtualSettingCriteria.cs" />
     <Compile Include="VirtualSetting\Criteria\GetProPrunterCriteria.cs" />
     <Compile Include="VirtualSetting\Business\VirtualSettingBusiness.cs" />
+    <Compile Include="VirtualSetting\Log\Log4NetService.cs" />
     <Compile Include="VirtualSetting\Log\RuntimeLog.cs" />
     <Compile Include="VirtualSetting\Model\CustomerVirtualRate.cs" />
     <Compile Include="VirtualSetting\Model\CustomerMargin.cs" />

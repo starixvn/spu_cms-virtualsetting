@@ -3,10 +3,10 @@
     using Fanex.Data.Configuration;
     using Fanex.Logging;
     using Fanex.MailDelivery.Client;
-    using Quartz;
     using Quartz.Impl;
     using SPU.WinService.VirtualSetting.JobScheduler;
     using SPU.WinService.VitualSetting;
+    using SPU.WinService.VitualSetting.Core.VirtualSetting.Log;
     using System.ServiceProcess;
 
     public partial class VirtualSettingService : ServiceBase
@@ -32,6 +32,7 @@
 
         protected override void OnStart(string[] args)
         {
+            Log4NetService.Info("OnStart Fanex.AutoAdjustVR.Service for scheduling to update Virtual Settings");
             Logger.Log.Info("OnStart Fanex.AutoAdjustVR.Service for scheduling to update Virtual Settings");
 
             MailClientHandler.Start();
@@ -43,6 +44,7 @@
 
         protected override void OnStop()
         {
+            Log4NetService.Info("OnStop Fanex.AutoAdjustVR.Service for updating Virtual Settings");
             Logger.Log.Info("OnStop Fanex.AutoAdjustVR.Service for updating Virtual Settings");
 
             MailClientHandler.Stop();
@@ -54,6 +56,7 @@
 
         protected override void OnShutdown()
         {
+            Log4NetService.Info("OnShutdown Fanex.AutoAdjustVR.Service for updating Virtual Settings");
             Logger.Log.Info("OnShutdown Fanex.AutoAdjustVR.Service for updating Virtual Settings");
 
             MailClientHandler.Stop();
