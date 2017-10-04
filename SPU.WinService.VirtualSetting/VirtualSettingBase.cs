@@ -69,33 +69,33 @@
 
         public void UpdateVirtualSetting(IEnumerable<Punter> punters, double newVirtualRate)
         {
-            try
-            {
-                var userId = AppSettings.DummyUser;
-                var ip = AppSettings.IP;
-                var chunkSize = AppSettings.PunterChunkSize;
-                var numOfMonth = AppSettings.NumOfMonth;
-                var chunkPunters = punters.Partition(chunkSize);                
+            var userId = AppSettings.DummyUser;
+            var ip = AppSettings.IP;
+            var chunkSize = AppSettings.PunterChunkSize;
+            var numOfMonth = AppSettings.NumOfMonth;
+            var chunkPunters = punters.Partition(chunkSize);
 
-                foreach (var selectedPunters in chunkPunters)
+            foreach (var selectedPunters in chunkPunters)
+            {
+                try
                 {
                     var updateResult = UpdatePunterVirtualSetting(selectedPunters, newVirtualRate, userId, ip);
                     if (!updateResult)
                     {
                         FailedUpdatePunterList.AddRange(selectedPunters);
-
                         Logger.Log.Error("Error for updating virtual settings on " + ServiceName);
                     }
                     else
-                    {                        
+                    {
                         LoggingUpdateVirtualSetting(newVirtualRate, userId, selectedPunters);
                         UpdateCustomerMarginHistory(selectedPunters);
                     }
                 }
-            }
-            catch (Exception exception)
-            {
-                Logger.Log.Error("Error (exception) for UpdateVirtualSetting on " + ServiceName + " ; " + exception.Message);
+                catch (Exception exception)
+                {
+                    FailedUpdatePunterList.AddRange(selectedPunters);
+                    Logger.Log.Error("Error (exception) for UpdateVirtualSetting on " + ServiceName + " ; " + exception.InnerException.Message);
+                }
             }
         }
 
