@@ -12,11 +12,11 @@
     using System.IO;
     using System.Linq;
 
-    public class VirtualSettingForSportbooks : VirtualSettingBase
+    public class VirtualSettingForSportsbook : VirtualSettingBase
     {
-        public VirtualSettingForSportbooks(string siteIds, string superIds, DateTime adjustDate)
+        public VirtualSettingForSportsbook(string siteIds, string superIds, DateTime adjustDate)
         {
-            ServiceName = "Sportbooks";
+            ServiceName = "Sportsbook";
             AdjustDate = adjustDate;
             SportGroupID = 0;
             SiteIds = siteIds;

@@ -67,15 +67,15 @@
 
         private IEnumerable<Punter> ExecuteForSportbooks(string siteIds, string superIds, DateTime adjustDate)
         {
-            Logger.Log.Info("Starting Virtual Setting For Sportbooks");
+            Logger.Log.Info("Starting Virtual Setting For Sportsbook");
 
-            var virtualSettingForSportbooks = new VirtualSettingForSportbooks(siteIds, superIds, adjustDate);
+            var virtualSettingForSportbooks = new VirtualSettingForSportsbook(siteIds, superIds, adjustDate);
             var puntersForSportbooks = virtualSettingForSportbooks.AutoAdjustVirtualSettingsForPunters();
             
             var count = (puntersForSportbooks != null && puntersForSportbooks.Any()) ? puntersForSportbooks.Count() : 0;
             var custIds = count > 0 ? string.Join(",", puntersForSportbooks.Select(p => p.CustID)) : string.Empty;
 
-            Logger.Log.Info("Done Virtual Setting For Sportbooks -> Affected members (Sportbooks) = " + count + " => {" + custIds + "}");
+            Logger.Log.Info("Done Virtual Setting For Sportsbook -> Affected members (Sportsbook) = " + count + " => {" + custIds + "}");
 
             return puntersForSportbooks;
         }
