@@ -58,7 +58,7 @@
             var puntersForSoccer = virtualSettingForSoccer.AutoAdjustVirtualSettingsForPunters();
 
             var count = (puntersForSoccer != null && puntersForSoccer.Any()) ? puntersForSoccer.Count() : 0;
-            var custIds = count > 0 ? string.Join(",", puntersForSoccer.Select(p => p.CustID)) : string.Empty;
+            var custIds = count > 0 ? string.Join(";", puntersForSoccer.Select(p => string.Join(",", p.CustID, p.OldVirtualRate, p.NewVirtualRate))) : string.Empty;
 
             Logger.Log.Info("Done Virtual Setting For Soccer -> Affected members (Soccer) = " + count + " => {" + custIds + "}");
 
@@ -73,7 +73,7 @@
             var puntersForSportbooks = virtualSettingForSportbooks.AutoAdjustVirtualSettingsForPunters();
             
             var count = (puntersForSportbooks != null && puntersForSportbooks.Any()) ? puntersForSportbooks.Count() : 0;
-            var custIds = count > 0 ? string.Join(",", puntersForSportbooks.Select(p => p.CustID)) : string.Empty;
+            var custIds = count > 0 ? string.Join(";", puntersForSportbooks.Select(p => string.Join(",", p.CustID, p.OldVirtualRate, p.NewVirtualRate))) : string.Empty;
 
             Logger.Log.Info("Done Virtual Setting For Sportsbook -> Affected members (Sportsbook) = " + count + " => {" + custIds + "}");
 

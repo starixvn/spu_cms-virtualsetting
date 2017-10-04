@@ -38,11 +38,17 @@
                     {
                         FailedUpdatePunterList.Clear();
 
-                        UpdateVirtualSetting(puntersDict.Values, AppSettings.NewVirtualMultiplierForWinning);
+                        double newVirtualRate = AppSettings.NewVirtualMultiplierForWinning;
+                        UpdateVirtualSetting(puntersDict.Values, newVirtualRate);
 
                         var succesfulUpdatedPunters = puntersDict.Values.Except(FailedUpdatePunterList, PunterEqualityComparer);
                         if (succesfulUpdatedPunters != null && succesfulUpdatedPunters.Any())
-                        {                            
+                        {
+                            foreach (var p in succesfulUpdatedPunters)
+                            {
+                                p.NewVirtualRate = newVirtualRate;
+                            }
+
                             return succesfulUpdatedPunters;
                         }
                     }
