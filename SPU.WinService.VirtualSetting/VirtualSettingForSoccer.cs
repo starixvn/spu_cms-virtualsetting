@@ -38,22 +38,8 @@
                     {                        
                         var proPunters = puntersDict.Values.Where(p => p.IsSuperProPunters);
                         var updatedProPunters = AdjustVirtualSettings(proPunters, AppSettings.NewVirtualMultiplierForSuperProPunter);
-                        
-                        var normalPunters = puntersDict.Values.Where(p => !p.IsSuperProPunters);
-                        var updatedNormalPunters = AdjustVirtualSettings(normalPunters, AppSettings.NewVirtualMultiplierForWinning);
 
-                        if (updatedProPunters != null && updatedNormalPunters != null)
-                        {
-                            return updatedProPunters.Union(updatedNormalPunters, PunterEqualityComparer);
-                        }
-                        else if (updatedProPunters != null)
-                        {
-                            return updatedProPunters;
-                        }
-                        else if (updatedNormalPunters != null)
-                        {
-                            return updatedNormalPunters;
-                        }                        
+                        return updatedProPunters;                 
                     }
                 }                
             }
@@ -91,7 +77,7 @@
                 {
                     foreach (var currentVR in currentVRs)
                     {
-                        if (currentVR.VRSoccer < VirtualRateThreshold)
+                        if (currentVR.VRSoccer == VirtualRateThreshold)
                         {
                             puntersDict[currentVR.CustID].OldVirtualRate = currentVR.VRSoccer;
                             puntersDict[currentVR.CustID].SportType = 1;

@@ -27,15 +27,9 @@
 
                     var puntersForSoccer = ExecuteForSoccer(AppSettings.SiteIds, AppSettings.SuperIds, startTime);
 
-                    System.Threading.Thread.Sleep(AppSettings.IdleTime * 1000);
-
-                    var puntersForSportbooks = ExecuteForSportbooks(AppSettings.SiteIds, AppSettings.SuperIds, startTime);
-
                     var stopTime = DateTime.Now;
 
-                    var countAffectedPunters = CountAffectedMembers(puntersForSoccer, puntersForSportbooks);
-                    Log4NetService.Info("Done Virtual Setting For All Sports -> Affected members = " + countAffectedPunters);
-                    Logger.Log.Info("Done Virtual Setting For All Sports -> Affected members = " + countAffectedPunters);
+                    var countAffectedPunters = puntersForSoccer != null ? puntersForSoccer.Count() : 0;                    
 
                     SendMail(startTime, stopTime, countAffectedPunters);
 
@@ -61,7 +55,7 @@
             var virtualSettingForSoccer = new VirtualSettingForSoccer(siteIds, superIds, adjustDate);
             var puntersForSoccer = virtualSettingForSoccer.AutoAdjustVirtualSettingsForPunters();
 
-            var count = (puntersForSoccer != null && puntersForSoccer.Any()) ? puntersForSoccer.Count() : 0;
+            var count = puntersForSoccer != null ? puntersForSoccer.Count() : 0;
             var custIds = count > 0 ? string.Join(";", puntersForSoccer.Select(p => string.Join(",", p.CustID, p.OldVirtualRate, p.NewVirtualRate))) : string.Empty;
 
             Log4NetService.Info("Done Virtual Setting For Soccer -> Affected members (Soccer) = " + count + " => {" + custIds + "}");
