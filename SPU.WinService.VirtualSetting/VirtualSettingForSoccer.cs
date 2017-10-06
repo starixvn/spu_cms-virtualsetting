@@ -1,16 +1,13 @@
 ﻿namespace SPU.WinService.VirtualSetting
 {
     using Fanex.Logging;
-    using Fanex.MailDelivery.Client;
-    using Quartz;
     using SPU.WinService.VitualSetting;
-    using SPU.WinService.VitualSetting.Core;
     using SPU.WinService.VitualSetting.Core.VirtualSetting;
     using SPU.WinService.VitualSetting.Core.VirtualSetting.Log;
     using System;
     using System.Collections.Generic;
-    using System.IO;
     using System.Linq;
+    using System.Threading.Tasks;
 
     public class VirtualSettingForSoccer : VirtualSettingBase
     {
@@ -31,7 +28,7 @@
                 var punters = GetPunterList();
 
                 if (punters != null && punters.Any())
-                {
+                {                    
                     var puntersDict = FilterPunterBaseOnCurrentVirtualRate(punters);
 
                     if (puntersDict != null && puntersDict.Any())
@@ -55,7 +52,24 @@
         {
             try
             {                
-                return VirtualSettingBusiness.GetWinningPunterSoccerList(SiteIds, SuperIds, VirtualRateThreshold);
+                var punters = VirtualSettingBusiness.GetWinningPunterSoccerList(SiteIds, SuperIds, VirtualRateThreshold);
+                try
+                {
+                    if (punters != null)
+                    {
+                        var info = "List of Soccer (" + punters.Count() + ")";
+                        Task.Factory.StartNew(() => 
+                        {
+                            Logger.Log.Info(info);
+                            Log4NetService.Info(info + " ==> {" + string.Join(",", punters.Select(p => p.CustID)) + "}"); 
+                        });
+                    }
+                }
+                catch
+                {
+                }
+
+                return punters;
             }
             catch (Exception exception)
             {
