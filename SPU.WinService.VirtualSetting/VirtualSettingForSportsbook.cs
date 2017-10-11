@@ -11,6 +11,7 @@
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
+    using System.Threading.Tasks;
 
     public class VirtualSettingForSportsbook : VirtualSettingBase
     {
@@ -66,7 +67,24 @@
         {
             try
             {
-                return VirtualSettingBusiness.GetWinningPunterList(SiteIds, SuperIds, VirtualRateThreshold);
+                var punters = VirtualSettingBusiness.GetWinningPunterList(SiteIds, SuperIds, VirtualRateThreshold);
+                try
+                {
+                    if (punters != null)
+                    {
+                        var info = "List of Sportsbook (" + punters.Count() + ")";
+                        Task.Factory.StartNew(() =>
+                        {
+                            Logger.Log.Info(info);
+                            Log4NetService.Info(info + " ==> {" + string.Join(",", punters.Select(p => p.CustID)) + "}");
+                        });
+                    }
+                }
+                catch
+                {
+                }
+
+                return punters;
             }
             catch (Exception exception)
             {
