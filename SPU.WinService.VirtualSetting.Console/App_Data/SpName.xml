@@ -8,5 +8,6 @@
     <Setting Key="NAP_Report_CustMngt_GetCustomersVirtualRate" SpName="NAP_Report_CustMngt_GetCustomersVirtualRate" DbName="DBCust.CustDB.bodbAdminNet" />    
     <Setting Key="NAP_Report_CustMngt_GetCustomerMarginHistory" SpName="NAP_Report_CustMngt_GetCustomerMarginHistory" DbName="DBDW.bodb_dwrs.bodbAdminNet" />
     <Setting Key="NAP_UserLog_InsertCustomerMarginHistory" SpName="NAP_UserLog_InsertCustomerMarginHistory" DbName="DBLOG.bodb_CustomerLog.bodbAdminNet" />
+    <Setting Key="Acc_CustomerVirtualRateSelectBA" SpName="Acc_CustomerVirtualRateSelectBA" DbName="DBLIC.bodb_Licensee.bodbAdminNet" />
   </Function>
 </Functions>

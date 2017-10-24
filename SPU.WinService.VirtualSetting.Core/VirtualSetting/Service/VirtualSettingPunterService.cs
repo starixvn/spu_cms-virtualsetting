@@ -50,5 +50,10 @@ namespace SPU.WinService.VitualSetting.Core.VirtualSetting
         {
             return GetData<CustomerMargin>(criteria);
         }
+
+        public IEnumerable<int> GetBACustIds(CriteriaBase criteria)
+        {
+            return GetData<int>(criteria);
+        }
     }
 }

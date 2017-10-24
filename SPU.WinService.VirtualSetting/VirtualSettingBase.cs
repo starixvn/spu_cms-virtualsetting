@@ -133,6 +133,29 @@
             }
         }
 
+        private IEnumerable<int> GetBAAccounts(IEnumerable<Punter> punters)
+        {
+            var custIds = string.Join(",", punters.Select(p => p.CustID));
+            return VirtualSettingBusiness.GetBACustIds(custIds);
+        }
+
+        public void DetectNewVirtualRateForLogging(double newVirtualRate, IEnumerable<Punter> succesfulUpdatedPunters)
+        {
+            try
+            {
+                var listBAAccounts = GetBAAccounts(succesfulUpdatedPunters);
+
+                foreach (var p in succesfulUpdatedPunters)
+                {
+                    p.NewVirtualRate = listBAAccounts.Contains(p.CustID) ? 1.0 : newVirtualRate;
+                }
+            }
+            catch (Exception exception)
+            {
+                Logger.Log.Error("Error (exception) for DetectNewVirtualRateForLogging on " + ServiceName + " ; " + exception.InnerException.Message);
+            }
+        }
+
         #endregion
     }
 }

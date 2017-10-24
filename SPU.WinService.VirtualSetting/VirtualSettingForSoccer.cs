@@ -157,11 +157,8 @@
 
                     var succesfulUpdatedPunters = filtedPunters.Except(FailedUpdatePunterList, PunterEqualityComparer);
                     if (succesfulUpdatedPunters != null && succesfulUpdatedPunters.Any())
-                    {                        
-                        foreach (var p in succesfulUpdatedPunters)
-                        {
-                            p.NewVirtualRate = newVirtualRate;
-                        }
+                    {
+                        DetectNewVirtualRateForLogging(newVirtualRate, succesfulUpdatedPunters);
 
                         return succesfulUpdatedPunters;
                     }

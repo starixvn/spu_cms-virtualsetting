@@ -134,6 +134,16 @@
             };
 
             return _virtualSettingsService.GetCurrentCustomerVirtualRate(criteria);
-        }               
+        }
+
+        public IEnumerable<int> GetBACustIds(string custIds)
+        {
+            var criteria = new GetBAAccountsCriteria
+            {
+                CustIds = custIds
+            };
+
+            return _virtualSettingsService.GetBACustIds(criteria);
+        }
     }
 }
