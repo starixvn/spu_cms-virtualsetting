@@ -130,7 +130,7 @@
         {
             var criteria = new GetCurrentCustomerVirtualRate
             {
-                CustIds = custIds                
+                CustIds = custIds
             };
 
             return _virtualSettingsService.GetCurrentCustomerVirtualRate(criteria);
@@ -144,6 +144,26 @@
             };
 
             return _virtualSettingsService.GetBACustIds(criteria);
+        }
+
+        public void InsertHistoryDataForSpecialCustIdList(string custIdList, byte sportGroupID, int numOfMonth, DateTime adjustDate, string serviceName)
+        {
+            var criteria = new GetCustomerMarginHistoryCriteria
+            {
+                CustIds = custIdList,
+                SportGroupID = sportGroupID,
+                NumOfMonth = numOfMonth
+            };
+
+            var customerMarginList = _virtualSettingsService.GetCustomerMarginHistory(criteria);
+
+            var insertCriteria = new InsertCustomerMarginHistoryCriteria
+            {
+                CustomerMarginDoc = Utilities.GenerateVirtualSettingXmlForCustomerMarginHistory(customerMarginList, serviceName),
+                AdjustDate = adjustDate
+            };
+
+            _virtualSettingsService.InsertCustomerMarginHistory(insertCriteria);
         }
     }
 }
