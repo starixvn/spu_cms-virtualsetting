@@ -62,11 +62,18 @@
 
         public override IEnumerable<Punter> GetPunterList()
         {
+            var startTime = DateTime.Now;
+            var endTime = startTime;
+
             try
             {
                 var punters = VirtualSettingBusiness.GetWinningPunterList(SiteIds, SuperIds, VirtualRateThreshold);
                 try
                 {
+                    endTime = DateTime.Now;
+                    Log4NetService.Info(string.Format("Timespan of calling GetWinningPunterList, starTime = {0}, endTime = {1}", startTime, endTime));
+                    Logger.Log.Info("Timespan of calling GetWinningPunterList, starTime = {0}, endTime = {1}", startTime, endTime);
+
                     if (punters != null)
                     {
                         var info = "List of Sportsbook (" + punters.Count() + ")";
@@ -85,6 +92,10 @@
             }
             catch (Exception exception)
             {
+                endTime = DateTime.Now;
+                Log4NetService.Info(string.Format("TIMEOUT of calling GetWinningPunterList, starTime = {0}, endTime = {1}", startTime, endTime));
+                Logger.Log.Info("TIMEOUT of calling GetWinningPunterList, starTime = {0}, endTime = {1}", startTime, endTime);
+
                 Logger.Log.Error("Error (exception) for GetPunterList of VirtualSettingForSportbooks : " + exception.Message);
             }
 
