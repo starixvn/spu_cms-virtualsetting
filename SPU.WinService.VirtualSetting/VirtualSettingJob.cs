@@ -11,6 +11,7 @@
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
+    using System.Threading;
 
     public class VirtualSettingJob : IJob
     {
@@ -27,19 +28,22 @@
 
                     var puntersForSoccer = ExecuteForSoccer(AppSettings.SiteIds, AppSettings.SuperIds, startTime);
 
-                    System.Threading.Thread.Sleep(AppSettings.IdleTime * 1000);
+                    if (puntersForSoccer != null)
+                    {
+                        Thread.Sleep(AppSettings.IdleTime * 1000);
 
-                    var puntersForSportbooks = ExecuteForSportbooks(AppSettings.SiteIds, AppSettings.SuperIds, startTime);
+                        var puntersForSportbooks = ExecuteForSportbooks(AppSettings.SiteIds, AppSettings.SuperIds, startTime);
 
-                    var stopTime = DateTime.Now;
+                        var stopTime = DateTime.Now;
 
-                    var countAffectedPunters = CountAffectedMembers(puntersForSoccer, puntersForSportbooks);
-                    Log4NetService.Info("Done Virtual Setting For All Sports -> Affected members = " + countAffectedPunters);
-                    Logger.Log.Info("Done Virtual Setting For All Sports -> Affected members = " + countAffectedPunters);
+                        var countAffectedPunters = CountAffectedMembers(puntersForSoccer, puntersForSportbooks);
+                        Log4NetService.Info("Done Virtual Setting For All Sports -> Affected members = " + countAffectedPunters);
+                        Logger.Log.Info("Done Virtual Setting For All Sports -> Affected members = " + countAffectedPunters);
 
-                    SendMail(startTime, stopTime, countAffectedPunters);
+                        SendMail(startTime, stopTime, countAffectedPunters);
 
-                    LogRuntime();
+                        LogRuntime();
+                    }
                 }
                 catch (Exception ex)
                 {
@@ -67,7 +71,7 @@
             Log4NetService.Info("Done Virtual Setting For Soccer -> Affected members (Soccer) = " + count + " => {" + custIds + "}");
             Logger.Log.Info("Done Virtual Setting For Soccer -> Affected members (Soccer) = " + count);
 
-            return puntersForSoccer;
+            return virtualSettingForSoccer.IsSuccessful ? puntersForSoccer : null;
         }
 
         private IEnumerable<Punter> ExecuteForSportbooks(string siteIds, string superIds, DateTime adjustDate)
@@ -84,7 +88,7 @@
             Log4NetService.Info("Done Virtual Setting For Sportsbook -> Affected members (Sportsbook) = " + count + " => {" + custIds + "}");
             Logger.Log.Info("Done Virtual Setting For Sportsbook -> Affected members (Sportsbook) = " + count);
 
-            return puntersForSportbooks;
+            return virtualSettingForSportbooks.IsSuccessful ? puntersForSportbooks : null;
         }
 
         private int CountAffectedMembers(IEnumerable<Punter> puntersForSoccer, IEnumerable<Punter> puntersForSportbooks)

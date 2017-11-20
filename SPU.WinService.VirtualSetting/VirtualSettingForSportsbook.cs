@@ -16,6 +16,7 @@
     public class VirtualSettingForSportsbook : VirtualSettingBase
     {
         public VirtualSettingForSportsbook(string siteIds, string superIds, DateTime adjustDate)
+            : base()
         {
             ServiceName = "Sportsbook";
             AdjustDate = adjustDate;
@@ -54,10 +55,11 @@
             }
             catch (Exception exception)
             {
+                IsSuccessful = false;
                 Logger.Log.Error("Error (exception) for AutoAdjustVirtualSettingsForPunters of VirtualSettingForSportbooks : " + exception.Message);
             }
 
-            return null;
+            return IsSuccessful ? new List<Punter>() : null;
         }
 
         public override IEnumerable<Punter> GetPunterList()
@@ -92,14 +94,15 @@
             }
             catch (Exception exception)
             {
+                IsSuccessful = false;
                 endTime = DateTime.Now;
-                Log4NetService.Info(string.Format("TIMEOUT of calling GetWinningPunterList, starTime = {0}, endTime = {1}", startTime, endTime));
-                Logger.Log.Info("TIMEOUT of calling GetWinningPunterList, starTime = {0}, endTime = {1}", startTime, endTime);
+                Log4NetService.Info(string.Format("Error - Timespan of calling GetWinningPunterList, starTime = {0}, endTime = {1}", startTime, endTime));
+                Logger.Log.Info("Error - Timespan of calling GetWinningPunterList, starTime = {0}, endTime = {1}", startTime, endTime);
 
                 Logger.Log.Error("Error (exception) for GetPunterList of VirtualSettingForSportbooks : " + exception.Message);
             }
 
-            return null;
+            return IsSuccessful ? new List<Punter>() : null;
         }
 
         public override Dictionary<int, Punter> FilterPunterBaseOnCurrentVirtualRate(IEnumerable<Punter> punters)
@@ -136,6 +139,7 @@
             }
             catch (Exception exception)
             {
+                IsSuccessful = false;
                 Logger.Log.Error("Error (exception) for FilterPunterBaseOnCurrentVirtualRate of VirtualSettingForSportbooks : " + exception.Message);
             }
 
@@ -151,6 +155,7 @@
             }
             catch (Exception ex)
             {
+                IsSuccessful = false;
                 throw ex;
             }
         }

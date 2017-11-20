@@ -15,7 +15,8 @@
 
     public class VirtualSettingForSoccer : VirtualSettingBase
     {
-        public VirtualSettingForSoccer(string siteIds, string superIds, DateTime adjustDate)
+        public VirtualSettingForSoccer(string siteIds, string superIds, DateTime adjustDate) 
+            : base()
         {
             ServiceName = "Soccer";
             AdjustDate = adjustDate;
@@ -30,9 +31,9 @@
             try
             {                
                 var punters = GetPunterList();
-
+             
                 if (punters != null && punters.Any())
-                {
+                {                    
                     var puntersDict = FilterPunterBaseOnCurrentVirtualRate(punters);
 
                     if (puntersDict != null && puntersDict.Any())
@@ -60,10 +61,11 @@
             }
             catch (Exception exception)
             {
+                IsSuccessful = false;
                 Logger.Log.Error("Error (exception) for AutoAdjustVirtualSettingsForPunters of VirtualSettingForSoccer : " + exception.Message);
             }
 
-            return null;
+            return IsSuccessful ? new List<Punter>() : null;
         }
 
         public override IEnumerable<Punter> GetPunterList()
@@ -98,14 +100,15 @@
             }
             catch (Exception exception)
             {
+                IsSuccessful = false;
                 endTime = DateTime.Now;
-                Log4NetService.Info(string.Format("TIMEOUT of calling GetWinningPunterSoccerList, starTime = {0}, endTime = {1}", startTime, endTime));
-                Logger.Log.Info("TIMEOUT of calling GetWinningPunterSoccerList, starTime = {0}, endTime = {1}", startTime, endTime);
+                Log4NetService.Info(string.Format("Error - Timespan of calling GetWinningPunterSoccerList, starTime = {0}, endTime = {1}", startTime, endTime));
+                Logger.Log.Info("Error - Timespan of calling GetWinningPunterSoccerList, starTime = {0}, endTime = {1}", startTime, endTime);
 
                 Logger.Log.Error("Error (exception) for GetPunterList of VirtualSettingForSoccer : " + exception.Message);
             }
 
-            return null;
+            return IsSuccessful ? new List<Punter>() : null;
         }
 
         public override Dictionary<int, Punter> FilterPunterBaseOnCurrentVirtualRate(IEnumerable<Punter> punters)
@@ -136,6 +139,7 @@
             }
             catch (Exception exception)
             {
+                IsSuccessful = false;
                 Logger.Log.Error("Error (exception) for FilterPunterBaseOnCurrentVirtualRate of VirtualSettingForSoccer : " + exception.Message);
             }
 
@@ -150,6 +154,7 @@
             }
             catch (Exception ex)
             {
+                IsSuccessful = false;
                 throw ex;
             }
         }
@@ -177,10 +182,11 @@
             }
             catch (Exception exception)
             {
+                IsSuccessful = false;
                 Logger.Log.Error("Error (exception) for AdjustVirtualSettings of VirtualSettingForSoccer : " + exception.Message);
             }
 
-            return null;
+            return IsSuccessful ? new List<Punter>() : null;
         }
       
         #endregion       

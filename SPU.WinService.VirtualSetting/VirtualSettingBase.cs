@@ -16,9 +16,10 @@
     {
         public VirtualSettingBase()
         {
+            IsSuccessful = true;
             FailedUpdatePunterList = new List<Punter>();
             VirtualSettingBusiness = new VirtualSettingBusiness();
-            PunterEqualityComparer = new PunterEqualityComparer();
+            PunterEqualityComparer = new PunterEqualityComparer();            
         }
 
         public string ServiceName { get; set; }
@@ -32,6 +33,8 @@
         public string SuperIds { get; set; }
 
         public double VirtualRateThreshold { get; set; }
+
+        public bool IsSuccessful { get; set; }
 
         public List<Punter> FailedUpdatePunterList { get; set; }
 
