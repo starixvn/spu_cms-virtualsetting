@@ -53,6 +53,11 @@
                 Log4NetService.Info("Finished Auto Updating Virtual Settings");
                 Logger.Log.Info("Finished Auto Updating Virtual Settings");
             }
+            else
+            {
+                Log4NetService.Info("Is NOT the executed date for Updating Virtual Settings");
+                Logger.Log.Info("Is NOT the executed date for Updating Virtual Settings");
+            }
         }
       
         #region Private Method
