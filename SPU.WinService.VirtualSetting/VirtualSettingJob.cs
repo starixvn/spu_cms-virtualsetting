@@ -55,8 +55,11 @@
             }
             else
             {
-                Log4NetService.Info("Is NOT the executed date for Updating Virtual Settings");
-                Logger.Log.Info("Is NOT the executed date for Updating Virtual Settings");
+                string message = "Is NOT the execution date for Updating Virtual Settings";
+                Log4NetService.Info(message);
+                Logger.Log.Info(message);
+                /// Send email to SPU only
+                SendMail("VR Auto Mail Service - Still alive", "VR Auto Mail Service - Still alive", message, AppSettings.MailingIdToSPU);
             }
         }
       
@@ -114,6 +117,19 @@
             {
                 return 0;
             }
+        }
+
+        private void SendMail(string subject, string tile, string body, int mailingListId)
+        {            
+            var newMail = new Fanex.MailDelivery.Core.Models.Mail
+            {
+                Subject = subject,
+                Title = tile,
+                Body = body,
+                MailingListId = mailingListId
+            };
+
+            MailClientHandler.SendFunctionMail(newMail);
         }
 
         private void SendMail(DateTime startTime, DateTime stopTime, int numberOfCustomers)

@@ -116,6 +116,21 @@
             }
         }
 
+        public static int MailingIdToSPU
+        {
+            get
+            {
+                string mailingListId = ConfigurationManager.AppSettings["MailingIdToSPU"];
+
+                if (!string.IsNullOrEmpty(mailingListId))
+                {
+                    return Convert.ToInt32(mailingListId);
+                }
+
+                return 80;
+            }
+        }
+
         public static double VirtualRateThresholdForWinning
         {
             get
