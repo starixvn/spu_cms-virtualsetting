@@ -17,6 +17,11 @@
     {
         public void Execute(IJobExecutionContext context)
         {
+            if (IsStopService())
+            {
+                return;
+            }
+
             if (IsExecutedDate())
             {
                 Log4NetService.Info("Starting Auto Updating Virtual Settings");                
@@ -41,7 +46,6 @@
                         Logger.Log.Info("Done Virtual Setting For All Sports -> Affected members = " + countAffectedPunters);
 
                         SendMail(startTime, stopTime, countAffectedPunters);
-
                         LogRuntime();
                     }
                 }
@@ -166,6 +170,11 @@
                 var logger = new RuntimeLog<DateTime>(logStream);
                 logger.Log(DateTime.Now);
             }
+        }
+
+        private bool IsStopService()
+        {
+            return AppSettings.IsStopService;
         }
 
         #endregion Private Method

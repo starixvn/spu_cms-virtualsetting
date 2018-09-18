@@ -233,5 +233,19 @@
                 return 30;
             }
         }
+
+        public static bool IsStopService
+        {
+            get
+            {
+                var value = ConfigurationManager.AppSettings["IsStopService"].ToString();
+                if (!string.IsNullOrEmpty(value))
+                {
+                    return Convert.ToBoolean(value) == true;
+                }
+
+                return false;
+            }
+        }        
     }
 }
