@@ -127,9 +127,6 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\RazorEngine.3.7.2\lib\net40\RazorEngine.dll</HintPath>
     </Reference>
-    <Reference Include="RemotingRef">
-      <HintPath>..\packages\RemotingRef.1.0.0.2\lib\net40\RemotingRef.dll</HintPath>
-    </Reference>
     <Reference Include="SPSRemoting">
       <HintPath>..\packages\SPSRemoting.1.0.0\lib\net40\SPSRemoting.dll</HintPath>
     </Reference>
