@@ -246,6 +246,14 @@
 
                 return false;
             }
+        }
+
+        public static string Environment
+        {
+            get
+            {
+                return ConfigurationManager.AppSettings["ENV"].ToString();                
+            }
         }        
     }
 }

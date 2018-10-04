@@ -31,6 +31,8 @@ namespace SPU.WinService.VitualSetting.Core.VirtualSetting
 
         public short SportType { get; set; }
 
-        public bool IsSuperProPunters { get; set; }       
+        public bool IsSuperProPunters { get; set; }
+
+        public bool IsBA { get; set; }
     }
 }

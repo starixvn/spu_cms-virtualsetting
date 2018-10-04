@@ -172,12 +172,8 @@
                     UpdateVirtualSetting(filtedPunters, newVirtualRate);
 
                     var succesfulUpdatedPunters = filtedPunters.Except(FailedUpdatePunterList, PunterEqualityComparer);
-                    if (succesfulUpdatedPunters != null && succesfulUpdatedPunters.Any())
-                    {
-                        DetectNewVirtualRateForLogging(newVirtualRate, succesfulUpdatedPunters);
 
-                        return succesfulUpdatedPunters;
-                    }
+                    return succesfulUpdatedPunters;
                 }
             }
             catch (Exception exception)

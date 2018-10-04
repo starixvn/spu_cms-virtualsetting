@@ -44,12 +44,8 @@
                         UpdateVirtualSetting(puntersDict.Values, newVirtualRate);
 
                         var succesfulUpdatedPunters = puntersDict.Values.Except(FailedUpdatePunterList, PunterEqualityComparer);
-                        if (succesfulUpdatedPunters != null && succesfulUpdatedPunters.Any())
-                        {
-                            DetectNewVirtualRateForLogging(newVirtualRate, succesfulUpdatedPunters);                           
 
-                            return succesfulUpdatedPunters;
-                        }
+                        return succesfulUpdatedPunters;                        
                     }
                 }                
             }

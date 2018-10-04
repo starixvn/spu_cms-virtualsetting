@@ -82,6 +82,8 @@
             {
                 try
                 {
+                    DetectBAAccounts(newVirtualRate, selectedPunters);
+
                     var updateResult = UpdatePunterVirtualSetting(selectedPunters, newVirtualRate, userId, ip);
                     if (!updateResult)
                     {
@@ -90,7 +92,7 @@
                     }
                     else
                     {
-                        LoggingUpdateVirtualSetting(newVirtualRate, userId, selectedPunters);
+                        LoggingUpdateVirtualSetting(userId, selectedPunters);
                         UpdateCustomerMarginHistory(selectedPunters);
                     }
                 }
@@ -102,11 +104,11 @@
             }
         }
 
-        private void LoggingUpdateVirtualSetting(double newVirtualRate, int userId, IEnumerable<Punter> selectedPunters)
+        private void LoggingUpdateVirtualSetting(int userId, IEnumerable<Punter> selectedPunters)
         {
             try
             {
-                var logResult = VirtualSettingBusiness.LogPunterVirtualSetting(ServiceName, selectedPunters, newVirtualRate, userId, AdjustDate);
+                var logResult = VirtualSettingBusiness.LogPunterVirtualSetting(ServiceName, selectedPunters, userId, AdjustDate);
                 if (!logResult)
                 {
                     Logger.Log.Error("Error for logging virtual settings on " + ServiceName);
@@ -135,14 +137,13 @@
                 Logger.Log.Error("Error (exception) for UpdateCustomerMarginHistory on " + ServiceName + " ; " + exception.Message);
             }
         }
-
-        private IEnumerable<int> GetBAAccounts(IEnumerable<Punter> punters)
-        {
-            var custIds = string.Join(",", punters.Select(p => p.CustID));
-            return VirtualSettingBusiness.GetBACustIds(custIds);
-        }
-
-        public void DetectNewVirtualRateForLogging(double newVirtualRate, IEnumerable<Punter> succesfulUpdatedPunters)
+       
+        /// <summary>
+        /// Detect BA Account & set value of NewVR for logging.
+        /// </summary>
+        /// <param name="newVirtualRate"></param>
+        /// <param name="succesfulUpdatedPunters"></param>
+        private void DetectBAAccounts(double newVirtualRate, IEnumerable<Punter> succesfulUpdatedPunters)
         {
             try
             {
@@ -150,13 +151,27 @@
 
                 foreach (var p in succesfulUpdatedPunters)
                 {
-                    p.NewVirtualRate = listBAAccounts.Contains(p.CustID) ? 1.0 : newVirtualRate;
+                    if (newVirtualRate == 3 && listBAAccounts.Contains(p.CustID))
+                    {
+                        p.NewVirtualRate = 1.0;
+                        p.IsBA = true;
+                    }
+                    else
+                    {
+                        p.NewVirtualRate = newVirtualRate;                        
+                    }
                 }
             }
             catch (Exception exception)
             {
-                Logger.Log.Error("Error (exception) for DetectNewVirtualRateForLogging on " + ServiceName + " ; " + exception.InnerException.Message);
+                Logger.Log.Error("Error (exception) for DetectBAAccounts on " + ServiceName + " ; " + exception.InnerException.Message);
             }
+        }
+
+        private IEnumerable<int> GetBAAccounts(IEnumerable<Punter> punters)
+        {
+            var custIds = string.Join(",", punters.Select(p => p.CustID));
+            return VirtualSettingBusiness.GetBACustIds(custIds);
         }
 
         #endregion

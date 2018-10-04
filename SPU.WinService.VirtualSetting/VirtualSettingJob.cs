@@ -127,7 +127,7 @@
         {            
             var newMail = new Fanex.MailDelivery.Core.Models.Mail
             {
-                Subject = subject,
+                Subject = subject + " (" + AppSettings.Environment + ")" ,
                 Title = tile,
                 Body = body,
                 MailingListId = mailingListId
@@ -145,7 +145,7 @@
 
             var newMail = new Fanex.MailDelivery.Core.Models.Mail
             {
-                Subject = "VR Auto Adjustment finished",
+                Subject = "VR Auto Adjustment finished" + " (" + AppSettings.Environment + ")",
                 Title = "VR Auto Mail Service",
                 Body = body,
                 MailingListId = AppSettings.MailingListId

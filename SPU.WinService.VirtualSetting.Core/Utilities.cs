@@ -25,11 +25,11 @@
             return result;
         }
 
-        public static string GenerateVirtualSettingXmlForLogging(IEnumerable<Punter> proPunters, double newVirtualRate)
+        public static string GenerateVirtualSettingXmlForLogging(IEnumerable<Punter> proPunters)
         {
             var xml = new StringBuilder();
             var pattern = "<Rate CustID=\"{0}\" ReportDate=\"{1}\" SiteID=\"{2}\" SRecommend=\"{3}\"" +
-                " MRecommend=\"{4}\" Recommend=\"{5}\" OldVirtualRate=\"{6}\" NewVirtualRate =\"{7}\" />";
+                " MRecommend=\"{4}\" Recommend=\"{5}\" OldVirtualRate=\"{6}\" NewVirtualRate =\"{7}\" IsBA =\"{8}\" />";
 
             foreach (var punter in proPunters)
             {
@@ -42,7 +42,8 @@
                                     punter.MRecommend,
                                     punter.Recommend,
                                     punter.OldVirtualRate,
-                                    newVirtualRate);
+                                    punter.NewVirtualRate,
+                                    punter.IsBA);
             }
 
             return "<ROOT>" + xml + "</ROOT>";
