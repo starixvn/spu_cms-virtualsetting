@@ -1,8 +1,10 @@
 ﻿namespace SPU.WinService.VirtualSetting.Console
 {
     using Fanex.Data.Configuration;
+    using Fanex.Logging;
     using Fanex.MailDelivery.Client;
     using SPU.WinService.VitualSetting;
+    using SPU.WinService.VitualSetting.Core.VirtualSetting.Log;
     using System;
 
     internal class Program
@@ -21,5 +23,6 @@
 
             Console.WriteLine("Window service is running now.");
         }
+        
     }
 }

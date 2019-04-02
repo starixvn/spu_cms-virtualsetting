@@ -17,53 +17,61 @@
     {
         public void Execute(IJobExecutionContext context)
         {
-            if (IsStopService())
+            try
             {
-                return;
-            }
-
-            if (IsExecutedDate())
-            {
-                Log4NetService.Info("Starting Auto Updating Virtual Settings");                
-                Logger.Log.Info("Starting Auto Updating Virtual Settings");                
-
-                try
+                if (IsStopService())
                 {
-                    var startTime = DateTime.Now;
+                    return;
+                }
 
-                    var puntersForSoccer = ExecuteForSoccer(AppSettings.SiteIds, AppSettings.SuperIds, startTime);
+                if (IsExecutedDate())
+                {
+                    Log4NetService.Info("Starting Auto Updating Virtual Settings");
+                    Logger.Log.Info("Starting Auto Updating Virtual Settings");
 
-                    if (puntersForSoccer != null)
+                    try
                     {
-                        Thread.Sleep(AppSettings.IdleTime * 1000);
+                        var startTime = DateTime.Now;
 
-                        var puntersForSportbooks = ExecuteForSportbooks(AppSettings.SiteIds, AppSettings.SuperIds, startTime);
+                        var puntersForSoccer = ExecuteForSoccer(AppSettings.SiteIds, AppSettings.SuperIds, startTime);
 
-                        var stopTime = DateTime.Now;
+                        if (puntersForSoccer != null)
+                        {
+                            Thread.Sleep(AppSettings.IdleTime * 1000);
 
-                        var countAffectedPunters = CountAffectedMembers(puntersForSoccer, puntersForSportbooks);
-                        Log4NetService.Info("Done Virtual Setting For All Sports -> Affected members = " + countAffectedPunters);
-                        Logger.Log.Info("Done Virtual Setting For All Sports -> Affected members = " + countAffectedPunters);
+                            var puntersForSportbooks = ExecuteForSportbooks(AppSettings.SiteIds, AppSettings.SuperIds, startTime);
 
-                        SendMail(startTime, stopTime, countAffectedPunters);
-                        LogRuntime();
+                            var stopTime = DateTime.Now;
+
+                            var countAffectedPunters = CountAffectedMembers(puntersForSoccer, puntersForSportbooks);
+                            Log4NetService.Info("Done Virtual Setting For All Sports -> Affected members = " + countAffectedPunters);
+                            Logger.Log.Info("Done Virtual Setting For All Sports -> Affected members = " + countAffectedPunters);
+
+                            SendMail(startTime, stopTime, countAffectedPunters);
+                            LogRuntime();
+                        }
                     }
-                }
-                catch (Exception ex)
-                {
-                    Logger.Log.Error(ex.Message);
-                }
+                    catch (Exception ex)
+                    {
+                        Logger.Log.Error(ex.Message);
+                    }
 
-                Log4NetService.Info("Finished Auto Updating Virtual Settings");
-                Logger.Log.Info("Finished Auto Updating Virtual Settings");
+                    Log4NetService.Info("Finished Auto Updating Virtual Settings");
+                    Logger.Log.Info("Finished Auto Updating Virtual Settings");
+                }
+                else
+                {
+                    string message = "Is NOT the execution date for Updating Virtual Settings";
+                    Log4NetService.Info(message);
+                    Logger.Log.Info(message);
+                    /// Send email to SPU only
+                    SendMail("VR Auto Mail Service - Still alive", "VR Auto Mail Service - Still alive", message, AppSettings.MailingIdToSPU);
+                }
             }
-            else
+            catch (Exception ex)
             {
-                string message = "Is NOT the execution date for Updating Virtual Settings";
-                Log4NetService.Info(message);
-                Logger.Log.Info(message);
-                /// Send email to SPU only
-                SendMail("VR Auto Mail Service - Still alive", "VR Auto Mail Service - Still alive", message, AppSettings.MailingIdToSPU);
+                Log4NetService.Info("CRITICAL - Fanex.AutoAdjustVR.Service --> " + ex.Message);
+                Logger.Log.Info("CRITICAL - Fanex.AutoAdjustVR.Service --> " + ex.Message);
             }
         }
       

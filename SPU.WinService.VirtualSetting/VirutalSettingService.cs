@@ -7,6 +7,7 @@
     using SPU.WinService.VirtualSetting.JobScheduler;
     using SPU.WinService.VitualSetting;
     using SPU.WinService.VitualSetting.Core.VirtualSetting.Log;
+    using System;
     using System.ServiceProcess;
 
     public partial class VirtualSettingService : ServiceBase
@@ -32,14 +33,22 @@
 
         protected override void OnStart(string[] args)
         {
-            Log4NetService.Info("OnStart Fanex.AutoAdjustVR.Service for scheduling to update Virtual Settings");
-            Logger.Log.Info("OnStart Fanex.AutoAdjustVR.Service for scheduling to update Virtual Settings");
+            try 
+            { 
+                Log4NetService.Info("OnStart Fanex.AutoAdjustVR.Service for scheduling to update Virtual Settings");
+                Logger.Log.Info("OnStart Fanex.AutoAdjustVR.Service for scheduling to update Virtual Settings");
 
-            MailClientHandler.Start();
+                MailClientHandler.Start();
 
-            base.OnStart(args);
+                base.OnStart(args);
 
-            _jobScheduler.Start();
+                _jobScheduler.Start();
+            }
+            catch (Exception ex)
+            {
+                Log4NetService.Info("CRITICAL - Fanex.AutoAdjustVR.Service --> " + ex.Message);
+                Logger.Log.Info("CRITICAL - Fanex.AutoAdjustVR.Service --> " + ex.Message);
+            }
         }
 
         protected override void OnStop()
